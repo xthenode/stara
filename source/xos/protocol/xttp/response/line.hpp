@@ -1,0 +1,194 @@
+///////////////////////////////////////////////////////////////////////
+/// Copyright (c) 1988-2020 $organization$
+///
+/// This software is provided by the author and contributors ``as is'' 
+/// and any express or implied warranties, including, but not limited to, 
+/// the implied warranties of merchantability and fitness for a particular 
+/// purpose are disclaimed. In no event shall the author or contributors 
+/// be liable for any direct, indirect, incidental, special, exemplary, 
+/// or consequential damages (including, but not limited to, procurement 
+/// of substitute goods or services; loss of use, data, or profits; or 
+/// business interruption) however caused and on any theory of liability, 
+/// whether in contract, strict liability, or tort (including negligence 
+/// or otherwise) arising in any way out of the use of this software, 
+/// even if advised of the possibility of such damage.
+///
+///   File: line.hpp
+///
+/// Author: $author$
+///   Date: 3/18/2020
+///////////////////////////////////////////////////////////////////////
+#ifndef XOS_PROTOCOL_XTTP_RESPONSE_LINE_HPP
+#define XOS_PROTOCOL_XTTP_RESPONSE_LINE_HPP
+
+#include "xos/protocol/xttp/message/part.hpp"
+#include "xos/protocol/xttp/message/line.hpp"
+#include "xos/protocol/xttp/protocol/identifier.hpp"
+#include "xos/protocol/xttp/response/status.hpp"
+#include "xos/protocol/xttp/response/reason.hpp"
+
+namespace xos {
+namespace protocol {
+namespace xttp {
+namespace response {
+
+/// class linet
+template 
+<class TExtends = message::line, class TImplements = typename TExtends::implements>
+class exported linet: virtual public TImplements, public TExtends {
+public:
+    typedef TImplements implements;
+    typedef TExtends extends;
+    typedef linet derives;
+
+    typedef response::status status_t;
+    typedef response::reason reason_t;
+    typedef protocol::identifier protocol_t;
+    typedef extends line_t;
+    typedef message::line::part_t part_t;
+    typedef typename extends::string_t string_t;
+    typedef typename string_t::char_t char_t;
+    typedef typename extends::reader_t reader_t;
+    typedef typename extends::writer_t writer_t;
+
+    /// constructor / destructor
+    linet(const protocol_t& protocol, const status_t& status, const reason_t& reason)
+    : protocol_(protocol), status_(status), reason_(reason) {
+        combine();
+    }
+    linet(const string_t& protocol, const string_t& status, const string_t& reason)
+    : protocol_(protocol), status_(status), reason_(reason) {
+        combine();
+    }
+    linet(const char_t* protocol, const char_t* status, const char_t* reason)
+    : protocol_(protocol), status_(status), reason_(reason) {
+        combine();
+    }
+    linet(const string_t &copy): extends(copy) {
+        separate();
+    }
+    linet(const char_t* chars, size_t length): extends(chars, length) {
+        separate();
+    }
+    linet(const char_t* chars): extends(chars) {
+        separate();
+    }
+    linet(const linet& copy)
+    : extends(copy), protocol_(copy.protocol_), status_(copy.status_), reason_(copy.reason_) {
+    }
+    linet() {
+        set_default();
+    }
+    virtual ~linet() {
+    }
+
+    /// read / write
+    virtual bool read(ssize_t& count, char_t& c, reader_t& reader) {
+        bool success = false;
+        return success;
+    }
+    virtual bool write(ssize_t& count, writer_t& writer) {
+        bool success = false;
+        const char_t* chars = 0;
+        size_t length = 0;
+        
+        if ((chars = this->has_chars(length))) {
+            ssize_t amount = 0;
+
+            if (length <= (amount = writer.write(chars, length))) {
+                count = amount;
+                success = true;
+            }
+        }
+        return success;
+    }
+
+    /// combine / separate
+    virtual bool combine() {
+        bool success = false;
+        const char_t *status = 0, *reason = 0, *protocol = 0;
+        if ((protocol = protocol_.has_chars()) 
+            && (status = status_.has_chars()) && (reason = reason_.has_chars())) {
+            this->assignl(protocol, " ", status, " ", reason, NULL);
+            return true;
+        }
+        this->clear();
+        return success;
+    }
+    virtual bool separate() {
+        bool success = false;
+        const char_t* chars = 0;
+        size_t length = 0;
+
+        set_defaults();
+        if ((chars = this->has_chars(length))) {
+            char_t c = 0;
+            const char_t* end = chars + length;
+            string_t *part = 0, protocol, status, reason;
+
+            for (part = &protocol; chars != end; ++chars) {
+                if (' ' != (c = *chars)) {
+                    part->append(&c, 1);
+                } else {
+                    if (part == &status) {
+                        if (status.has_chars()) {
+                            // ?' '
+                            part = &reason;
+                        } else {
+                            // ' '
+                            return false;
+                        }
+                    } else {
+                        if (part != &reason) {
+                            if (status.has_chars()) {
+                                // ?' '?' '
+                                part = &reason;
+                            } else {
+                                // ?' '' '
+                                return false;
+                            }
+                        } else {
+                            // ?' '?'/'*' '
+                            return false;
+                        }
+                    }
+                }
+            }
+            if ((protocol.has_chars()) 
+                && (status.has_chars()) && (reason.has_chars())) {
+                protocol_.set(protocol);
+                status_.set(status);
+                reason_.set(reason);
+                success = true;
+            }
+        }
+        return success;
+    }
+
+    /// set_default...
+    virtual derives& set_default() {
+        this->clear();
+        set_defaults();
+        combine();
+        return *this;
+    }
+    virtual derives& set_defaults() {
+        protocol_.set_default();
+        status_.set_default();
+        reason_.set_default();
+        return *this;
+    }
+
+protected:
+    protocol_t protocol_;
+    status_t status_;
+    reason_t reason_;
+}; /// class linet
+typedef linet<> line;
+
+} /// namespace response
+} /// namespace xttp
+} /// namespace protocol
+} /// namespace xos
+
+#endif /// ndef XOS_PROTOCOL_XTTP_RESPONSE_LINE_HPP 
