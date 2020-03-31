@@ -78,8 +78,18 @@ public:
     /// read / write
     virtual bool read(ssize_t& count, char_t& c, reader_t& reader) {
         bool success = false;
+        ssize_t amount = 0;
 
         set_default();
+        if ((line_.read(amount, c, reader))) {
+            count = amount;
+            if ((headers_.read(amount, c, reader))) {
+                count += amount;
+                if ((combine())) {
+                    success = true;
+                }
+            }
+        }
         return success;
     }
     virtual bool write(ssize_t& count, writer_t& writer) {
@@ -198,6 +208,9 @@ public:
     }
     virtual const content_t* content() const {
         return content_;
+    }
+    virtual size_t content_length() const {
+        return headers_.content_length();
     }
 
 protected:

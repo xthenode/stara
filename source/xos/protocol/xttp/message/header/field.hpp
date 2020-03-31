@@ -63,7 +63,56 @@ public:
     virtual ~fieldt() {
     }
 
+    /// read / write
+    virtual bool read(ssize_t& count, char_t& c, reader_t& reader) {
+        bool success = false;
+        char_t cr = 0;
+        ssize_t amount = 0;
+        string_t chars;
+
+        this->set_default();
+        do {
+            if (0 < (amount = reader.read(&c, 1))) {
+                count += amount;
+                if (('\r' != c)) {
+                    if (('\n' != c)) {
+                        chars.append(&c, 1);
+                    } else {
+                        success = this->set(chars);
+                        break;
+                    }
+                } else {
+                    if (cr != c) {
+                        cr = c;
+                    } else {
+                        chars.append(&cr, 1);
+                    }
+                }
+            } else {
+                count = amount;
+                break;
+            }
+        } while (0 < amount);
+        return success;
+    }
+    virtual bool write(ssize_t& count, writer_t& writer) {
+        bool success = false;
+        const char_t* chars = 0;
+        size_t length = 0;
+        
+        if ((chars = this->has_chars(length))) {
+            ssize_t amount = 0;
+
+            if (length <= (amount = writer.write(chars, length))) {
+                count = amount;
+                success = true;
+            }
+        }
+        return success;
+    }
+
     /// set
+    using extends::set;
     virtual bool set(const string_t& name, const string_t& value) {
         bool success = true;
         const char_t* chars = 0;

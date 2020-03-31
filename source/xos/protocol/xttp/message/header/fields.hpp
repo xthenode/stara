@@ -146,6 +146,7 @@ public:
                     on_add_field(*f);
                 } else {
                     free_field(f);
+                    success = true;
                     break;
                 }
             }

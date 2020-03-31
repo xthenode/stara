@@ -84,6 +84,33 @@ public:
     /// read / write
     virtual bool read(ssize_t& count, char_t& c, reader_t& reader) {
         bool success = false;
+        char_t cr = 0;
+        ssize_t amount = 0;
+        string_t chars;
+
+        this->set_default();
+        do {
+            if (0 < (amount = reader.read(&c, 1))) {
+                count += amount;
+                if (('\r' != c)) {
+                    if (('\n' != c)) {
+                        chars.append(&c, 1);
+                    } else {
+                        success = this->set(chars);
+                        break;
+                    }
+                } else {
+                    if (cr != c) {
+                        cr = c;
+                    } else {
+                        chars.append(&cr, 1);
+                    }
+                }
+            } else {
+                count = amount;
+                break;
+            }
+        } while (0 < amount);
         return success;
     }
     virtual bool write(ssize_t& count, writer_t& writer) {

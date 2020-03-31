@@ -45,6 +45,9 @@
 #include "xos/protocol/xttp/response/line.hpp"
 #include "xos/protocol/xttp/response/message.hpp"
 
+#include "xos/io/crt/file/writer.hpp"
+#include "xos/io/crt/file/reader.hpp"
+
 namespace xos {
 namespace app {
 namespace console {
@@ -65,8 +68,10 @@ public:
 
     /// constructor / destructor
     maint()
-    : protocol_(protocol_name_, protocol_version_),
+    : input_(0), input_name_(0), output_name_(0), 
+      protocol_(protocol_name_, protocol_version_),
 
+      request_name_("request.xttp"),
       request_parameters_("/stara/"), 
       request_line_(request_method_, request_parameters_, protocol_),
       request_content_("Hello\r\n"), 
@@ -75,6 +80,7 @@ public:
       request_headers_(&request_content_type_, &request_content_length_, null),
       request_(request_line_, request_headers_, &request_content_),
     
+      response_name_("response.xttp"),
       response_line_(protocol_, response_status_, response_reason_),
       response_content_(request_content_),
       response_content_length_(response_content_),
@@ -101,7 +107,7 @@ protected:
         virtual ssize_t read(what_t* what, size_t size) {
             sized_t* sized = 0; ssize_t count = 0;
             if ((sized = ((sized_t*)what)) && (size)) {
-                count = main_.in(sized, size);
+                count = main_.input(sized, size);
             }
             return count;
         }    
@@ -148,23 +154,79 @@ protected:
         int err = 0;
         derives::reader this_reader(*this);
         derives::writer this_writer(*this);
+        input_name_ = request_name_.has_chars();
         err = respond_run(this_writer, this_reader, argc, argv, env);
+        input_name_ = 0; input_ = 0; reader_.closed();
         return err;
     }
     virtual int respond_run
     (writer_t& writer, reader_t& reader, int argc, char_t** argv, char_t** env) {
         int err = 0;
         ssize_t count = 0;
+        reader_t::sized_t c = 0;
         
+        if ((request_.read(count, c, reader))) {
+        }
         response_.write(count, writer);
         return err;
     }
 
+    /// ...input
+    ssize_t (derives::*input_)(char_t* chars, size_t length);
+    virtual ssize_t input(char_t* chars, size_t length) {
+        ssize_t count = 0;
+        if ((this->input_)) {
+            count = (this->*input_)(chars, length);
+        } else {
+            count = begin_input(chars, length);
+        }
+        return count;
+    }
+    virtual ssize_t begin_input(char_t* chars, size_t length) {
+        const char_t* name_chars = 0;
+        ssize_t count = 0;
+
+        if ((name_chars = input_name_) && (name_chars[0])) {
+            const char_t* pattern_chars = 0;
+            size_t pattern_length = 0;
+            string_t pattern(name_chars);
+
+            pattern.append("\r\n");
+            if ((pattern_chars = pattern.has_chars(pattern_length))) {
+
+                if ((reader_.open_safe(name_chars, pattern_chars))) {
+                    
+                    if (length <= (count = read_input(chars, length))) {
+                        input_ = &derives::read_input;
+                        return count;
+                    }
+                    writer_.close();
+                }
+            }
+        }
+        count = in_input(chars, length);
+        input_ = &derives::in_input;
+        return count;
+    }
+    virtual ssize_t read_input(char_t* chars, size_t length) {
+        ssize_t count = 0;
+        count = reader_.read(chars, length);
+        return count;
+    }
+    virtual ssize_t in_input(char_t* chars, size_t length) {
+        ssize_t count = 0;
+        count = this->in(chars, length);
+        return count;
+    }
+
 protected:
+    const char_t *input_name_, *output_name_;
+    
     xos::protocol::xttp::protocol::name protocol_name_;
     xos::protocol::xttp::protocol::version protocol_version_;
     xos::protocol::xttp::protocol::identifier protocol_;
 
+    string_t request_name_;
     xos::protocol::xttp::request::method request_method_;
     xos::protocol::xttp::request::parameters request_parameters_;
     xos::protocol::xttp::request::line request_line_;
@@ -174,6 +236,7 @@ protected:
     xos::protocol::xttp::message::header::fields request_headers_;
     xos::protocol::xttp::request::message request_;
     
+    string_t response_name_;
     xos::protocol::xttp::response::status response_status_;
     xos::protocol::xttp::response::reason response_reason_;
     xos::protocol::xttp::response::line response_line_;
@@ -182,6 +245,9 @@ protected:
     xos::protocol::xttp::message::header::content::type response_content_type_;
     xos::protocol::xttp::message::header::fields response_headers_;
     xos::protocol::xttp::response::message response_;
+
+    xos::io::crt::file::char_reader reader_;
+    xos::io::crt::file::char_writer writer_;
 }; /// class maint
 typedef maint<> main;
 
