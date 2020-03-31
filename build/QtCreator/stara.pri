@@ -53,11 +53,34 @@ build_nadir_FRAMEWORKS += \
 build_nadir_LIBS += \
 
 ########################################################################
+# rete
+#
+# pkg-config --cflags --libs rete
+#
+
+# build rete INCLUDEPATH
+#
+build_rete_INCLUDEPATH += \
+
+# build rete DEFINES
+#
+build_rete_DEFINES += \
+
+# build rete FRAMEWORKS
+#
+build_rete_FRAMEWORKS += \
+
+# build rete LIBS
+#
+build_rete_LIBS += \
+
+########################################################################
 # stara
 
 # build stara INCLUDEPATH
 #
 build_stara_INCLUDEPATH += \
+$${build_rete_INCLUDEPATH} \
 $${build_nadir_INCLUDEPATH} \
 
 
@@ -65,17 +88,18 @@ $${build_nadir_INCLUDEPATH} \
 #
 build_stara_DEFINES += \
 $${build_nadir_DEFINES} \
+$${build_rete_DEFINES} \
 
 
 # build stara FRAMEWORKS
 #
 build_stara_FRAMEWORKS += \
+$${build_rete_FRAMEWORKS} \
 $${build_nadir_FRAMEWORKS} \
 
 
 # build stara LIBS
 #
 build_stara_LIBS += \
+$${build_rete_LIBS} \
 $${build_nadir_LIBS} \
-
-

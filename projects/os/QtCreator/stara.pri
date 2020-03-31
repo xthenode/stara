@@ -75,6 +75,28 @@ nadir_LIBS += \
 -l$${NADIR_NAME} \
 
 ########################################################################
+# rete
+RETE_THIRDPARTY_PKG_MAKE_BLD = $${RETE_THIRDPARTY_PKG}/build/$${BUILD_OS}/$${BUILD_CONFIG}
+RETE_THIRDPARTY_PRJ_MAKE_BLD = $${OTHER_BLD}/$${RETE_THIRDPARTY_PRJ}/build/$${BUILD_OS}/$${BUILD_CONFIG}
+RETE_THIRDPARTY_PKG_BLD = $${RETE_THIRDPARTY_PKG}/build/$${BUILD_OS}/QtCreator/$${BUILD_CONFIG}
+RETE_THIRDPARTY_PRJ_BLD = $${OTHER_BLD}/$${RETE_THIRDPARTY_PRJ}/build/$${BUILD_OS}/QtCreator/$${BUILD_CONFIG}
+RETE_PKG_BLD = $${OTHER_BLD}/$${RETE_PKG}/build/$${BUILD_OS}/QtCreator/$${BUILD_CONFIG}
+RETE_PRJ_BLD = $${OTHER_BLD}/$${RETE_PRJ}/build/$${BUILD_OS}/QtCreator/$${BUILD_CONFIG}
+#RETE_LIB = $${RETE_THIRDPARTY_PKG_MAKE_BLD}/lib
+#RETE_LIB = $${RETE_THIRDPARTY_PRJ_MAKE_BLD}/lib
+#RETE_LIB = $${RETE_THIRDPARTY_PKG_BLD}/lib
+#RETE_LIB = $${RETE_THIRDPARTY_PRJ_BLD}/lib
+RETE_LIB = $${RETE_PKG_BLD}/lib
+#RETE_LIB = $${RETE_PRJ_BLD}/lib
+#RETE_LIB = $${STARA_LIB}
+
+# rete LIBS
+#
+rete_LIBS += \
+-L$${RETE_LIB}/lib$${RETE_NAME} \
+-l$${RETE_NAME} \
+
+########################################################################
 # stara
 
 # stara INCLUDEPATH
@@ -88,6 +110,7 @@ stara_DEFINES += \
 # stara LIBS
 #
 stara_LIBS += \
+$${rete_LIBS} \
 $${nadir_LIBS} \
 $${build_stara_LIBS} \
 
