@@ -28,6 +28,7 @@ namespace protocol {
 namespace xttp {
 namespace protocol {
 
+namespace extended {
 /// class versiont
 template <class TExtends = message::part, class TImplements = typename TExtends::implements>
 class exported versiont: virtual public TImplements, public TExtends {
@@ -43,29 +44,19 @@ public:
     typedef typename extends::writer_t writer_t;
 
     /// constructor / destructor
-    versiont(const string_t& major, const string_t& minor)
-    : major_(major), minor_(minor) {
-        combine();
+    versiont(const string_t& major, const string_t& minor): major_(major), minor_(minor) {
     }
-    versiont(const char_t* major, const char_t* minor)
-    : major_(major), minor_(minor) {
-        combine();
+    versiont(const char_t* major, const char_t* minor): major_(major), minor_(minor) {
     }
     versiont(const string_t& chars): extends(chars) {
-        separate();
     }
     versiont(const char_t* chars, size_t length): extends(chars, length) {
-        separate();
     }
     versiont(const char_t* chars): extends(chars) {
-        separate();
     }
-    versiont(const versiont& copy)
-    : extends(copy), major_(copy.major_), minor_(copy.minor_) {
+    versiont(const versiont& copy): extends(copy), major_(copy.major_), minor_(copy.minor_) {
     }
     versiont() {
-        set_defaults();
-        combine();
     }
     virtual ~versiont() {
     }
@@ -244,6 +235,47 @@ public:
 
 protected:
     part_t major_, minor_;
+}; /// class versiont
+typedef versiont<> version;
+} /// namespace extended
+
+/// class versiont
+template <class TExtends = extended::version, class TImplements = typename TExtends::implements>
+class exported versiont: virtual public TImplements, public TExtends {
+public:
+    typedef TImplements implements;
+    typedef TExtends extends;
+    typedef versiont derives;
+
+    typedef extends part_t;
+    typedef typename extends::string_t string_t;
+    typedef typename string_t::char_t char_t;
+    typedef typename extends::reader_t reader_t;
+    typedef typename extends::writer_t writer_t;
+
+    /// constructor / destructor
+    versiont(const string_t& major, const string_t& minor): extends(major, minor) {
+        this->combine();
+    }
+    versiont(const char_t* major, const char_t* minor): extends(major, minor) {
+        this->combine();
+    }
+    versiont(const string_t& chars): extends(chars) {
+        this->separate();
+    }
+    versiont(const char_t* chars, size_t length): extends(chars, length) {
+        this->separate();
+    }
+    versiont(const char_t* chars): extends(chars) {
+        this->separate();
+    }
+    versiont(const versiont& copy): extends(copy) {
+    }
+    versiont() {
+        this->set_default();
+    }
+    virtual ~versiont() {
+    }
 }; /// class versiont
 typedef versiont<> version;
 

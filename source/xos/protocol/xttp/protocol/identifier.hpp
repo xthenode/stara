@@ -30,16 +30,19 @@ namespace protocol {
 namespace xttp {
 namespace protocol {
 
+namespace extended {
 /// class identifiert
-template <class TExtends = message::part, class TImplements = typename TExtends::implements>
+template 
+<class TName = protocol::name, class TVersion = protocol::version,
+ class TExtends = message::part, class TImplements = typename TExtends::implements>
 class exported identifiert: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;
     typedef TExtends extends;
     typedef identifiert derives;
 
-    typedef protocol::name name_t;
-    typedef protocol::version version_t;
+    typedef TName name_t;
+    typedef TVersion version_t;
     typedef extends part_t;
     typedef typename extends::string_t string_t;
     typedef typename string_t::char_t char_t;
@@ -48,28 +51,21 @@ public:
 
     /// constructor / destructor
     identifiert(const name_t& name, const version_t& version): name_(name), version_(version)  {
-        combine();
     }
     identifiert(const string_t& name, const string_t& version): name_(name), version_(version)  {
-        combine();
     }
     identifiert(const char_t* name, const char_t* version): name_(name), version_(version)  {
-        combine();
     }
     identifiert(const string_t& chars): extends(chars)  {
-        separate();
     }
     identifiert(const char_t* chars, size_t length): extends(chars, length)  {
-        separate();
     }
     identifiert(const char_t* chars): extends(chars)  {
-        separate();
     }
     identifiert(const identifiert& copy)
     : extends(copy), name_(copy.name_), version_(copy.version_) {
     }
     identifiert() {
-        set_default();
     }
     virtual ~identifiert() {
     }
@@ -174,6 +170,54 @@ public:
 protected:
     name_t name_;
     version_t version_;
+}; /// class identifiert
+typedef identifiert<> identifier;
+} /// namespace extended
+
+/// class identifiert
+template 
+<class TExtends = xttp::protocol::extended::identifier, 
+ class TImplements = typename TExtends::implements>
+class exported identifiert: virtual public TImplements, public TExtends {
+public:
+    typedef TImplements implements;
+    typedef TExtends extends;
+    typedef identifiert derives;
+
+    typedef typename extends::name_t name_t;
+    typedef typename extends::version_t version_t;
+    typedef typename extends::part_t part_t;
+    typedef typename extends::string_t string_t;
+    typedef typename string_t::char_t char_t;
+    typedef typename extends::reader_t reader_t;
+    typedef typename extends::writer_t writer_t;
+
+    /// constructor / destructor
+    identifiert(const name_t& name, const version_t& version): extends(name, version)  {
+        this->combine();
+    }
+    identifiert(const string_t& name, const string_t& version): extends(name, version)  {
+        this->combine();
+    }
+    identifiert(const char_t* name, const char_t* version): extends(name, version)  {
+        this->combine();
+    }
+    identifiert(const string_t& chars): extends(chars)  {
+        this->separate();
+    }
+    identifiert(const char_t* chars, size_t length): extends(chars, length)  {
+        this->separate();
+    }
+    identifiert(const char_t* chars): extends(chars)  {
+        this->separate();
+    }
+    identifiert(const identifiert& copy): extends(copy) {
+    }
+    identifiert() {
+        this->set_default();
+    }
+    virtual ~identifiert() {
+    }
 }; /// class identifiert
 typedef identifiert<> identifier;
 

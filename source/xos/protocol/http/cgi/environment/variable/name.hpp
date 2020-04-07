@@ -16,21 +16,23 @@
 ///   File: name.hpp
 ///
 /// Author: $author$
-///   Date: 3/13/2020
+///   Date: 4/4/2020
 ///////////////////////////////////////////////////////////////////////
-#ifndef XOS_PROTOCOL_XTTP_PROTOCOL_NAME_HPP
-#define XOS_PROTOCOL_XTTP_PROTOCOL_NAME_HPP
+#ifndef XOS_PROTOCOL_HTTP_CGI_ENVIRONMENT_VARIABLE_NAME_HPP
+#define XOS_PROTOCOL_HTTP_CGI_ENVIRONMENT_VARIABLE_NAME_HPP
 
+#include "xos/protocol/http/cgi/environment/variable/which.hpp"
 #include "xos/protocol/xttp/message/part.hpp"
 
 namespace xos {
 namespace protocol {
-namespace xttp {
-namespace protocol {
+namespace http {
+namespace cgi {
+namespace environment {
+namespace variable {
 
-namespace extened {
 /// class namet
-template <class TExtends = message::part, class TImplements = typename TExtends::implements>
+template <class TExtends = xttp::message::part, class TImplements = typename TExtends::implements>
 class exported namet: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;
@@ -44,17 +46,54 @@ public:
     typedef typename extends::writer_t writer_t;
 
     /// constructor / destructor
-    namet(const string_t &copy): extends(copy) {
+    namet(variable::which_t which): which_(which) {
+        combine();
+    }
+    namet(const string_t& chars): extends(chars) {
+        separate();
     }
     namet(const char_t* chars, size_t length): extends(chars, length) {
+        separate();
     }
     namet(const char_t* chars): extends(chars) {
+        separate();
     }
-    namet(const namet& copy): extends(copy) {
+    namet(const namet& copy): extends(copy), which_(copy.which_) {
     }
     namet() {
     }
     virtual ~namet() {
+    }
+
+    /// set
+    virtual bool set(variable::which_t to) {
+        bool success = false;
+        const char_t* chars = 0;
+        this->clear();
+        set_which(to);
+        if ((chars = which_.name()) && (chars[0])) {
+            this->assign(chars);
+            success = true;
+        }
+        return success;
+    }
+    virtual bool set(const string_t& chars) {
+        bool success = false;
+        this->assign(chars);
+        success = separate();
+        return success;
+    }
+    virtual bool set(const char_t* chars, size_t length) {
+        bool success = false;
+        this->assign(chars, length);
+        success = separate();
+        return success;
+    }
+    virtual bool set(const char_t* chars) {
+        bool success = false;
+        this->assign(chars);
+        success = separate();
+        return success;
     }
 
     /// read / write
@@ -63,11 +102,11 @@ public:
         ssize_t amount = 0;
         string_t chars;
         
-        this->set_default();
+        set_default();
         do {
             if (0 < (amount = reader.read(&c, 1))) {
                 count += amount;
-                if (('/' != c) && (' ' != c) && ('\r' != c) && ('\n' != c)) {
+                if (('=' != c) && ('\r' != c) && ('\n' != c)) {
                     chars.append(&c, 1);
                 } else {
                     break;
@@ -79,23 +118,30 @@ public:
         } while (0 < amount);
         if ((chars.has_chars())) {
             this->assign(chars);
-            success = true;
+            success = separate();
         }
         return success;
     }
     virtual bool write(ssize_t& count, writer_t& writer) {
         bool success = false;
-        const char_t* chars = 0;
-        size_t length = 0;
-        
-        if ((chars = this->has_chars(length))) {
-            ssize_t amount = 0;
+        success = this->write_this(count, writer);
+        return success;
+    }
 
-            if (length <= (amount = writer.write(chars, length))) {
-                count = amount;
-                success = true;
-            }
+    /// combine / separate
+    virtual bool combine() {
+        bool success = false;
+        const char_t* chars = 0;
+        this->clear();
+        if ((chars = which_.name()) && (chars[0])) {
+            this->assign(chars);
+            success = true;
         }
+        return success;
+    }
+    virtual bool separate() {
+        variable::which_t which = set_which();
+        bool success = (variable::none != which);
         return success;
     }
 
@@ -106,52 +152,33 @@ public:
         return *this;
     }
     virtual derives& set_defaults() {
-        this->assign(default_name_chars());
+        set_which(variable::none);
         return *this;
     }
 
-    /// ...name_chars
-    virtual const char_t* default_name_chars() const {
-        return "HTTP";
+    /// ...which
+    virtual variable::which_t set_which() {
+        which_ = this->chars();
+        return (variable::which_t)which_;
     }
-}; /// class namet
-typedef namet<> name;
-} /// namespace extended
+    virtual variable::which_t set_which(variable::which_t to) {
+        which_ = to;
+        return (variable::which_t)which_;
+    }
+    virtual variable::which_t which() const {
+        return (variable::which_t)which_;
+    }
 
-/// class namet
-template <class TExtends = message::part, class TImplements = typename TExtends::implements>
-class exported namet: virtual public TImplements, public TExtends {
-public:
-    typedef TImplements implements;
-    typedef TExtends extends;
-    typedef namet derives;
-
-    typedef extends part_t;
-    typedef typename extends::string_t string_t;
-    typedef typename string_t::char_t char_t;
-    typedef typename extends::reader_t reader_t;
-    typedef typename extends::writer_t writer_t;
-
-    /// constructor / destructor
-    namet(const string_t &copy): extends(copy) {
-    }
-    namet(const char_t* chars, size_t length): extends(chars, length) {
-    }
-    namet(const char_t* chars): extends(chars) {
-    }
-    namet(const namet& copy): extends(copy) {
-    }
-    namet() {
-        this->set_default();
-    }
-    virtual ~namet() {
-    }
+protected:
+    variable::which which_;
 }; /// class namet
 typedef namet<> name;
 
-} /// namespace protocol
-} /// namespace xttp
+} /// namespace variable
+} /// namespace environment
+} /// namespace cgi
+} /// namespace http
 } /// namespace protocol
 } /// namespace xos
 
-#endif /// ndef XOS_PROTOCOL_XTTP_PROTOCOL_NAME_HPP 
+#endif /// ndef XOS_PROTOCOL_HTTP_CGI_ENVIRONMENT_VARIABLE_NAME_HPP 

@@ -22,6 +22,8 @@
 #define XOS_PROTOCOL_XTTP_MESSAGE_PART_HPP
 
 #include "xos/base/string.hpp"
+#include "xos/base/logged.hpp"
+#include "xos/base/logger.hpp"
 #include "xos/io/reader.hpp"
 #include "xos/io/writer.hpp"
 
@@ -111,7 +113,7 @@ public:
         return success;
     }
 
-    /// set
+    /// set / clear
     virtual bool set(const string_t& to) {
         bool success = false;
         this->assign(to);
@@ -129,6 +131,10 @@ public:
         this->assign(to);
         success = separate();
         return success;
+    }
+    virtual derives& clear() {
+        extends::clear();
+        return *this;
     }
 
     /// combine / separate
@@ -219,8 +225,17 @@ public:
         return is_combined_;
     }
 
+    /// ...is_logged
+    virtual bool set_is_logged(bool to = true) {
+        return logged_.set_is_logged(to);
+    }
+    virtual bool is_logged() const {
+        return logged_.is_logged();
+    }
+
 protected:
     bool is_combined_;
+    xos::extended::logged logged_;
 }; /// class partt
 typedef partt<> part;
 
