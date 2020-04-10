@@ -55,11 +55,19 @@ $${stara_DEFINES} \
 cgicatch_HEADERS += \
 $${NADIR_SRC}/xos/base/string.hpp \
 $${NADIR_SRC}/xos/io/crt/file/attached.hpp \
+$${NADIR_SRC}/xos/io/string/reader.hpp \
 \
 $${STARA_SRC}/xos/protocol/xttp/protocol/name.hpp \
 $${STARA_SRC}/xos/protocol/xttp/protocol/version.hpp \
 $${STARA_SRC}/xos/protocol/xttp/protocol/identifier.hpp \
 $${STARA_SRC}/xos/protocol/xttp/message/part.hpp \
+$${STARA_SRC}/xos/protocol/xttp/content/reader.hpp \
+\
+$${STARA_SRC}/xos/protocol/http/form/content.hpp \
+$${STARA_SRC}/xos/protocol/http/form/field.hpp \
+$${STARA_SRC}/xos/protocol/http/form/fields.hpp \
+$${STARA_SRC}/xos/protocol/http/url/encoded/reader.hpp \
+$${STARA_SRC}/xos/protocol/http/url/encoded/form/content/type.hpp \
 \
 $${STARA_SRC}/xos/protocol/http/cgi/name.hpp \
 $${STARA_SRC}/xos/protocol/http/cgi/version.hpp \
@@ -77,7 +85,13 @@ $${NADIR_SRC}/xos/console/main_main.hpp \
 # cgicatch SOURCES
 #
 cgicatch_SOURCES += \
+$${NADIR_SRC}/xos/io/string/reader.cpp \
 $${NADIR_SRC}/xos/io/crt/file/attached.cpp \
+\
+$${STARA_SRC}/xos/protocol/http/form/content.cpp \
+$${STARA_SRC}/xos/protocol/http/form/field.cpp \
+$${STARA_SRC}/xos/protocol/http/form/fields.cpp \
+$${STARA_SRC}/xos/protocol/http/url/encoded/form/content/type.cpp \
 \
 $${STARA_SRC}/xos/protocol/http/cgi/version.cpp \
 $${STARA_SRC}/xos/protocol/http/cgi/identifier.cpp \
