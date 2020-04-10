@@ -85,6 +85,22 @@ public:
         }
         return 0;
     }
+    virtual int get() {
+        value_t* value = 0;
+        const char_t* chars = 0;
+        size_t length = 0;
+        int count = 0;
+
+        init();
+        for (variable::which_t which = variable::first; which <= variable::last; ++which) {
+            if ((value = value_of(which))) {
+                if ((chars = value->get(length))) {
+                    ++count;
+                }
+            }
+        }
+        return count;
+    }
 
     /// first / next
     virtual value_t* first(variable::which_t& which) const {
@@ -108,7 +124,21 @@ public:
         return 0;
     }
 
-    /// value
+    /// setting_of
+    virtual const char_t* setting_of(value_t*& value, const char_t* name) const {
+        if ((value = value_of(name))) {
+            return value->setting();
+        }
+        return 0;
+    }
+    virtual const char_t* setting_of(value_t*& value, variable::which_t which) const {
+        if ((value = value_of(which))) {
+            return value->setting();
+        }
+        return 0;
+    }
+
+    /// value_of
     virtual value_t* value_of(const char_t* name) const {
         value_t& value = operator[](name);
         if ((&null_ != (&value)) && (variable::none != (value.which()))) {
