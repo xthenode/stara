@@ -80,6 +80,8 @@ $${STARA_SRC}/xos/protocol/http/cgi/environment/variable/setting.hpp \
 \
 $${STARA_SRC}/xos/app/console/network/protocol/http/cgi/main_opt.hpp \
 $${STARA_SRC}/xos/app/console/network/protocol/http/cgi/main.hpp \
+$${STARA_SRC}/xos/app/console/network/protocol/http/cgi/catcher/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/network/protocol/http/cgi/catcher/main.hpp \
 $${NADIR_SRC}/xos/console/main_main.hpp \
 
 # cgicatch SOURCES
@@ -101,8 +103,8 @@ $${STARA_SRC}/xos/protocol/http/cgi/environment/variable/value.cpp \
 $${STARA_SRC}/xos/protocol/http/cgi/environment/variable/values.hpp \
 $${STARA_SRC}/xos/protocol/http/cgi/environment/variable/setting.cpp \
 \
-$${STARA_SRC}/xos/app/console/network/protocol/http/cgi/main_opt.cpp \
-$${STARA_SRC}/xos/app/console/network/protocol/http/cgi/main.cpp \
+$${STARA_SRC}/xos/app/console/network/protocol/http/cgi/catcher/main_opt.cpp \
+$${STARA_SRC}/xos/app/console/network/protocol/http/cgi/catcher/main.cpp \
 $${NADIR_SRC}/xos/console/main_main.cpp \
 
 ########################################################################
