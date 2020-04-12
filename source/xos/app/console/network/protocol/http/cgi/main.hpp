@@ -33,6 +33,8 @@
 #include "xos/protocol/http/cgi/environment/variable/values.hpp"
 #include "xos/protocol/http/cgi/environment/variable/setting.hpp"
 #include "xos/io/crt/file/attached.hpp"
+#include "xos/io/crt/file/reader.hpp"
+#include "xos/io/crt/file/writer.hpp"
 #include "xos/io/string/reader.hpp"
 
 namespace xos {
@@ -62,11 +64,11 @@ public:
     : run_(0), in_std_in_(0), out_std_out_(0),
       out_content_type_(0), content_type_(0), 
       content_type_text_("text/plain"), content_type_html_("text/html"), 
-      content_type_xml_("text/html"), content_type_parameter_name_("content_type"),
-      environment_file_name_("cgicatch-env.txt"), environment_file_pattern_("environment\r\n"),
-      input_file_name_("cgicatch-stdin.txt"), input_file_pattern_("stdin\r\n"),
-      form_file_name_("cgicatch-form.txt"), form_file_pattern_("form\r\n"),
-      query_file_name_("cgicatch-query.txt"), query_file_pattern_("query\r\n") {
+      content_type_xml_("text/xml"), content_type_parameter_name_("content_type"),
+      environment_name_("environment"), environment_file_name_("cgicatch-env.txt"), environment_file_pattern_("environment\r\n"),
+      input_name_("stdin"), input_file_name_("cgicatch-stdin.txt"), input_file_pattern_("stdin\r\n"),
+      form_name_("form"), form_file_name_("cgicatch-form.txt"), form_file_pattern_("form\r\n"),
+      query_name_("query"), query_file_name_("cgicatch-query.txt"), query_file_pattern_("query\r\n") {
     }
     virtual ~maint() {
     }
@@ -80,6 +82,8 @@ protected:
     typedef xos::protocol::xttp::message::part::reader_t reader_t;
     typedef xos::protocol::xttp::message::part::writer_t writer_t;
     typedef xos::protocol::xttp::content::readert<reader_t> content_reader_t;
+    typedef xos::io::crt::file::readert<reader_t> file_reader_t;
+    typedef xos::io::crt::file::writert<writer_t> file_writer_t;
     typedef xos::io::string::readert<reader_t> string_reader_t;
     typedef string_reader_t::string_t query_string_t;
     typedef xos::protocol::http::form::content form_content_t;
@@ -226,15 +230,17 @@ protected:
     }
     virtual int before_console_run(int argc, char_t** argv, char_t** env) {
         int err = 0;
-        /*set_console_in_std_in();
+        set_console_in_std_in();
         set_console_out_std_out();
-        err = all_read_environment_values(argc, argv, env);*/
+        if (!(err = all_read_environment_values(argc, argv, env))) {
+            err = all_read_form_fields(argc, argv, env);
+        }
         return err;
     }
     virtual int after_console_run(int argc, char_t** argv, char_t** env) {
         int err = 0;
-        /*unset_in_std_in();
-        unset_out_std_out();*/
+        unset_in_std_in();
+        unset_out_std_out();
         return err;
     }
     virtual int all_console_run(int argc, char_t** argv, char_t** env) {
@@ -251,23 +257,24 @@ protected:
     /// ...console_gateway_run
     virtual int console_gateway_run(int argc, char_t** argv, char_t** env) {
         int err = 0;
-        /*if ((content_type_is_html()) || (content_type_is_xml())) {
-            this->outlln("<html><body><pre>", NULL);
-        }*/
+
+        if ((content_type_is_html()) || (content_type_is_xml())) {
+            this->outln("<html><body><pre>");
+        }
 
         all_out_environment_values(argc, argv, env);
         all_out_form_content(argc, argv, env);
         all_out_form(argc, argv, env);
         all_out_query(argc, argv, env);
 
-        /*if ((content_type_is_html()) || (content_type_is_xml())) {
-            this->outlln("</pre></body></html>", NULL);
-        }*/
+        if ((content_type_is_html()) || (content_type_is_xml())) {
+            this->outln("</pre></body></html>");
+        }
         return err;
     }
     virtual int before_console_gateway_run(int argc, char_t** argv, char_t** env) {
         int err = 0;
-        /*set_content_type_from_parameter();*/
+        set_content_type_from_parameter();
         return err;
     }
     virtual int after_console_gateway_run(int argc, char_t** argv, char_t** env) {
@@ -336,19 +343,17 @@ protected:
                 content_reader_t content_reader(this_reader, content_length);
                 url_encoded_reader_t url_encoded_reader(content_reader);
                 
-                all_read_form_fields(url_encoded_reader, argc, argv, env);
+                all_read_form_content(url_encoded_reader, argc, argv, env);
             }
         }
         return err;
     }
     virtual int before_get_form_fields(int argc, char_t** argv, char_t** env) {
         int err = 0;
-        //err = read_query_form_fields(argc, argv, env);
         return err;
     }
     virtual int after_get_form_fields(int argc, char_t** argv, char_t** env) {
         int err = 0;
-        //form_fields_.finish_read();
         return err;
     }
     virtual int all_get_form_fields(int argc, char_t** argv, char_t** env) {
@@ -356,6 +361,120 @@ protected:
         if (!(err = before_get_form_fields(argc, argv, env))) {
             err = get_form_fields(argc, argv, env);
             if ((err2 = after_get_form_fields(argc, argv, env))) {
+                if ((!err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...read_environment_values
+    virtual int read_environment_values(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        environment_.read(environment_file_name_, environment_file_pattern_);
+        return err;
+    }
+    virtual int before_read_environment_values(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_read_environment_values(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_read_environment_values(int argc, char_t** argv, char_t** env) {
+        int err = 0, err2 = 0;
+        if (!(err = before_read_environment_values(argc, argv, env))) {
+            err = read_environment_values(argc, argv, env);
+            if ((err2 = after_read_environment_values(argc, argv, env))) {
+                if ((!err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...read_form_fields
+    virtual int read_form_fields(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        size_t content_length = 0;
+        const char_t *setting = 0;
+        environment_value_t *value = 0;
+
+        form_content_.clear();
+        if ((setting = (environment_.setting_of(value, QUERY_STRING))) && (setting[0])) {
+            query_string_t query_string(setting);
+            string_reader_t string_reader(query_string);
+            url_encoded_reader_t url_encoded_reader(string_reader);
+
+            all_read_query_fields(url_encoded_reader, argc, argv, env);
+        }
+        if ((setting = (environment_.setting_of(value, CONTENT_LENGTH))) && (setting[0])) {
+            content_length = value->to_unsigned();
+        }
+        if ((setting = (environment_.setting_of(value, CONTENT_TYPE))) && (setting[0])) {
+            url_encoded_form_content_type_t url_encoded_form_content_type;
+
+            if ((url_encoded_form_content_type.is_equal(setting))) {
+                const char_t *name = 0, *pattern = 0;
+                
+                if ((name = input_file_name_.has_chars()) && (pattern = input_file_pattern_.has_chars())) {
+                    file_reader_t file;
+                    
+                    if ((file.open_safe(name, pattern))) {
+                        content_reader_t content_reader(file, content_length);
+                        url_encoded_reader_t url_encoded_reader(content_reader);
+                        
+                        all_read_form_content(url_encoded_reader, argc, argv, env);
+                        file.close();
+                    }
+                }
+            }
+        }
+        return err;
+    }
+    virtual int before_read_form_fields(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_read_form_fields(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_read_form_fields(int argc, char_t** argv, char_t** env) {
+        int err = 0, err2 = 0;
+        if (!(err = before_read_form_fields(argc, argv, env))) {
+            err = read_form_fields(argc, argv, env);
+            if ((err2 = after_read_form_fields(argc, argv, env))) {
+                if ((!err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...read_form_content
+    virtual int read_form_content(reader_t &reader, int argc, char_t** argv, char_t** env) {
+        int err = 0;
+
+        all_read_form_fields(reader, argc, argv, env);
+        /*if (0 < (form_content_.read(reader))) {
+            string_reader_t string_reader(form_content_);
+
+            all_read_form_fields(string_reader, argc, argv, env);
+        }*/
+        return err;
+    }
+    virtual int before_read_form_content(reader_t &reader, int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_read_form_content(reader_t &reader, int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_read_form_content(reader_t &reader, int argc, char_t** argv, char_t** env) {
+        int err = 0, err2 = 0;
+        if (!(err = before_read_form_content(reader, argc, argv, env))) {
+            err = read_form_content(reader, argc, argv, env);
+            if ((err2 = after_read_form_content(reader, argc, argv, env))) {
                 if ((!err)) err = err2;
             }
         }
@@ -420,6 +539,157 @@ protected:
         return err;
     }
 
+    /// ...write_environment_values
+    virtual int write_environment_values(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        const char_t *name = 0, *pattern = 0;
+        
+        if ((name = environment_file_name_.has_chars()) && (pattern = environment_file_pattern_.has_chars())) {
+            file_writer_t file;
+            
+            if ((file.open_safe(name, pattern))) {
+                all_write_environment_values(file, argc, argv, env);
+                file.close();
+            }
+        }
+        return err;
+    }
+    virtual int before_write_environment_values(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_write_environment_values(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_write_environment_values(int argc, char_t** argv, char_t** env) {
+        int err = 0, err2 = 0;
+        if (!(err = before_write_environment_values(argc, argv, env))) {
+            err = write_environment_values(argc, argv, env);
+            if ((err2 = after_write_environment_values(argc, argv, env))) {
+                if ((!err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...write_environment_values
+    virtual int write_environment_values(writer_t& writer, int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        const char_t *pattern = 0;
+        size_t length = 0;
+        
+        if ((pattern = environment_file_pattern_.has_chars(length))) {
+            if (0 < (writer.write(pattern, length))) {
+                environment_.write(writer);
+            }
+        }
+        return err;
+    }
+    virtual int before_write_environment_values(writer_t& writer, int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_write_environment_values(writer_t& writer, int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_write_environment_values(writer_t& writer, int argc, char_t** argv, char_t** env) {
+        int err = 0, err2 = 0;
+        if (!(err = before_write_environment_values(writer, argc, argv, env))) {
+            err = write_environment_values(writer, argc, argv, env);
+            if ((err2 = after_write_environment_values(writer, argc, argv, env))) {
+                if ((!err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...write_form_content
+    virtual int write_form_content(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        const char_t *name = 0, *pattern = 0;
+        
+        if ((name = input_file_name_.has_chars()) && (pattern = input_file_pattern_.has_chars())) {
+            file_writer_t file;
+            
+            if ((file.open_safe(name, pattern))) {
+                all_write_form_content(file, argc, argv, env);
+                file.close();
+            }
+        }
+        return err;
+    }
+    virtual int before_write_form_content(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_write_form_content(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_write_form_content(int argc, char_t** argv, char_t** env) {
+        int err = 0, err2 = 0;
+        if (!(err = before_write_form_content(argc, argv, env))) {
+            err = write_form_content(argc, argv, env);
+            if ((err2 = after_write_form_content(argc, argv, env))) {
+                if ((!err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...write_form_content
+    virtual int write_form_content(writer_t& writer, int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        const char_t *pattern = 0;
+        size_t length = 0;
+        
+        if ((pattern = input_file_pattern_.has_chars(length))) {
+            if (0 < (writer.write(pattern, length))) {
+                const char_t *setting = 0;
+                environment_value_t *value = 0;
+
+                if ((setting = (environment_.setting_of(value, CONTENT_LENGTH))) && (setting[0])) {
+                    size_t content_length = 0;
+
+                    if (0 < (content_length = value->to_unsigned())) {
+                        ssize_t amount = 0;
+                        char_t c = 0;
+                        
+                        for (; 0 < content_length; --content_length) {
+                            if (0 < (amount = input(&c, 1))) {
+                                if (0 < (amount = writer.write(&c, 1))) {
+                                    continue;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return err;
+    }
+    virtual int before_write_form_content(writer_t& writer, int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_write_form_content(writer_t& writer, int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_write_form_content(writer_t& writer, int argc, char_t** argv, char_t** env) {
+        int err = 0, err2 = 0;
+        if (!(err = before_write_form_content(writer, argc, argv, env))) {
+            err = write_form_content(writer, argc, argv, env);
+            if ((err2 = after_write_form_content(writer, argc, argv, env))) {
+                if ((!err)) err = err2;
+            }
+        }
+        return err;
+    }
+
     /// ...out_environment_values
     virtual int out_environment_values(int argc, char_t** argv, char_t** env) {
         int err = 0;
@@ -427,7 +697,7 @@ protected:
         if (0 < (environment_.size())) {
 
             this->outln();
-            this->outlln("environment = \"", environment_file_name_.chars(), "\"", null);
+            this->outlln(environment_name_.chars(), " = \"", environment_file_name_.chars(), "\"", null);
             this->outln();
 
             for (environment_which_t which = environment_first; which <= environment_last; ++which) {
@@ -470,7 +740,7 @@ protected:
         if ((chars = form_content_.has_chars(length))) {
 
             this->outln();
-            this->outlln("stdin = \"", input_file_name_.chars(), "\"", null);
+            this->outlln(input_name_.chars(), " = \"", input_file_name_.chars(), "\"", null);
             this->outln();
             this->out(chars, length);
             this->outln();
@@ -506,7 +776,11 @@ protected:
             form_fields_t::const_iterator_t i;
 
             this->outln();
-            this->outlln("form = \"", form_file_name_.chars(), "\"", null);
+            if (!(form_content_.has_chars(length))) {
+                this->outlln(input_name_.chars(), " = \"", input_file_name_.chars(), "\"", null);
+                this->outln();
+            }
+            this->outlln(form_name_.chars(), " = \"", form_file_name_.chars(), "\"", null);
             this->outln();
             for (field = form_.first(i); field; field = form_.next(i)) {
                 this->outlln(field->name().chars(), " = \"", field->value().chars(), "\"", NULL);
@@ -543,7 +817,7 @@ protected:
             form_fields_t::const_iterator_t i;
 
             this->outln();
-            this->outlln("query = \"", query_file_name_.chars(), "\"", null);
+            this->outlln(query_name_.chars(), " = \"", query_file_name_.chars(), "\"", null);
             this->outln();
             for (field = query_.first(i); field; field = query_.next(i)) {
                 this->outlln(field->name().chars(), " = \"", field->value().chars(), "\"", NULL);
@@ -715,6 +989,76 @@ protected:
         return count;
     }
 
+    /// ...parameter
+    const char_t* get_parameter(const string_t& name) const {
+        const char_t* chars = 0;
+        if (!(chars = query_.has_value_of(name))) {
+            chars = form_.has_value_of(name);
+        }
+        return chars;
+    }
+
+    /// set_content_type...
+    virtual content_type_header_t* set_content_type_from_parameter() {
+        return set_content_type_from_parameter(content_type_parameter_name_);
+    }
+    virtual content_type_header_t* set_content_type_from_parameter(const string_t& parameter_name) {
+        const char_t* chars = 0;
+        if ((chars = get_parameter(parameter_name))) {
+            set_content_type(chars);
+        }
+        return content_type_;
+    }
+    virtual content_type_header_t* set_content_type(const char_t* chars) {
+        if ((chars) && (chars[0])) {
+            if (!(content_type_text_.value().compare(chars))) {
+                content_type_ = content_type_text();
+            } else {
+                if (!(content_type_html_.value().compare(chars))) {
+                    content_type_ = content_type_html();
+                } else {
+                    if (!(content_type_xml_.value().compare(chars))) {
+                        content_type_ = content_type_xml();
+                    } else {
+                    }
+                }
+            }
+        }
+        return content_type_;
+    }
+
+    /// ...content_type...
+    virtual content_type_header_t* set_content_type_text() {
+        set_content_type(content_type_text());
+        return content_type_;
+    }
+    virtual content_type_header_t* set_content_type_html() {
+        set_content_type(content_type_html());
+        return content_type_;
+    }
+    virtual content_type_header_t* set_content_type_xml() {
+        set_content_type(content_type_xml());
+        return content_type_;
+    }
+    virtual content_type_header_t* content_type_is_text() const {
+        if ((content_type_) && (content_type_text() == content_type_)) {
+            return content_type_;
+        }
+        return 0;
+    }
+    virtual content_type_header_t* content_type_is_html() const {
+        if ((content_type_) && (content_type_html() == content_type_)) {
+            return content_type_;
+        }
+        return 0;
+    }
+    virtual content_type_header_t* content_type_is_xml() const {
+        if ((content_type_) && (content_type_xml() == content_type_)) {
+            return content_type_;
+        }
+        return 0;
+    }
+
     /// ...content_type
     virtual content_type_header_t* output_content_type() {
         content_type_header_t* content_type = 0;
@@ -748,10 +1092,10 @@ protected:
                           content_type_text_, content_type_html_, content_type_xml_;
 
     string_t content_type_parameter_name_,
-             environment_file_name_, environment_file_pattern_,
-             input_file_name_, input_file_pattern_,
-             form_file_name_, form_file_pattern_,
-             query_file_name_, query_file_pattern_;
+             environment_name_, environment_file_name_, environment_file_pattern_,
+             input_name_, input_file_name_, input_file_pattern_,
+             form_name_, form_file_name_, form_file_pattern_,
+             query_name_, query_file_name_, query_file_pattern_;
     
     gateway_interface_t gateway_interface_;
     environment_values_t environment_;

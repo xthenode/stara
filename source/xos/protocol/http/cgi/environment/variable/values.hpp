@@ -21,7 +21,11 @@
 #ifndef XOS_PROTOCOL_HTTP_CGI_ENVIRONMENT_VARIABLE_VALUES_HPP
 #define XOS_PROTOCOL_HTTP_CGI_ENVIRONMENT_VARIABLE_VALUES_HPP
 
+#include "xos/protocol/http/cgi/environment/variable/name.hpp"
 #include "xos/protocol/http/cgi/environment/variable/value.hpp"
+#include "xos/protocol/http/cgi/environment/variable/setting.hpp"
+#include "xos/io/crt/file/reader.hpp"
+#include "xos/io/crt/file/writer.hpp"
 #include "xos/base/array.hpp"
 
 namespace xos {
@@ -41,6 +45,7 @@ public:
     typedef TExtends extends;
     typedef valuest derives;
 
+    typedef variable::setting setting_t;
     typedef variable::value value_t;
     typedef variable::value::part_t part_t;
     typedef variable::value::string_t string_t;
@@ -48,6 +53,7 @@ public:
     typedef variable::value::string_t::char_t char_t;
     typedef variable::value::reader_t reader_t;
     typedef variable::value::writer_t writer_t;
+    typedef io::crt::file::readert<reader_t> file_reader_t;
 
     /// constructor / destructor
     valuest(const valuest& copy) {
@@ -96,6 +102,82 @@ public:
             if ((value = value_of(which))) {
                 if ((chars = value->get(length))) {
                     ++count;
+                }
+            }
+        }
+        return count;
+    }
+
+    /// read / write
+    virtual int read(const string_t& file_name, const string_t& file_pattern) {
+        int count = 0;
+        const char_t *name, *pattern = 0;
+        init();
+        if ((name = file_name.has_chars()) && (pattern = file_pattern.has_chars())) {
+            count = read(name, pattern);
+        }
+        return count;
+    }
+    virtual int read(const char_t* file_name, const char_t* file_pattern) {
+        int count = 0;
+        init();
+        if ((file_name) && (file_name[0]) && (file_pattern) && (file_pattern[0])) {
+            file_reader_t file;
+            
+            if ((file.open_safe(file_name, file_pattern))) {
+                count = read(file);
+                file.close();
+            }
+        }
+        return count;
+    }
+    virtual int read(reader_t& reader) {
+        int count = 0;
+        ssize_t amount = 0;
+        setting_t setting;
+        char_t c = 0;
+
+        init();
+        do {
+            if ((setting.read(amount, c, reader))) {
+                if (('\r' == c)) {
+                    if (0 < (reader.read(&c, 1))) {
+                        if (('\n' == c)) {
+                            value_t& value = setting.value();
+                            which_t which = value.which();
+                            value_t& what = operator[](which);
+        
+                            if (&null_ != (&what)) {
+                                if ((what.set(which, value))) {
+                                    what.set_setting();
+                                    ++count;
+                                }
+                            }
+                            continue;
+                        }
+                    }
+                }
+            }
+            break;
+        } while (0 < (amount));
+        return count;
+    }
+    virtual int write(writer_t& writer) {
+        int count = 0;
+        ssize_t amount = 0;
+        value_t* value = 0;
+        const char_t *name = 0, *setting = 0;
+
+        for (variable::which_t which = variable::first; which <= variable::last; ++which) {
+            if ((value = value_of(which)) && (name = value->of()) && (setting = value->setting())) {
+                if (0 < (amount = writer.write(name))) {
+                    if (0 < (amount = writer.write("="))) {
+                        if (0 <= (amount = writer.write(setting))) {
+                            if (0 < (amount = writer.write("\r\n"))) {
+                                ++count;
+                            }
+                        }
+                    }
                 }
             }
         }
