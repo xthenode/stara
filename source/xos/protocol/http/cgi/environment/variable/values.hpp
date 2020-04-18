@@ -219,6 +219,20 @@ public:
         }
         return 0;
     }
+    virtual const char_t* setting_of(const char_t* name) const {
+        value_t* value = 0;
+        if ((value = value_of(name))) {
+            return value->setting();
+        }
+        return 0;
+    }
+    virtual const char_t* setting_of(variable::which_t which) const {
+        value_t* value = 0;
+        if ((value = value_of(which))) {
+            return value->setting();
+        }
+        return 0;
+    }
 
     /// value_of
     virtual value_t* value_of(const char_t* name) const {

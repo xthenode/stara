@@ -101,6 +101,7 @@ protected:
         CONTENT_LENGTH = xos::protocol::http::cgi::environment::variable::CONTENT_LENGTH,
         CONTENT_TYPE = xos::protocol::http::cgi::environment::variable::CONTENT_TYPE,
         GATEWAY_INTERFACE = xos::protocol::http::cgi::environment::variable::GATEWAY_INTERFACE,
+        PATH_TRANSLATED = xos::protocol::http::cgi::environment::variable::PATH_TRANSLATED,
         QUERY_STRING = xos::protocol::http::cgi::environment::variable::QUERY_STRING,
         environment_first = xos::protocol::http::cgi::environment::variable::first,
         environment_last = xos::protocol::http::cgi::environment::variable::last,
@@ -257,19 +258,7 @@ protected:
     /// ...console_gateway_run
     virtual int console_gateway_run(int argc, char_t** argv, char_t** env) {
         int err = 0;
-
-        if ((content_type_is_html()) || (content_type_is_xml())) {
-            this->outln("<html><body><pre>");
-        }
-
-        all_out_environment_values(argc, argv, env);
-        all_out_form_content(argc, argv, env);
-        all_out_form(argc, argv, env);
-        all_out_query(argc, argv, env);
-
-        if ((content_type_is_html()) || (content_type_is_xml())) {
-            this->outln("</pre></body></html>");
-        }
+        err = all_console_gateway_out_run(argc, argv, env);
         return err;
     }
     virtual int before_console_gateway_run(int argc, char_t** argv, char_t** env) {
@@ -286,6 +275,40 @@ protected:
         if (!(err = before_console_gateway_run(argc, argv, env))) {
             err = console_gateway_run(argc, argv, env);
             if ((err2 = after_console_gateway_run(argc, argv, env))) {
+                if ((!err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...console_gateway_out_run
+    virtual int console_gateway_out_run(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        all_out_environment_values(argc, argv, env);
+        all_out_form_content(argc, argv, env);
+        all_out_form(argc, argv, env);
+        all_out_query(argc, argv, env);
+        return err;
+    }
+    virtual int before_console_gateway_out_run(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        if ((content_type_is_html()) || (content_type_is_xml())) {
+            this->outln("<html><body><pre>");
+        }
+        return err;
+    }
+    virtual int after_console_gateway_out_run(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        if ((content_type_is_html()) || (content_type_is_xml())) {
+            this->outln("</pre></body></html>");
+        }
+        return err;
+    }
+    virtual int all_console_gateway_out_run(int argc, char_t** argv, char_t** env) {
+        int err = 0, err2 = 0;
+        if (!(err = before_console_gateway_out_run(argc, argv, env))) {
+            err = console_gateway_out_run(argc, argv, env);
+            if ((err2 = after_console_gateway_out_run(argc, argv, env))) {
                 if ((!err)) err = err2;
             }
         }
@@ -1085,6 +1108,61 @@ protected:
     }
     virtual content_type_header_t* content_type_xml() const {
         return (content_type_header_t*)&content_type_xml_;
+    }
+
+    /// environment_setting...
+    virtual const char_t *environment_setting_PATH_TRANSLATED() const {
+        const char_t *setting = environment_setting(PATH_TRANSLATED);
+        return setting;
+    }
+    virtual const char_t *environment_setting(environment_which_t of) const {
+        const char_t *setting = 0;
+        setting = environment_.setting_of(of);
+        return setting;
+    }
+    
+    /// ...form_field
+    const form_field_t* first_form_field(form_fields_t::const_iterator_t& i) const {    
+        const form_field_t* field = 0;
+        field = form_.first(i);
+        return field;
+    }
+    const form_field_t* next_form_field(form_fields_t::const_iterator_t& i) const {    
+        const form_field_t* field = 0;
+        field = form_.next(i);
+        return field;
+    }
+    const form_field_t* last_form_field(form_fields_t::const_iterator_t& i) const {    
+        const form_field_t* field = 0;
+        field = form_.last(i);
+        return field;
+    }
+    const form_field_t* prev_form_field(form_fields_t::const_iterator_t& i) const {    
+        const form_field_t* field = 0;
+        field = form_.prev(i);
+        return field;
+    }
+
+    /// ...query_field
+    const form_field_t* first_query_field(form_fields_t::const_iterator_t& i) const {    
+        const form_field_t* field = 0;
+        field = query_.first(i);
+        return field;
+    }
+    const form_field_t* next_query_field(form_fields_t::const_iterator_t& i) const {    
+        const form_field_t* field = 0;
+        field = query_.next(i);
+        return field;
+    }
+    const form_field_t* last_query_field(form_fields_t::const_iterator_t& i) const {    
+        const form_field_t* field = 0;
+        field = query_.last(i);
+        return field;
+    }
+    const form_field_t* prev_query_field(form_fields_t::const_iterator_t& i) const {    
+        const form_field_t* field = 0;
+        field = query_.prev(i);
+        return field;
     }
 
 protected:
