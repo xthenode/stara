@@ -53,6 +53,19 @@ $${stara_DEFINES} \
 # cgi HEADERS
 #
 cgi_HEADERS += \
+$${STARA_SRC}/xos/protocol/http/url/encoded/reader.hpp \
+$${STARA_SRC}/xos/protocol/http/url/encoded/form/content/type.hpp \
+\
+$${STARA_SRC}/xos/protocol/http/form/content.hpp \
+$${STARA_SRC}/xos/protocol/http/form/field.hpp \
+$${STARA_SRC}/xos/protocol/http/form/fields.hpp \
+\
+$${STARA_SRC}/xos/protocol/http/cgi/identifier.hpp \
+$${STARA_SRC}/xos/protocol/http/cgi/environment/variable/name.hpp \
+$${STARA_SRC}/xos/protocol/http/cgi/environment/variable/value.hpp \
+$${STARA_SRC}/xos/protocol/http/cgi/environment/variable/setting.hpp \
+$${STARA_SRC}/xos/protocol/http/cgi/environment/variable/values.hpp \
+\
 $${STARA_SRC}/xos/app/console/network/protocol/http/cgi/main_opt.hpp \
 $${STARA_SRC}/xos/app/console/network/protocol/http/cgi/main.hpp \
 $${NADIR_SRC}/xos/console/main_main.hpp \

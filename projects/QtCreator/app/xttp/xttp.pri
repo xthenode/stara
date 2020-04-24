@@ -13,83 +13,68 @@
 # or otherwise) arising in any way out of the use of this software,
 # even if advised of the possibility of such damage.
 #
-#   File: xttpcatch.pri
+#   File: xttp.pri
 #
 # Author: $author$
-#   Date: 3/27/2020
+#   Date: 4/22/2020
 #
-# QtCreator .pri file for stara executable xttpcatch
+# QtCreator .pri file for stara executable xttp
 ########################################################################
 
 ########################################################################
-# xttpcatch
+# xttp
 
-# xttpcatch TARGET
+# xttp TARGET
 #
-xttpcatch_TARGET = xttpcatch
+xttp_TARGET = xttp
 
-# xttpcatch INCLUDEPATH
+# xttp INCLUDEPATH
 #
-xttpcatch_INCLUDEPATH += \
+xttp_INCLUDEPATH += \
 $${stara_INCLUDEPATH} \
 
-# xttpcatch DEFINES
+# xttp DEFINES
 #
-xttpcatch_DEFINES += \
+xttp_DEFINES += \
 $${stara_DEFINES} \
 
 ########################################################################
-# xttpcatch OBJECTIVE_HEADERS
+# xttp OBJECTIVE_HEADERS
 #
-#xttpcatch_OBJECTIVE_HEADERS += \
+#xttp_OBJECTIVE_HEADERS += \
 #$${STARA_SRC}/stara/base/Base.hh \
 
-# xttpcatch OBJECTIVE_SOURCES
+# xttp OBJECTIVE_SOURCES
 #
-#xttpcatch_OBJECTIVE_SOURCES += \
+#xttp_OBJECTIVE_SOURCES += \
 #$${STARA_SRC}/stara/base/Base.mm \
 
 ########################################################################
-# xttpcatch HEADERS
+# xttp HEADERS
 #
-xttpcatch_HEADERS += \
-$${NADIR_SRC}/xos/base/array.hpp \
-$${NADIR_SRC}/xos/io/crt/file/attached.hpp \
-$${NADIR_SRC}/xos/io/crt/file/opened.hpp \
-$${NADIR_SRC}/xos/io/crt/file/writer.hpp \
-$${NADIR_SRC}/xos/io/crt/file/reader.hpp \
-\
+xttp_HEADERS += \
 $${RETE_SRC}/xos/app/console/network/main_opt.hpp \
 $${RETE_SRC}/xos/app/console/network/main.hpp \
 \
-$${STARA_SRC}/xos/app/console/network/protocol/xttp/catcher/main_opt.hpp \
-$${STARA_SRC}/xos/app/console/network/protocol/xttp/catcher/main.hpp \
-\
-$${NADIR_SRC}/xos/console/main_main.hpp \
+$${STARA_SRC}/xos/app/console/network/protocol/xttp/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/network/protocol/xttp/main.hpp \
 
-# xttpcatch SOURCES
+# xttp SOURCES
 #
-xttpcatch_SOURCES += \
-$${NADIR_SRC}/xos/base/array.cpp \
-$${NADIR_SRC}/xos/io/crt/file/attached.cpp \
-$${NADIR_SRC}/xos/io/crt/file/opened.cpp \
-$${NADIR_SRC}/xos/io/crt/file/writer.cpp \
-$${NADIR_SRC}/xos/io/crt/file/reader.cpp \
-\
-$${STARA_SRC}/xos/app/console/network/protocol/xttp/catcher/main_opt.cpp \
-$${STARA_SRC}/xos/app/console/network/protocol/xttp/catcher/main.cpp \
-\
+xttp_SOURCES += \
+$${STARA_SRC}/xos/app/console/network/protocol/xttp/main_opt.cpp \
+$${STARA_SRC}/xos/app/console/network/protocol/xttp/main.cpp \
 $${NADIR_SRC}/xos/console/main_main.cpp \
 
 ########################################################################
-# xttpcatch FRAMEWORKS
+# xttp FRAMEWORKS
 #
-xttpcatch_FRAMEWORKS += \
+xttp_FRAMEWORKS += \
 $${stara_FRAMEWORKS} \
 
-# xttpcatch LIBS
+# xttp LIBS
 #
-xttpcatch_LIBS += \
+xttp_LIBS += \
 $${stara_LIBS} \
 
 
