@@ -21,7 +21,7 @@
 #ifndef XOS_PROTOCOL_XTTP_CONTENT_READER_HPP
 #define XOS_PROTOCOL_XTTP_CONTENT_READER_HPP
 
-#include "xos/io/reader.hpp"
+#include "xos/protocol/xttp/message/part.hpp"
 
 namespace xos {
 namespace protocol {
@@ -29,7 +29,7 @@ namespace xttp {
 namespace content {
 
 /// class readert
-template <class TImplements = io::reader, class TExtends = extend>
+template <class TImplements = message::part::reader_t, class TExtends = extend>
 class exported readert: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;

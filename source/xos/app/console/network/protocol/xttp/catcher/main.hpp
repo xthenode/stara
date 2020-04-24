@@ -72,37 +72,10 @@ protected:
         return err;
     }
 
-    /// accept / connect
-    using extends::accept;
-    virtual int accept(int argc, char_t** argv, char_t**env) {
-        const xos::network::sockets::sockstring_t& host = this->accept_host();
-        const xos::network::sockets::sockport_t& port = this->accept_port();
-        xos::network::sockets::endpoint& ep = this->accept_ep();
-        xos::network::sockets::transport& tp = this->accept_tp();
-        xos::network::sockets::interface &ac = this->accept_iface(), 
-                                    &cn = this->connect_iface();
-        xos::network::sockets::sockaddr_t& ad = this->connect_addr();
-        xos::network::sockets::socklen_t& al = this->connect_addrlen();
+    /// ...accept / ...connect
+    virtual int after_accept(int argc, char_t** argv, char_t**env) {
         int err = 0;
-
-        if ((ep.attach(host, port))) {
-
-            if ((ac.open(tp))) {
-                
-                if ((ac.listen(ep))) {
-                    
-                    if ((ac.accept(cn, &ad, al))) {
-                        
-                        this->accept(cn, argc, argv, env);
-                        cn.close();
-                    }
-                }
-                ac.close();
-            }
-            ep.detach();
-        }
         writer_.closed();
-        reader_.closed();
         return err;
     }
     virtual int connect(int argc, char_t** argv, char_t**env) {
@@ -114,6 +87,11 @@ protected:
             count += amount;
             this->out(&c, 1);
         }
+        return err;
+    }
+    virtual int after_connect(int argc, char_t** argv, char_t**env) {
+        int err = 0;
+        reader_.closed();
         return err;
     }
 

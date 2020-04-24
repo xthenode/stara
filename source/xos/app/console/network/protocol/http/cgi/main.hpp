@@ -64,11 +64,13 @@ public:
     : run_(0), in_std_in_(0), out_std_out_(0),
       out_content_type_(0), content_type_(0), 
       content_type_text_("text/plain"), content_type_html_("text/html"), 
-      content_type_xml_("text/xml"), content_type_parameter_name_("content_type"),
+      content_type_xml_("text/xml"), content_type_css_("text/css"), 
+      content_type_js_("application/javascript"), content_type_json_("application/json"), content_type_parameter_name_("content_type"),
       environment_name_("environment"), environment_file_name_("cgicatch-env.txt"), environment_file_pattern_("environment\r\n"),
       input_name_("stdin"), input_file_name_("cgicatch-stdin.txt"), input_file_pattern_("stdin\r\n"),
       form_name_("form"), form_file_name_("cgicatch-form.txt"), form_file_pattern_("form\r\n"),
-      query_name_("query"), query_file_name_("cgicatch-query.txt"), query_file_pattern_("query\r\n") {
+      query_name_("query"), query_file_name_("cgicatch-query.txt"), query_file_pattern_("query\r\n"),
+      conf_name_("conf"), conf_file_name_("conf.conf"), conf_file_pattern_("conf\r\n") {
     }
     virtual ~maint() {
     }
@@ -1043,6 +1045,21 @@ protected:
                     if (!(content_type_xml_.value().compare(chars))) {
                         content_type_ = content_type_xml();
                     } else {
+                        if (!(content_type_css_.value().compare(chars))) {
+                            content_type_ = content_type_css();
+                        } else {
+                            if (!(content_type_js_.value().compare(chars))) {
+                                content_type_ = content_type_js();
+                            } else {
+                                if (!(content_type_json_.value().compare(chars))) {
+                                    content_type_ = content_type_json();
+                                } else {
+                                    if ((content_type_ = content_type_other())) {
+                                        content_type_->set_value(chars);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1050,7 +1067,7 @@ protected:
         return content_type_;
     }
 
-    /// ...content_type...
+    /// set_content_type...
     virtual content_type_header_t* set_content_type_text() {
         set_content_type(content_type_text());
         return content_type_;
@@ -1063,21 +1080,47 @@ protected:
         set_content_type(content_type_xml());
         return content_type_;
     }
+    virtual content_type_header_t* set_content_type_css() {
+        set_content_type(content_type_css());
+        return content_type_;
+    }
+    virtual content_type_header_t* set_content_type_js() {
+        set_content_type(content_type_js());
+        return content_type_;
+    }
+    virtual content_type_header_t* set_content_type_json() {
+        set_content_type(content_type_json());
+        return content_type_;
+    }
+
+    /// content_type_is...
     virtual content_type_header_t* content_type_is_text() const {
-        if ((content_type_) && (content_type_text() == content_type_)) {
-            return content_type_;
-        }
-        return 0;
+        return content_type_is(content_type_text());
     }
     virtual content_type_header_t* content_type_is_html() const {
-        if ((content_type_) && (content_type_html() == content_type_)) {
-            return content_type_;
-        }
-        return 0;
+        return content_type_is(content_type_html());
     }
     virtual content_type_header_t* content_type_is_xml() const {
-        if ((content_type_) && (content_type_xml() == content_type_)) {
-            return content_type_;
+        return content_type_is(content_type_xml());
+    }
+    virtual content_type_header_t* content_type_is_css() const {
+        return content_type_is(content_type_css());
+    }
+    virtual content_type_header_t* content_type_is_js() const {
+        return content_type_is(content_type_js());
+    }
+    virtual content_type_header_t* content_type_is_json() const {
+        return content_type_is(content_type_json());
+    }
+    virtual content_type_header_t* content_type_is(content_type_header_t* content_type) const {
+        if ((content_type_) && (content_type)) {
+            int unequal = 0;
+            if ((content_type_ != content_type)) {
+                unequal = content_type_->compare(*content_type);
+            }
+            if (!(unequal)) {
+                return content_type_;
+            }
         }
         return 0;
     }
@@ -1108,6 +1151,18 @@ protected:
     }
     virtual content_type_header_t* content_type_xml() const {
         return (content_type_header_t*)&content_type_xml_;
+    }
+    virtual content_type_header_t* content_type_css() const {
+        return (content_type_header_t*)&content_type_css_;
+    }
+    virtual content_type_header_t* content_type_js() const {
+        return (content_type_header_t*)&content_type_js_;
+    }
+    virtual content_type_header_t* content_type_json() const {
+        return (content_type_header_t*)&content_type_json_;
+    }
+    virtual content_type_header_t* content_type_other() const {
+        return (content_type_header_t*)&content_type_other_;
     }
 
     /// environment_setting...
@@ -1167,19 +1222,22 @@ protected:
 
 protected:
     content_type_header_t *out_content_type_, *content_type_,
-                          content_type_text_, content_type_html_, content_type_xml_;
+                          content_type_text_, content_type_html_, content_type_xml_,
+                          content_type_css_, content_type_js_, content_type_json_,
+                          content_type_other_;
 
     string_t content_type_parameter_name_,
              environment_name_, environment_file_name_, environment_file_pattern_,
              input_name_, input_file_name_, input_file_pattern_,
              form_name_, form_file_name_, form_file_pattern_,
-             query_name_, query_file_name_, query_file_pattern_;
+             query_name_, query_file_name_, query_file_pattern_,
+             conf_name_, conf_file_name_, conf_file_pattern_;
     
     gateway_interface_t gateway_interface_;
     environment_values_t environment_;
 
     form_content_t form_content_;
-    form_fields_t form_, query_;
+    form_fields_t form_, query_, conf_;
 }; /// class maint
 typedef maint<> main;
 
