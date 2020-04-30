@@ -56,6 +56,7 @@ stara_exe_HEADERS += \
 $${STARA_SRC}/xos/protocol/xttp/protocol/name.hpp \
 $${STARA_SRC}/xos/protocol/xttp/protocol/version.hpp \
 $${STARA_SRC}/xos/protocol/xttp/protocol/identifier.hpp \
+\
 $${STARA_SRC}/xos/protocol/xttp/message/part.hpp \
 $${STARA_SRC}/xos/protocol/xttp/message/line.hpp \
 $${STARA_SRC}/xos/protocol/xttp/message/header/field.hpp \
@@ -64,16 +65,24 @@ $${STARA_SRC}/xos/protocol/xttp/message/header/content/type.hpp \
 $${STARA_SRC}/xos/protocol/xttp/message/header/content/length.hpp \
 $${STARA_SRC}/xos/protocol/xttp/message/parts.hpp \
 $${STARA_SRC}/xos/protocol/xttp/message/body/content.hpp \
+\
 $${STARA_SRC}/xos/protocol/xttp/request/method.hpp \
 $${STARA_SRC}/xos/protocol/xttp/request/line.hpp \
 $${STARA_SRC}/xos/protocol/xttp/request/message.hpp \
+\
 $${STARA_SRC}/xos/protocol/xttp/response/status.hpp \
 $${STARA_SRC}/xos/protocol/xttp/response/reason.hpp \
 $${STARA_SRC}/xos/protocol/xttp/response/line.hpp \
 $${STARA_SRC}/xos/protocol/xttp/response/message.hpp \
 \
+$${STARA_SRC}/xos/app/console/protocol/xttp/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/main.hpp \
+\
 $${STARA_SRC}/xos/app/console/stara/main_opt.hpp \
 $${STARA_SRC}/xos/app/console/stara/main.hpp \
+\
+$${NADIR_SRC}/xos/app/console/version/main_opt.hpp \
+$${NADIR_SRC}/xos/app/console/version/main.hpp \
 $${NADIR_SRC}/xos/console/main_main.hpp \
 
 # stara_exe SOURCES
@@ -82,6 +91,7 @@ stara_exe_SOURCES += \
 $${STARA_SRC}/xos/protocol/xttp/protocol/name.cpp \
 $${STARA_SRC}/xos/protocol/xttp/protocol/version.cpp \
 $${STARA_SRC}/xos/protocol/xttp/protocol/identifier.cpp \
+\
 $${STARA_SRC}/xos/protocol/xttp/message/part.cpp \
 $${STARA_SRC}/xos/protocol/xttp/message/header/field.cpp \
 $${STARA_SRC}/xos/protocol/xttp/message/header/fields.cpp \
@@ -89,6 +99,7 @@ $${STARA_SRC}/xos/protocol/xttp/message/header/content/type.cpp \
 $${STARA_SRC}/xos/protocol/xttp/message/header/content/length.cpp \
 $${STARA_SRC}/xos/protocol/xttp/message/parts.cpp \
 $${STARA_SRC}/xos/protocol/xttp/message/body/content.cpp \
+\
 $${STARA_SRC}/xos/protocol/xttp/request/method.cpp \
 $${STARA_SRC}/xos/protocol/xttp/response/message.cpp \
 $${STARA_SRC}/xos/protocol/xttp/response/status.cpp \
@@ -98,6 +109,8 @@ $${STARA_SRC}/xos/protocol/xttp/response/line.cpp \
 $${STARA_SRC}/xos/app/console/stara/main_opt.cpp \
 $${STARA_SRC}/xos/app/console/stara/main.cpp \
 $${NADIR_SRC}/xos/console/main_main.cpp \
+
+_stara_exe_SOURCES += \
 
 ########################################################################
 # stara_exe FRAMEWORKS

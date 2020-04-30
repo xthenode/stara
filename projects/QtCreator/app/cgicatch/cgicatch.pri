@@ -72,6 +72,11 @@ $${STARA_SRC}/xos/protocol/http/url/encoded/form/content/type.hpp \
 $${STARA_SRC}/xos/protocol/http/cgi/name.hpp \
 $${STARA_SRC}/xos/protocol/http/cgi/version.hpp \
 $${STARA_SRC}/xos/protocol/http/cgi/identifier.hpp \
+$${STARA_SRC}/xos/protocol/http/cgi/configure/which.hpp \
+$${STARA_SRC}/xos/protocol/http/cgi/configure/name.hpp \
+$${STARA_SRC}/xos/protocol/http/cgi/configure/value.hpp \
+$${STARA_SRC}/xos/protocol/http/cgi/configure/setting.hpp \
+$${STARA_SRC}/xos/protocol/http/cgi/configure/values.hpp \
 $${STARA_SRC}/xos/protocol/http/cgi/environment/variable/which.hpp \
 $${STARA_SRC}/xos/protocol/http/cgi/environment/variable/name.hpp \
 $${STARA_SRC}/xos/protocol/http/cgi/environment/variable/value.hpp \
@@ -97,11 +102,11 @@ $${STARA_SRC}/xos/protocol/http/url/encoded/form/content/type.cpp \
 \
 $${STARA_SRC}/xos/protocol/http/cgi/version.cpp \
 $${STARA_SRC}/xos/protocol/http/cgi/identifier.cpp \
-$${STARA_SRC}/xos/protocol/http/cgi/environment/variable/which.cpp \
-$${STARA_SRC}/xos/protocol/http/cgi/environment/variable/name.cpp \
-$${STARA_SRC}/xos/protocol/http/cgi/environment/variable/value.cpp \
-$${STARA_SRC}/xos/protocol/http/cgi/environment/variable/values.hpp \
-$${STARA_SRC}/xos/protocol/http/cgi/environment/variable/setting.cpp \
+$${STARA_SRC}/xos/protocol/http/cgi/configure/which.cpp \
+$${STARA_SRC}/xos/protocol/http/cgi/configure/name.cpp \
+$${STARA_SRC}/xos/protocol/http/cgi/configure/value.cpp \
+$${STARA_SRC}/xos/protocol/http/cgi/configure/setting.cpp \
+$${STARA_SRC}/xos/protocol/http/cgi/configure/values.cpp \
 \
 $${STARA_SRC}/xos/app/console/network/protocol/http/cgi/catcher/main_opt.cpp \
 $${STARA_SRC}/xos/app/console/network/protocol/http/cgi/catcher/main.cpp \
