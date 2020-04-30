@@ -71,7 +71,7 @@ public:
     : input_(0), input_name_(0), output_name_(0), 
       protocol_(protocol_name_, protocol_version_),
 
-      request_name_("request.xttp"),
+      request_name_("xttpcatch-request.txt"),
       request_parameters_("/stara/"), 
       request_line_(request_method_, request_parameters_, protocol_),
       request_content_("Hello\r\n"), 
@@ -80,7 +80,7 @@ public:
       request_headers_(&request_content_type_, &request_content_length_, null),
       request_(request_line_, request_headers_, &request_content_),
     
-      response_name_("response.xttp"),
+      response_name_("xttpcatch-response.txt"),
       response_line_(protocol_, response_status_, response_reason_),
       response_content_(request_content_),
       response_content_length_(response_content_),
@@ -91,7 +91,7 @@ public:
     virtual ~maint() {
     }
 private:
-    maint(const maint& copy): extends(copy) {
+    maint(const maint& copy) {
     }
 
 protected:

@@ -30,6 +30,7 @@
 #include "xos/protocol/http/url/encoded/reader.hpp"
 #include "xos/protocol/http/url/encoded/form/content/type.hpp"
 #include "xos/protocol/http/cgi/identifier.hpp"
+#include "xos/protocol/http/cgi/configure/values.hpp"
 #include "xos/protocol/http/cgi/environment/variable/values.hpp"
 #include "xos/protocol/http/cgi/environment/variable/setting.hpp"
 #include "xos/io/crt/file/attached.hpp"
@@ -66,11 +67,11 @@ public:
       content_type_text_("text/plain"), content_type_html_("text/html"), 
       content_type_xml_("text/xml"), content_type_css_("text/css"), 
       content_type_js_("application/javascript"), content_type_json_("application/json"), content_type_parameter_name_("content_type"),
+      configure_name_("configure"), configure_file_name_("cgicatch-conf.txt"), configure_file_pattern_("configure\r\n"),
       environment_name_("environment"), environment_file_name_("cgicatch-env.txt"), environment_file_pattern_("environment\r\n"),
       input_name_("stdin"), input_file_name_("cgicatch-stdin.txt"), input_file_pattern_("stdin\r\n"),
       form_name_("form"), form_file_name_("cgicatch-form.txt"), form_file_pattern_("form\r\n"),
-      query_name_("query"), query_file_name_("cgicatch-query.txt"), query_file_pattern_("query\r\n"),
-      conf_name_("conf"), conf_file_name_("conf.conf"), conf_file_pattern_("conf\r\n") {
+      query_name_("query"), query_file_name_("cgicatch-query.txt"), query_file_pattern_("query\r\n") {
     }
     virtual ~maint() {
     }
@@ -94,6 +95,16 @@ protected:
     typedef xos::protocol::http::url::encoded::readert<reader_t> url_encoded_reader_t;
     typedef xos::protocol::http::url::encoded::form::content::type url_encoded_form_content_type_t;
     typedef xos::protocol::http::cgi::identifier gateway_interface_t;
+    typedef xos::protocol::http::cgi::configure::which_t configure_which_t;
+    typedef xos::protocol::http::cgi::configure::name configure_name_t;
+    typedef xos::protocol::http::cgi::configure::value configure_value_t;
+    typedef xos::protocol::http::cgi::configure::values configure_values_t;
+    enum {
+        configure_content_type = xos::protocol::http::cgi::configure::content_type,
+        configure_first = xos::protocol::http::cgi::configure::first,
+        configure_last = xos::protocol::http::cgi::configure::last,
+        configure_count = xos::protocol::http::cgi::configure::count
+    };
     typedef xos::protocol::http::cgi::environment::variable::which_t environment_which_t;
     typedef xos::protocol::http::cgi::environment::variable::name environment_name_t;
     typedef xos::protocol::http::cgi::environment::variable::value environment_value_t;
@@ -204,8 +215,10 @@ protected:
         int err = 0;
         set_gateway_in_std_in();
         set_gateway_out_std_out();
-        if (!(err = all_get_environment_values(argc, argv, env))) {
-            err = all_get_form_fields(argc, argv, env);
+        if (!(err = all_read_configure_values(argc, argv, env))) {
+            if (!(err = all_get_environment_values(argc, argv, env))) {
+                err = all_get_form_fields(argc, argv, env);
+            }
         }
         return err;
     }
@@ -235,8 +248,10 @@ protected:
         int err = 0;
         set_console_in_std_in();
         set_console_out_std_out();
-        if (!(err = all_read_environment_values(argc, argv, env))) {
-            err = all_read_form_fields(argc, argv, env);
+        if (!(err = all_read_configure_values(argc, argv, env))) {
+            if (!(err = all_read_environment_values(argc, argv, env))) {
+                err = all_read_form_fields(argc, argv, env);
+            }
         }
         return err;
     }
@@ -386,6 +401,31 @@ protected:
         if (!(err = before_get_form_fields(argc, argv, env))) {
             err = get_form_fields(argc, argv, env);
             if ((err2 = after_get_form_fields(argc, argv, env))) {
+                if ((!err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...read_configure_values
+    virtual int read_configure_values(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        configure_.read(configure_file_name_, configure_file_pattern_);
+        return err;
+    }
+    virtual int before_read_configure_values(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_read_configure_values(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_read_configure_values(int argc, char_t** argv, char_t** env) {
+        int err = 0, err2 = 0;
+        if (!(err = before_read_configure_values(argc, argv, env))) {
+            err = read_configure_values(argc, argv, env);
+            if ((err2 = after_read_configure_values(argc, argv, env))) {
                 if ((!err)) err = err2;
             }
         }
@@ -558,6 +598,72 @@ protected:
         if (!(err = before_read_query_fields(reader, argc, argv, env))) {
             err = read_query_fields(reader, argc, argv, env);
             if ((err2 = after_read_query_fields(reader, argc, argv, env))) {
+                if ((!err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...write_configure_values
+    virtual int write_configure_values(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        const char_t *name = 0, *pattern = 0;
+        
+        if ((name = configure_file_name_.has_chars()) && (pattern = configure_file_pattern_.has_chars())) {
+            file_writer_t file;
+            
+            if ((file.open_safe(name, pattern))) {
+                all_write_configure_values(file, argc, argv, env);
+                file.close();
+            }
+        }
+        return err;
+    }
+    virtual int before_write_configure_values(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_write_configure_values(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_write_configure_values(int argc, char_t** argv, char_t** env) {
+        int err = 0, err2 = 0;
+        if (!(err = before_write_configure_values(argc, argv, env))) {
+            err = write_configure_values(argc, argv, env);
+            if ((err2 = after_write_configure_values(argc, argv, env))) {
+                if ((!err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...write_configure_values
+    virtual int write_configure_values(writer_t& writer, int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        const char_t *pattern = 0;
+        size_t length = 0;
+        
+        if ((pattern = configure_file_pattern_.has_chars(length))) {
+            if (0 < (writer.write(pattern, length))) {
+                configure_.write(writer);
+            }
+        }
+        return err;
+    }
+    virtual int before_write_configure_values(writer_t& writer, int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_write_configure_values(writer_t& writer, int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_write_configure_values(writer_t& writer, int argc, char_t** argv, char_t** env) {
+        int err = 0, err2 = 0;
+        if (!(err = before_write_configure_values(writer, argc, argv, env))) {
+            err = write_configure_values(writer, argc, argv, env);
+            if ((err2 = after_write_configure_values(writer, argc, argv, env))) {
                 if ((!err)) err = err2;
             }
         }
@@ -1024,6 +1130,13 @@ protected:
     }
 
     /// set_content_type...
+    virtual content_type_header_t* set_content_type_from_configure() {
+        const char_t* chars = 0;
+        if ((chars = configure_setting_content_type()) && (chars[0])) {
+            set_content_type(chars);
+        }
+        return content_type_;
+    }
     virtual content_type_header_t* set_content_type_from_parameter() {
         return set_content_type_from_parameter(content_type_parameter_name_);
     }
@@ -1031,6 +1144,8 @@ protected:
         const char_t* chars = 0;
         if ((chars = get_parameter(parameter_name))) {
             set_content_type(chars);
+        } else {
+            set_content_type_from_configure();
         }
         return content_type_;
     }
@@ -1126,6 +1241,13 @@ protected:
     }
 
     /// ...content_type
+    virtual const char_t* output_content_type_value_chars() {
+        content_type_header_t* content_type = 0;
+        if ((content_type = output_content_type())) {
+            return content_type->value().chars();
+        }
+        return 0;
+    }
     virtual content_type_header_t* output_content_type() {
         content_type_header_t* content_type = 0;
         if (!(content_type = this->content_type())) {
@@ -1163,6 +1285,28 @@ protected:
     }
     virtual content_type_header_t* content_type_other() const {
         return (content_type_header_t*)&content_type_other_;
+    }
+    
+    /// ...configure_setting...
+    virtual const char_t *set_configure_setting_content_type(const char_t *to) {
+        const char_t *setting = 0;
+        setting = configure_.set_setting_of(configure_content_type, to);
+        return setting;
+    }
+    virtual const char_t *configure_setting_content_type() const {
+        const char_t *setting = 0;
+        setting = configure_.setting_of(configure_content_type);
+        return setting;
+    }
+    virtual const char_t *set_configure_setting(configure_which_t of, const char_t *to) {
+        const char_t *setting = 0;
+        setting = configure_.set_setting_of(of, to);
+        return setting;
+    }
+    virtual const char_t *configure_setting(configure_which_t of) const {
+        const char_t *setting = 0;
+        setting = configure_.setting_of(of);
+        return setting;
     }
 
     /// environment_setting...
@@ -1227,17 +1371,18 @@ protected:
                           content_type_other_;
 
     string_t content_type_parameter_name_,
+             configure_name_, configure_file_name_, configure_file_pattern_,
              environment_name_, environment_file_name_, environment_file_pattern_,
              input_name_, input_file_name_, input_file_pattern_,
              form_name_, form_file_name_, form_file_pattern_,
-             query_name_, query_file_name_, query_file_pattern_,
-             conf_name_, conf_file_name_, conf_file_pattern_;
+             query_name_, query_file_name_, query_file_pattern_;
     
     gateway_interface_t gateway_interface_;
+    configure_values_t configure_;
     environment_values_t environment_;
 
     form_content_t form_content_;
-    form_fields_t form_, query_, conf_;
+    form_fields_t form_, query_;
 }; /// class maint
 typedef maint<> main;
 

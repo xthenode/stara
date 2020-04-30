@@ -64,7 +64,10 @@ protected:
         this->set_gateway_out_std_out();
         if (!(err = this->all_get_environment_values(argc, argv, env))) {
             if (!(err = this->all_write_environment_values(argc, argv, env))) {
-                err = this->all_write_form_content(argc, argv, env);
+                if (!(err = this->all_write_form_content(argc, argv, env))) {
+                    this->set_configure_setting_content_type(this->output_content_type_value_chars());
+                    err = this->all_write_configure_values(argc, argv, env);
+                }
             }
         }
         return err;
