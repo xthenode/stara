@@ -80,6 +80,53 @@ nadir_LIBS += \
 nadir_FRAMEWORKS += \
 
 ########################################################################
+# cifra
+CIFRA_VERSION_MAJOR = 0
+CIFRA_VERSION_MINOR = 0
+CIFRA_VERSION_RELEASE = 0
+CIFRA_VERSION = ${CIFRA_VERSION_MAJOR}.${CIFRA_VERSION_MINOR}.${CIFRA_VERSION_RELEASE}
+CIFRA_NAME = cifra
+CIFRA_GROUP = ${CIFRA_NAME}
+CIFRA_VERSION_DIR = ${CIFRA_GROUP}/${CIFRA_NAME}-${CIFRA_VERSION}
+CIFRA_DEPENDS_DIR = ${CIFRA_NAME}
+
+#CIFRA_PKG = ${OTHER_THIRDPARTY_VERSION_PKG}/${CIFRA_VERSION_DIR}
+#CIFRA_PKG = ${OTHER_VERSION_PKG}/${CIFRA_VERSION_DIR}
+CIFRA_PKG = ${OTHER_DEPENDS_PKG}/${CIFRA_DEPENDS_DIR}
+#CIFRA_SRC = ${CIFRA_PKG}/source/${BN_GROUP}/${BN_NAME}
+CIFRA_SRC = ${CIFRA_PKG}/source
+CIFRA_BLD = ${CIFRA_PKG}/${BLD}/${BUILD_TYPE}
+CIFRA_LIB = ${CIFRA_BLD}/lib
+CIFRA_BIN = ${CIFRA_BLD}/bin
+
+# cifra USRDEFINES
+#
+cifra_USRDEFINES += \
+
+# cifra USRINCLUDES
+#
+cifra_USRINCLUDES += \
+-I${CIFRA_SRC} \
+
+# cifra USRCXXFLAGS
+#
+cifra_USRCXXFLAGS += \
+
+# cifra USRLIBDIRS
+#
+cifra_USRLIBDIRS += \
+-L${CIFRA_LIB} \
+
+# cifra LIBS
+#
+cifra_LIBS += \
+-lcifra \
+
+# cifra FRAMEWORKS
+#
+cifra_FRAMEWORKS += \
+
+########################################################################
 # rete
 RETE_VERSION_MAJOR = 0
 RETE_VERSION_MINOR = 0
@@ -134,6 +181,7 @@ rete_FRAMEWORKS += \
 #
 stara_USRDEFINES += \
 ${nadir_USRDEFINES} \
+${cifra_USRDEFINES} \
 ${rete_USRDEFINES} \
 ${build_stara_USRDEFINES} \
 
@@ -142,6 +190,7 @@ ${build_stara_USRDEFINES} \
 stara_USRINCLUDES += \
 -I${STARA_SRC} \
 ${rete_USRINCLUDES} \
+${cifra_USRINCLUDES} \
 ${nadir_USRINCLUDES} \
 ${build_stara_USRINCLUDES} \
 
@@ -149,6 +198,7 @@ ${build_stara_USRINCLUDES} \
 #
 stara_USRCXXFLAGS += \
 ${nadir_USRCXXFLAGS} \
+${cifra_USRCXXFLAGS} \
 ${rete_USRCXXFLAGS} \
 ${build_stara_USRCXXFLAGS} \
 
@@ -157,6 +207,7 @@ ${build_stara_USRCXXFLAGS} \
 stara_USRLIBDIRS += \
 -L${STARA_LIB} \
 ${rete_USRLIBDIRS} \
+${cifra_USRLIBDIRS} \
 ${nadir_USRLIBDIRS} \
 ${build_stara_USRLIBDIRS} \
 
@@ -165,6 +216,7 @@ ${build_stara_USRLIBDIRS} \
 stara_LIBS += \
 -lstara \
 ${rete_LIBS} \
+${cifra_LIBS} \
 ${nadir_LIBS} \
 ${build_stara_LIBS} \
 

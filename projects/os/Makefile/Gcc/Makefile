@@ -38,6 +38,7 @@ include $(PKG)/$(MAK)/Makedefines
 SRC_DIRS = \
 $(PKG)/$(PRJ)/lib/libstara \
 $(PKG)/$(PRJ)/app/stara \
+$(PKG)/$(PRJ)/app/xttp \
 $(PKG)/$(PRJ)/app/xttpcatch \
 $(PKG)/$(PRJ)/app/cgi \
 $(PKG)/$(PRJ)/app/cgicatch \

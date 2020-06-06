@@ -70,6 +70,53 @@ build_nadir_FRAMEWORKS += \
 endif # eq ($(USE_HOME_BUILD_nadir),yes)
 
 ########################################################################
+# build cifra
+#
+# pkg-config --cflags --libs cifra
+#
+
+ifndef USE_HOME_BUILD_cifra
+USE_HOME_BUILD_cifra = no
+endif #ndef USE_HOME_BUILD_cifra
+
+ifeq ($(USE_HOME_BUILD_cifra),yes)
+#
+# home build cifra
+#
+build_cifra_USRDEFINES += \
+
+build_cifra_USRINCLUDES += \
+-I$(HOME)/build/cifra/include \
+
+build_cifra_USRCXXFLAGS += \
+
+build_cifra_USRLIBDIRS += \
+-L$(HOME)/build/cifra/lib \
+
+build_cifra_LIBS += \
+-lcifra \
+
+build_cifra_FRAMEWORKS += \
+
+else # eq ($(USE_HOME_BUILD_cifra),yes)
+#
+# build cifra
+#
+build_cifra_USRDEFINES += \
+
+build_cifra_USRINCLUDES += \
+
+build_cifra_USRCXXFLAGS += \
+
+build_cifra_USRLIBDIRS += \
+
+build_cifra_LIBS += \
+
+build_cifra_FRAMEWORKS += \
+
+endif # eq ($(USE_HOME_BUILD_cifra),yes)
+
+########################################################################
 # build rete
 #
 # pkg-config --cflags --libs rete
@@ -123,6 +170,7 @@ endif # eq ($(USE_HOME_BUILD_rete),yes)
 #
 build_stara_USRDEFINES += \
 ${build_nadir_USRDEFINES} \
+${build_cifra_USRDEFINES} \
 ${build_rete_USRDEFINES} \
 
 
@@ -130,6 +178,7 @@ ${build_rete_USRDEFINES} \
 #
 build_stara_USRINCLUDES += \
 ${build_rete_USRINCLUDES} \
+${build_cifra_USRINCLUDES} \
 ${build_nadir_USRINCLUDES} \
 
 
@@ -137,6 +186,7 @@ ${build_nadir_USRINCLUDES} \
 #
 build_stara_USRCXXFLAGS += \
 ${build_nadir_USRCXXFLAGS} \
+${build_cifra_USRCXXFLAGS} \
 ${build_rete_USRCXXFLAGS} \
 
 
@@ -144,6 +194,7 @@ ${build_rete_USRCXXFLAGS} \
 #
 build_stara_USRLIBDIRS += \
 ${build_rete_USRLIBDIRS} \
+${build_cifra_USRLIBDIRS} \
 ${build_nadir_USRLIBDIRS} \
 
 
@@ -151,6 +202,7 @@ ${build_nadir_USRLIBDIRS} \
 #
 build_stara_FRAMEWORKS += \
 ${build_rete_FRAMEWORKS} \
+${build_cifra_FRAMEWORKS} \
 ${build_nadir_FRAMEWORKS} \
 
 
@@ -158,7 +210,6 @@ ${build_nadir_FRAMEWORKS} \
 #
 build_stara_LIBS += \
 ${build_rete_LIBS} \
+${build_cifra_LIBS} \
 ${build_nadir_LIBS} \
 ${build_stara_FRAMEWORKS}
-
-

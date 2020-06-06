@@ -16,41 +16,41 @@
 #   File: Makefile
 #
 # Author: $author$
-#   Date: 4/21/2020
+#   Date: 5/8/2020
 #
-# generic Gcc Makefile for stara Executable cgicatch
+# generic Gcc Makefile for stara Executable xttp
 ########################################################################
 
 
 #
 # target
 #
-cgicatch_EXETARGET = cgicatch
+xttp_EXETARGET = xttp
 
 ########################################################################
 
 #
 # user c++ flags
 #
-cgicatch_USRCXXFLAGS += \
+xttp_USRCXXFLAGS += \
 ${stara_USRCXXFLAGS} \
 
 #
 # user defines
 #
-cgicatch_USRDEFINES += \
+xttp_USRDEFINES += \
 ${stara_USRDEFINES} \
 
 #
 # user includes
 #
-cgicatch_USRINCLUDES += \
+xttp_USRINCLUDES += \
 ${stara_USRINCLUDES} \
 
 #
 # user libdirs
 #
-cgicatch_USRLIBDIRS += \
+xttp_USRLIBDIRS += \
 ${stara_USRLIBDIRS} \
 
 ########################################################################
@@ -58,55 +58,39 @@ ${stara_USRLIBDIRS} \
 #
 # Executable .c sources
 #
-#cgicatch_EXE_C_SOURCES += \
+#xttp_EXE_C_SOURCES += \
 #${STARA_SRC}/stara/base/Base.c \
 
 #
 # Executable .cc sources
 #
-#cgicatch_EXE_CC_SOURCES += \
+#xttp_EXE_CC_SOURCES += \
 #${STARA_SRC}/stara/base/Base.cc \
 
 #
 # Executable .cxx sources
 #
-#cgicatch_EXE_CXX_SOURCES += \
+#xttp_EXE_CXX_SOURCES += \
 #${STARA_SRC}/stara/base/Base.cxx \
 
 #
 # Executable .cpp sources
 #
-cgicatch_EXE_CPP_SOURCES += \
-${NADIR_SRC}/xos/io/string/reader.cpp \
-${NADIR_SRC}/xos/io/crt/file/attached.cpp \
-\
-${STARA_SRC}/xos/protocol/http/form/content.cpp \
-${STARA_SRC}/xos/protocol/http/form/field.cpp \
-${STARA_SRC}/xos/protocol/http/form/fields.cpp \
-${STARA_SRC}/xos/protocol/http/url/encoded/form/content/type.cpp \
-\
-${STARA_SRC}/xos/protocol/http/cgi/version.cpp \
-${STARA_SRC}/xos/protocol/http/cgi/identifier.cpp \
-${STARA_SRC}/xos/protocol/http/cgi/configure/which.cpp \
-${STARA_SRC}/xos/protocol/http/cgi/configure/name.cpp \
-${STARA_SRC}/xos/protocol/http/cgi/configure/value.cpp \
-${STARA_SRC}/xos/protocol/http/cgi/configure/setting.cpp \
-${STARA_SRC}/xos/protocol/http/cgi/configure/values.cpp \
-\
-${STARA_SRC}/xos/app/console/network/protocol/http/cgi/catcher/main_opt.cpp \
-${STARA_SRC}/xos/app/console/network/protocol/http/cgi/catcher/main.cpp \
+xttp_EXE_CPP_SOURCES += \
+${STARA_SRC}/xos/app/console/network/protocol/xttp/main_opt.cpp \
+${STARA_SRC}/xos/app/console/network/protocol/xttp/main.cpp \
 ${NADIR_SRC}/xos/console/main_main.cpp \
 
 #
 # Executable .m sources
 #
-#cgicatch_EXE_M_SOURCES += \
+#xttp_EXE_M_SOURCES += \
 #${STARA_SRC}/stara/base/Base.m \
 
 #
 # Executable .mm sources
 #
-#cgicatch_EXE_MM_SOURCES += \
+#xttp_EXE_MM_SOURCES += \
 #${STARA_SRC}/stara/base/Base.mm \
 
 
@@ -115,7 +99,7 @@ ${NADIR_SRC}/xos/console/main_main.cpp \
 #
 # Executable libraries
 #
-cgicatch_LIBS += \
+xttp_LIBS += \
 ${stara_LIBS}
 
 

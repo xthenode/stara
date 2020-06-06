@@ -53,6 +53,8 @@ $${stara_DEFINES} \
 # xttp HEADERS
 #
 xttp_HEADERS += \
+$${RETE_SRC}/xos/network/sockets/endpoint.hpp \
+\
 $${RETE_SRC}/xos/app/console/network/main_opt.hpp \
 $${RETE_SRC}/xos/app/console/network/main.hpp \
 \

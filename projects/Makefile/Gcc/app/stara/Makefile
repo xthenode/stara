@@ -80,6 +80,7 @@ stara_exe_EXE_CPP_SOURCES += \
 ${STARA_SRC}/xos/protocol/xttp/protocol/name.cpp \
 ${STARA_SRC}/xos/protocol/xttp/protocol/version.cpp \
 ${STARA_SRC}/xos/protocol/xttp/protocol/identifier.cpp \
+\
 ${STARA_SRC}/xos/protocol/xttp/message/part.cpp \
 ${STARA_SRC}/xos/protocol/xttp/message/header/field.cpp \
 ${STARA_SRC}/xos/protocol/xttp/message/header/fields.cpp \
@@ -87,6 +88,7 @@ ${STARA_SRC}/xos/protocol/xttp/message/header/content/type.cpp \
 ${STARA_SRC}/xos/protocol/xttp/message/header/content/length.cpp \
 ${STARA_SRC}/xos/protocol/xttp/message/parts.cpp \
 ${STARA_SRC}/xos/protocol/xttp/message/body/content.cpp \
+\
 ${STARA_SRC}/xos/protocol/xttp/request/method.cpp \
 ${STARA_SRC}/xos/protocol/xttp/response/message.cpp \
 ${STARA_SRC}/xos/protocol/xttp/response/status.cpp \
