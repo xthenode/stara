@@ -56,7 +56,7 @@ public:
     enum { end_char = extends::end_char };
 
     /// constructor / destructor
-    maint(): input_(0), output_(0), outname_("request.xttp"), response_("HTTP/1.0 200 Ok\r\n\r\nOk\r\n") {
+    maint(): input_(0), output_(0), outname_("xttpcatch-request.txt"), response_("HTTP/1.0 200 Ok\r\n\r\nOk\r\n") {
     }
     virtual ~maint() {
     }

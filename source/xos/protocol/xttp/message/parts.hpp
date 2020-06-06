@@ -200,6 +200,11 @@ public:
     }
 
     /// line / headers / content
+    virtual line_t& set_line(const line_t& to) {
+        line_.set(to);
+        combine();
+        return line_;
+    }
     virtual const line_t& line() const {
         return line_;
     }

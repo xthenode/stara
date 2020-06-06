@@ -84,19 +84,15 @@ public:
         return success;
     }
     virtual bool write(ssize_t& count, writer_t& writer) {
-        bool success = false;
-        const char_t* chars = 0;
-        size_t length = 0;
-        
-        if ((chars = this->has_chars(length))) {
-            ssize_t amount = 0;
-
-            if (length <= (amount = writer.write(chars, length))) {
-                count = amount;
-                success = true;
-            }
-        }
+        bool success = this->write_this(count, writer);
         return success;
+    }
+
+    /// set
+    using extends::set;
+    virtual derives& set(const parameterst& to) {
+        this->assign(to);
+        return *this;
     }
 
     /// set_default...

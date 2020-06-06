@@ -13,35 +13,34 @@
 /// or otherwise) arising in any way out of the use of this software, 
 /// even if advised of the possibility of such damage.
 ///
-///   File: method.hpp
+///   File: name.hpp
 ///
 /// Author: $author$
-///   Date: 3/13/2020
+///   Date: 5/25/2020
 ///////////////////////////////////////////////////////////////////////
-#ifndef XOS_PROTOCOL_XTTP_REQUEST_METHOD_HPP
-#define XOS_PROTOCOL_XTTP_REQUEST_METHOD_HPP
+#ifndef XOS_PROTOCOL_HTTP_CONTENT_TYPE_NAME_HPP
+#define XOS_PROTOCOL_HTTP_CONTENT_TYPE_NAME_HPP
 
-#include "xos/protocol/xttp/message/part.hpp"
+#include "xos/protocol/http/content/type/which.hpp"
+#include "xos/protocol/http/content/media/type/name.hpp"
+#include "xos/protocol/http/content/media/subtype/name.hpp"
 
 namespace xos {
 namespace protocol {
-namespace xttp {
-namespace request {
+namespace http {
+namespace content {
+namespace type {
 
-namespace extended {
-/// class methodt
-template 
-<typename TWhich = int, TWhich VNone = 0, 
- class TExtends = message::part, class TImplements = typename TExtends::implements>
-class exported methodt: virtual public TImplements, public TExtends {
+/// class namet
+template <class TExtends = message::part, class TImplements = typename TExtends::implements>
+class exported namet: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;
     typedef TExtends extends;
-    typedef methodt derives;
+    typedef namet derives;
 
-    typedef TWhich which_t;
-    enum { none = VNone };
-
+    typedef media::type::name type_name_t;
+    typedef media::subtype::name subtype_name_t;
     typedef extends part_t;
     typedef typename extends::string_t string_t;
     typedef typename string_t::char_t char_t;
@@ -49,21 +48,28 @@ public:
     typedef typename extends::writer_t writer_t;
 
     /// constructor / destructor
-    methodt(const string_t &copy): extends(copy), which_(none) {
+    namet(const string_t &copy): extends(copy), which_(none) {
+        separate();
     }
-    methodt(const char_t* chars, size_t length): extends(chars, length), which_(none) {
+    namet(const char_t* chars, size_t length): extends(chars, length), which_(none) {
+        separate();
     }
-    methodt(const char_t* chars): extends(chars), which_(none) {
+    namet(const char_t* chars): extends(chars), which_(none) {
+        separate();
     }
-    methodt(which_t which): which_(which) {
+    namet(which_t which): which_(which) {
+        set_name();
+        separate();
     }
-    methodt(const methodt& copy): extends(copy), which_(copy.which_) {
+    namet(const namet& copy): extends(copy), which_(copy.which_) {
     }
-    methodt(): which_(none) {
+    namet(): which_(none) {
+        set_name();
+        separate();
     }
-    virtual ~methodt() {
+    virtual ~namet() {
     }
-    
+
     /// read / write
     virtual bool read(ssize_t& count, char_t& c, reader_t& reader) {
         bool success = false;
@@ -74,7 +80,7 @@ public:
         do {
             if (0 < (amount = reader.read(&c, 1))) {
                 count += amount;
-                if ((' ' != c) && ('\r' != c) && ('\n' != c)) {
+                if (('/' != c) && (' ' != c) && ('\r' != c) && ('\n' != c)) {
                     chars.append(&c, 1);
                 } else {
                     break;
@@ -97,38 +103,75 @@ public:
 
     /// combine / separate
     virtual bool combine() {
-        bool success = true;
-        set_name();
+        bool success = false;
+        const char_t *type_name = 0, *subtype_name = 0;
+
+        this->clear();
+        if ((type_name = type_name_.has_chars())
+            && (subtype_name = subtype_name_.has_chars())) {
+            this->assign(type_name);
+            this->append("/");
+            this->append(subtype_name);
+            return true;
+        }
         return success;
     }
     virtual bool separate() {
-        bool success = true;
-        set_which();
-        return success;
-    }
+        bool success = false;
+        const char_t* chars = 0;
+        size_t length = 0;
 
-    /// set
-    using extends::set;
-    virtual derives& set(const methodt& to) {
-        which_ = to.which_;
-        this->assign(to);
-        return *this;
+        set_defaults();
+        if ((chars = this->has_chars(length))) {
+            char_t c = 0;
+            const char_t* end = chars + length;
+            string_t *part = 0, type_name, subtype_name;
+
+            for (part = &type_name; chars != end; ++chars) {
+                if ('/' != (c = *chars)) {
+                    part->append(&c, 1);
+                } else {
+                    if (part != &subtype_name) {
+                        if (type_name.has_chars()) {
+                            // ?'/'
+                            part = &subtype_name;
+                        } else {
+                            // '/'
+                            return false;
+                        }
+                    } else {
+                        // ?'/'*'/'
+                        return false;
+                    }
+                }
+            }
+            if ((type_name.has_chars()) && (subtype_name.has_chars())) {
+                // ?'/'?
+                type_name_.set(type_name);
+                subtype_name_.set(subtype_name);
+                success = true;
+            }
+        }
+        return success;
     }
 
     /// set_default...
     virtual derives& set_default() {
         this->clear();
         set_defaults();
+        this->assign(name_of_chars(which_ = default_which()));
         return *this;
     }
     virtual derives& set_defaults() {
-        this->assign(name_of_chars(which_ = default_which()));
+        type_name_.set_default();
+        subtype_name_.set_default();
         return *this;
     }
 
     /// ...name / ...which
     virtual string_t set_name() {
-        string_t name(name_of_chars(which_));
+        const char_t* chars = name_of_chars(which_);
+        string_t name(chars);
         this->assign(name);
         return name;
     }
@@ -145,75 +188,35 @@ public:
         return of_name(name.chars());
     }
     virtual which_t of_name(const char_t* name) const {
-        return none;
+        return which::of_name(name);
     }
     virtual string_t name_of(which_t which) const {
         string name(name_of_chars(which));
         return name;
     }
     virtual const char_t* name_of_chars(which_t which) const {
-        return default_name_chars();
+        return which::name_of(which);
     }
 
     /// ...name_chars / ...which
     virtual const char_t* default_name_chars() const {
-        return "GET";
+        return which::name_of_none();
     }
     virtual which_t default_which() const {
-        return none;
+        return which::of_name_none();
     }
 
 protected:
     which_t which_;
-}; /// class methodt
-typedef methodt<> method;
-} /// namespace extended
+    type_name_t type_name_;
+    subtype_name_t subtype_name_;
+}; /// class namet
+typedef namet<> name;
 
-/// class methodt
-template <class TExtends = extended::method, class TImplements = typename TExtends::implements>
-class exported methodt: virtual public TImplements, public TExtends {
-public:
-    typedef TImplements implements;
-    typedef TExtends extends;
-    typedef methodt derives;
-
-    typedef typename extends::which_t which_t;
-    enum { none = extends::none };
-
-    typedef extends part_t;
-    typedef typename extends::string_t string_t;
-    typedef typename string_t::char_t char_t;
-    typedef typename extends::reader_t reader_t;
-    typedef typename extends::writer_t writer_t;
-
-    /// constructor / destructor
-    methodt(const string_t &copy): extends(copy) {
-        this->separate();
-    }
-    methodt(const char_t* chars, size_t length): extends(chars, length) {
-        this->separate();
-    }
-    methodt(const char_t* chars): extends(chars) {
-        this->separate();
-    }
-    methodt(which_t which): extends(which) {
-        this->combine();
-    }
-    methodt(const extends& copy): extends(copy) {
-    }
-    methodt(const methodt& copy): extends(copy) {
-    }
-    methodt() {
-        this->combine();
-    }
-    virtual ~methodt() {
-    }
-}; /// class methodt
-typedef methodt<> method;
-    
-} /// namespace request
-} /// namespace xttp
+} /// namespace type
+} /// namespace content
+} /// namespace http
 } /// namespace protocol
 } /// namespace xos
 
-#endif /// ndef XOS_PROTOCOL_XTTP_REQUEST_METHOD_HPP 
+#endif /// ndef XOS_PROTOCOL_HTTP_CONTENT_TYPE_NAME_HPP 

@@ -114,18 +114,7 @@ public:
         return success;
     }
     virtual bool write(ssize_t& count, writer_t& writer) {
-        bool success = false;
-        const char_t* chars = 0;
-        size_t length = 0;
-        
-        if ((chars = this->has_chars(length))) {
-            ssize_t amount = 0;
-
-            if (length <= (amount = writer.write(chars, length))) {
-                count = amount;
-                success = true;
-            }
-        }
+        bool success = this->write_this(count, writer);
         return success;
     }
 
@@ -193,6 +182,16 @@ public:
         return success;
     }
 
+    /// set
+    using extends::set;
+    virtual derives& set(const linet& to) {
+        method_.set(to.method_);
+        parameters_.set(to.parameters_);
+        protocol_.set(to.protocol_);
+        this->assign(to);
+        return *this;
+    }
+
     /// set_default...
     virtual derives& set_default() {
         this->clear();
@@ -205,6 +204,16 @@ public:
         parameters_.set_default();
         protocol_.set_default();
         return *this;
+    }
+
+    /// ...method
+    virtual method_t& set_method(const method_t& to) {
+        method_.set(to);
+        combine();
+        return method_;
+    }
+    virtual const method_t& method() const {
+        return method_;
     }
 
 protected:

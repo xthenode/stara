@@ -114,6 +114,10 @@ public:
     }
 
     /// set / clear
+    virtual derives& set(const partt& to) {
+        this->assign(to);
+        return *this;
+    }
     virtual bool set(const string_t& to) {
         bool success = false;
         this->assign(to);

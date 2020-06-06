@@ -162,6 +162,15 @@ public:
         return success;
     }
 
+    /// set
+    using extends::set;
+    virtual derives& set(const versiont& to) {
+        major_.set(to.major_);
+        minor_.set(to.minor_);
+        this->assign(to);
+        return *this;
+    }
+
     /// set_default...
     virtual derives& set_default() {
         this->clear();

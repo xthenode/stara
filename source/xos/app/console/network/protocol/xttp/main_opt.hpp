@@ -69,6 +69,9 @@ private:
 public:
 
 protected:
+    typedef typename extends::out_writer_t out_writer_t;
+
+protected:
     /// ...options...
     virtual const char_t* options(const struct option*& longopts) {
         static const char_t* chars = XOS_NETWORK_PROTOCOL_XTTP_MAIN_OPTIONS_CHARS;
