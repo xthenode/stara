@@ -32,17 +32,22 @@ namespace protocol {
 namespace xttp {
 namespace request {
 
+namespace extended {
 /// class linet
-template <class TExtends = message::line, class TImplements = typename TExtends::implements>
+template 
+<class TMethod = request::method, 
+ class TParameters = request::parameters, class TProtocol = protocol::identifier,
+ class TExtends = message::line, class TImplements = typename TExtends::implements>
+
 class exported linet: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;
     typedef TExtends extends;
     typedef linet derives;
 
-    typedef request::method method_t;
-    typedef request::parameters parameters_t;
-    typedef protocol::identifier protocol_t;
+    typedef TMethod method_t;
+    typedef TParameters parameters_t;
+    typedef TProtocol protocol_t;
     typedef extends line_t;
     typedef message::line::part_t part_t;
     typedef typename extends::string_t string_t;
@@ -53,30 +58,23 @@ public:
     /// constructor / destructor
     linet(const method_t& method, const parameters_t& parameters, const protocol_t& protocol)
     : method_(method), parameters_(parameters), protocol_(protocol) {
-        combine();
     }
     linet(const string_t& method, const string_t& parameters, const string_t& protocol)
     : method_(method), parameters_(parameters), protocol_(protocol) {
-        combine();
     }
     linet(const char_t* method, const char_t* parameters, const char_t* protocol)
     : method_(method), parameters_(parameters), protocol_(protocol) {
-        combine();
     }
     linet(const string_t &copy): extends(copy) {
-        separate();
     }
     linet(const char_t* chars, size_t length): extends(chars, length) {
-        separate();
     }
     linet(const char_t* chars): extends(chars) {
-        separate();
     }
     linet(const linet& copy)
     : extends(copy), method_(copy.method_), parameters_(copy.parameters_), protocol_(copy.protocol_) {
     }
     linet() {
-        set_default();
     }
     virtual ~linet() {
     }
@@ -220,6 +218,57 @@ protected:
     method_t method_;
     parameters_t parameters_;
     protocol_t protocol_;
+}; /// class linet
+typedef linet<> line;
+} /// namespace extended
+
+/// class linet
+template <class TExtends = extended::line, class TImplements = typename TExtends::implements>
+class exported linet: virtual public TImplements, public TExtends {
+public:
+    typedef TImplements implements;
+    typedef TExtends extends;
+    typedef linet derives;
+
+    typedef typename extends::method_t method_t;
+    typedef typename extends::parameters_t parameters_t;
+    typedef typename extends::protocol_t protocol_t;
+    typedef typename extends::line_t line_t;
+    typedef typename extends::part_t part_t;
+    typedef typename extends::string_t string_t;
+    typedef typename string_t::char_t char_t;
+    typedef typename extends::reader_t reader_t;
+    typedef typename extends::writer_t writer_t;
+
+    /// constructor / destructor
+    linet(const method_t& method, const parameters_t& parameters, const protocol_t& protocol)
+    : extends(method, parameters, protocol) {
+        this->combine();
+    }
+    linet(const string_t& method, const string_t& parameters, const string_t& protocol)
+    : extends(method, parameters, protocol) {
+        this->combine();
+    }
+    linet(const char_t* method, const char_t* parameters, const char_t* protocol)
+    : extends(method, parameters, protocol) {
+        this->combine();
+    }
+    linet(const string_t &copy): extends(copy) {
+        this->separate();
+    }
+    linet(const char_t* chars, size_t length): extends(chars, length) {
+        this->separate();
+    }
+    linet(const char_t* chars): extends(chars) {
+        this->separate();
+    }
+    linet(const linet& copy): extends(copy) {
+    }
+    linet() {
+        this->set_default();
+    }
+    virtual ~linet() {
+    }
 }; /// class linet
 typedef linet<> line;
 

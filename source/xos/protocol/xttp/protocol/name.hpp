@@ -28,7 +28,7 @@ namespace protocol {
 namespace xttp {
 namespace protocol {
 
-namespace extened {
+namespace extended {
 /// class namet
 template <class TExtends = message::part, class TImplements = typename TExtends::implements>
 class exported namet: virtual public TImplements, public TExtends {
@@ -115,7 +115,7 @@ typedef namet<> name;
 } /// namespace extended
 
 /// class namet
-template <class TExtends = protocol::extened::name, class TImplements = typename TExtends::implements>
+template <class TExtends = protocol::extended::name, class TImplements = typename TExtends::implements>
 class exported namet: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;

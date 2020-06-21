@@ -31,10 +31,11 @@ namespace protocol {
 namespace xttp {
 namespace message {
 
+namespace extended {
 /// class partst
 template 
-<class TLine = message::line,
- class TExtends = part, class TImplements = typename TExtends::implements>
+<class TLine = message::line, class TFields = header::fields, class TContent = body::content,
+ class TExtends = message::part, class TImplements = typename TExtends::implements>
 class exported partst: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;
@@ -42,9 +43,9 @@ public:
     typedef partst derives;
 
     typedef TLine line_t;
-    typedef header::field field_t;
-    typedef header::fields headers_t;
-    typedef body::content content_t;
+    typedef TFields headers_t;
+    typedef typename headers_t::field_t field_t;
+    typedef TContent content_t;
     typedef extends part_t;
     typedef typename extends::string_t string_t;
     typedef typename string_t::char_t char_t;
@@ -52,25 +53,25 @@ public:
     typedef typename extends::writer_t writer_t;
 
     /// constructor / destructor
+    partst(const partst& copy, const content_t& content): extends(copy), content_(&content) {
+    }
+    partst(const partst& copy, const content_t* content): extends(copy), content_(content) {
+    }
+    partst(const line_t& line, const headers_t& headers, const content_t& content): line_(line), headers_(headers), content_(&content) {
+    }
     partst(const line_t& line, const headers_t& headers, const content_t* content): line_(line), headers_(headers), content_(content) {
-        combine();
     }
     partst(const line_t& line, const headers_t& headers): line_(line), headers_(headers), content_(0) {
-        combine();
     }
     partst(const string_t& chars): extends(chars), content_(0) {
-        separate();
     }
     partst(const char_t* chars, size_t length): extends(chars, length), content_(0) {
-        separate();
     }
     partst(const char_t* chars): extends(chars), content_(0) {
-        separate();
     }
     partst(const partst& copy): extends(copy), content_(copy.content_) {
     }
     partst(): content_(0) {
-        set_default();
     }
     virtual ~partst() {
     }
@@ -123,7 +124,7 @@ public:
 
         if ((chars = line_.has_chars())) {
             const field_t* h = 0;
-            headers_t::const_iterator_t i;
+            typename headers_t::const_iterator_t i;
 
             this->assignl(chars, "\r\n", NULL);
             if ((h = headers_.first(i))) {
@@ -217,11 +218,79 @@ public:
     virtual size_t content_length() const {
         return headers_.content_length();
     }
+    virtual const char_t* content_chars() const {
+        const char_t* chars = 0;
+        if (content_) {
+            chars = content_->has_chars();
+        }
+        return chars;
+    }
+    virtual const char_t* content_chars(size_t& length) const {
+        const char_t* chars = 0;
+        if (content_) {
+            chars = content_->has_chars(length);
+        }
+        return chars;
+    }
 
 protected:
     line_t line_;
     headers_t headers_;
     const content_t* content_;
+}; /// class partst
+typedef partst<> parts;
+} /// namespace extended
+
+/// class partst
+template 
+<class TLine = message::line,
+ class TExtends = extended::partst<TLine>, class TImplements = typename TExtends::implements>
+class exported partst: virtual public TImplements, public TExtends {
+public:
+    typedef TImplements implements;
+    typedef TExtends extends;
+    typedef partst derives;
+
+    typedef typename extends::line_t line_t;
+    typedef typename extends::headers_t headers_t;
+    typedef typename extends::field_t field_t;
+    typedef typename extends::content_t content_t;
+    typedef typename extends::part_t part_t;
+    typedef typename extends::string_t string_t;
+    typedef typename string_t::char_t char_t;
+    typedef typename extends::reader_t reader_t;
+    typedef typename extends::writer_t writer_t;
+
+    /// constructor / destructor
+    partst(const partst& copy, const content_t& content): extends(copy, content) {
+    }
+    partst(const partst& copy, const content_t* content): extends(copy, content) {
+    }
+    partst(const line_t& line, const headers_t& headers, const content_t& content): extends(line, headers, content) {
+        this->combine();
+    }
+    partst(const line_t& line, const headers_t& headers, const content_t* content): extends(line, headers, content) {
+        this->combine();
+    }
+    partst(const line_t& line, const headers_t& headers): extends(line, headers) {
+        this->combine();
+    }
+    partst(const string_t& chars): extends(chars) {
+        this->separate();
+    }
+    partst(const char_t* chars, size_t length): extends(chars, length) {
+        this->separate();
+    }
+    partst(const char_t* chars): extends(chars) {
+        this->separate();
+    }
+    partst(const partst& copy): extends(copy) {
+    }
+    partst() {
+        this->set_default();
+    }
+    virtual ~partst() {
+    }
 }; /// class partst
 typedef partst<> parts;
 

@@ -16,84 +16,27 @@
 ///   File: type.hpp
 ///
 /// Author: $author$
-///   Date: 3/12/2020
+///   Date: 6/16/2020
 ///////////////////////////////////////////////////////////////////////
-#ifndef XOS_PROTOCOL_XTTP_MESSAGE_HEADER_CONTENT_TYPE_HPP
-#define XOS_PROTOCOL_XTTP_MESSAGE_HEADER_CONTENT_TYPE_HPP
+#ifndef XOS_PROTOCOL_HTTP_MESSAGE_HEADER_CONTENT_TYPE_HPP
+#define XOS_PROTOCOL_HTTP_MESSAGE_HEADER_CONTENT_TYPE_HPP
 
-#include "xos/protocol/xttp/message/header/field.hpp"
+#include "xos/protocol/xttp/message/header/content/type.hpp"
+#include "xos/protocol/http/message/header/field.hpp"
+#include "xos/protocol/http/content/type/name.hpp"
 
 namespace xos {
 namespace protocol {
-namespace xttp {
+namespace http {
 namespace message {
 namespace header {
 namespace content {
 
-namespace extended {
 /// class typet
 template 
-<class TType = message::part,
- class TExtends = header::field, class TImplements = typename TExtends::implements>
-class exported typet: virtual public TImplements, public TExtends {
-public:
-    typedef TImplements implements;
-    typedef TExtends extends;
-    typedef typet derives;
-
-    typedef TType type_t;
-    typedef typename extends::part_t part_t;
-    typedef typename extends::string_t string_t;
-    typedef typename string_t::char_t char_t;
-    typedef typename extends::reader_t reader_t;
-    typedef typename extends::writer_t writer_t;
-
-    /// constructor / destructor
-    typet(const string_t& chars) {
-    }
-    typet(const char_t* chars, size_t length) {
-    }
-    typet(const char_t* chars) {
-    }
-    typet(const typet& copy) {
-    }
-    typet() {
-    }
-    virtual ~typet() {
-    }
-
-    /// set_type
-    virtual derives& set_type(const string& s) {
-        this->set_name(name_chars());
-        this->set_value(s);
-        return *this;
-    }
-    virtual derives& set_type(const char* chars, size_t length) {
-        this->set_name(name_chars());
-        this->set_value(chars, length);
-        return *this;
-    }
-    virtual derives& set_type(const char* chars) {
-        this->set_name(name_chars());
-        this->set_value(chars);
-        return *this;
-    }
-    virtual derives& set_type() {
-        this->set_name(name_chars());
-        this->set_value();
-        return *this;
-    }
-    
-    /// name_chars
-    const char_t* name_chars() const {
-        return "Content-Type";
-    }
-}; /// class typet
-typedef typet<> type;
-} /// namespace extended
-
-/// class typet
-template <class TExtends = extended::type, class TImplements = typename TExtends::implements>
+<class TExtends = xttp::message::header::content::extended::typet
+ <http::content::type::name, http::message::header::field>, 
+ class TImplements = typename TExtends::implements>
 class exported typet: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;
@@ -108,6 +51,9 @@ public:
     typedef typename extends::writer_t writer_t;
 
     /// constructor / destructor
+    typet(const type_t& type) {
+        this->set_type(type);
+    }
     typet(const string_t& chars) {
         this->set_type(chars);
     }
@@ -131,8 +77,8 @@ typedef typet<> type;
 } /// namespace content
 } /// namespace header
 } /// namespace message
-} /// namespace xttp
+} /// namespace http
 } /// namespace protocol
 } /// namespace xos
 
-#endif /// ndef XOS_PROTOCOL_XTTP_MESSAGE_HEADER_CONTENT_TYPE_HPP 
+#endif /// ndef XOS_PROTOCOL_HTTP_MESSAGE_HEADER_CONTENT_TYPE_HPP 

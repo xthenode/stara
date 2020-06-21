@@ -31,16 +31,19 @@ namespace message {
 namespace header {
 namespace content {
 
+namespace extended {
 /// class lengtht
-template <class TExtends = header::field, class TImplements = typename TExtends::implements>
+template 
+<class TContent = message::body::content, 
+ class TExtends = header::field, class TImplements = typename TExtends::implements>
 class exported lengtht: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;
     typedef TExtends extends;
     typedef lengtht derives;
 
-    typedef message::body::content content_t;
-    typedef extends part_t;
+    typedef TContent content_t;
+    typedef typename extends::part_t part_t;
     typedef typename extends::string_t string_t;
     typedef typename string_t::char_t char_t;
     typedef typename extends::reader_t reader_t;
@@ -48,22 +51,18 @@ public:
 
     /// constructor / destructor
     lengtht(const content_t& content) {
-        set_length(content);
     }
     lengtht(const string_t& chars) {
-        set_length(chars);
     }
     lengtht(const char_t* chars, size_t length) {
-        set_length(chars, length);
     }
     lengtht(const char_t* chars) {
-        set_length(chars);
+    }
+    lengtht(size_t length) {
     }
     lengtht(const lengtht& copy) {
-        set_length(copy.value());
     }
     lengtht() {
-        set_length();
     }
     virtual ~lengtht() {
     }
@@ -91,6 +90,13 @@ public:
         this->set_value(chars);
         return *this;
     }
+    virtual derives& set_length(size_t length) {
+        string_t s;
+        s.assign_unsigned(length);
+        this->set_name(name_chars());
+        this->set_value(s);
+        return *this;
+    }
     virtual derives& set_length() {
         this->set_name(name_chars());
         this->set_value(default_value_chars());
@@ -103,6 +109,49 @@ public:
     }
     const char_t* default_value_chars() const {
         return "0";
+    }
+}; /// class lengtht
+typedef lengtht<> length;
+} /// namespace extended
+
+/// class lengtht
+template <class TExtends = extended::length, class TImplements = typename TExtends::implements>
+class exported lengtht: virtual public TImplements, public TExtends {
+public:
+    typedef TImplements implements;
+    typedef TExtends extends;
+    typedef lengtht derives;
+
+    typedef typename extends::content_t content_t;
+    typedef typename extends::part_t part_t;
+    typedef typename extends::string_t string_t;
+    typedef typename string_t::char_t char_t;
+    typedef typename extends::reader_t reader_t;
+    typedef typename extends::writer_t writer_t;
+
+    /// constructor / destructor
+    lengtht(const content_t& content) {
+        this->set_length(content);
+    }
+    lengtht(const string_t& chars) {
+        this->set_length(chars);
+    }
+    lengtht(const char_t* chars, size_t length) {
+        this->set_length(chars, length);
+    }
+    lengtht(const char_t* chars) {
+        this->set_length(chars);
+    }
+    lengtht(size_t length) {
+        this->set_length(length);
+    }
+    lengtht(const lengtht& copy) {
+        this->set_length(copy.value());
+    }
+    lengtht() {
+        this->set_length();
+    }
+    virtual ~lengtht() {
     }
 }; /// class lengtht
 typedef lengtht<> length;

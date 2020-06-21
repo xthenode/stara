@@ -29,6 +29,7 @@ namespace xttp {
 namespace message {
 namespace header {
 
+namespace extended {
 /// class fieldt
 template <class TExtends = part, class TImplements = typename TExtends::implements>
 class exported fieldt: virtual public TImplements, public TExtends {
@@ -45,16 +46,12 @@ public:
 
     /// constructor / destructor
     fieldt(const string_t& name, const string_t& value) {
-        set(name, value);
     }
     fieldt(const string_t& chars): extends(chars) {
-        separate();
     }
     fieldt(const char_t* chars, size_t length): extends(chars, length) {
-        separate();
     }
     fieldt(const char_t* chars): extends(chars) {
-        separate();
     }
     fieldt(const fieldt& copy): extends(copy) {
     }
@@ -247,6 +244,44 @@ public:
 
 protected:
     part_t name_, value_;
+}; /// class fieldt
+typedef fieldt<> field;
+} /// namespace extended
+
+/// class fieldt
+template <class TExtends = extended::field, class TImplements = typename TExtends::implements>
+class exported fieldt: virtual public TImplements, public TExtends {
+public:
+    typedef TImplements implements;
+    typedef TExtends extends;
+    typedef fieldt derives;
+
+    typedef extends part_t;
+    typedef typename extends::string_t string_t;
+    typedef typename string_t::char_t char_t;
+    typedef typename extends::reader_t reader_t;
+    typedef typename extends::writer_t writer_t;
+
+    /// constructor / destructor
+    fieldt(const string_t& name, const string_t& value) {
+        this->set(name, value);
+    }
+    fieldt(const string_t& chars): extends(chars) {
+        this->separate();
+    }
+    fieldt(const char_t* chars, size_t length): extends(chars, length) {
+        this->separate();
+    }
+    fieldt(const char_t* chars): extends(chars) {
+        this->separate();
+    }
+    fieldt(const fieldt& copy): extends(copy) {
+    }
+    fieldt() {
+        this->set_default();
+    }
+    virtual ~fieldt() {
+    }
 }; /// class fieldt
 typedef fieldt<> field;
 

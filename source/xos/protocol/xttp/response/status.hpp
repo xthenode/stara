@@ -28,6 +28,7 @@ namespace protocol {
 namespace xttp {
 namespace response {
 
+namespace extended {
 /// class statust
 template 
 <typename TWhich = int, TWhich VNone = 200, 
@@ -48,18 +49,16 @@ public:
 
     /// constructor / destructor
     statust(const string_t& chars): extends(chars), which_(none) {
-        set_which();
     }
     statust(const char_t* chars, size_t length): extends(chars, length), which_(none) {
-        set_which();
     }
     statust(const char_t* chars): extends(chars), which_(none) {
-        set_which();
+    }
+    statust(which_t which): which_(which) {
     }
     statust(const statust& copy): extends(copy), which_(copy.which_) {
     }
     statust(): which_(none) {
-        set_default();
     }
     virtual ~statust() {
     }
@@ -91,18 +90,7 @@ public:
         return success;
     }
     virtual bool write(ssize_t& count, writer_t& writer) {
-        bool success = false;
-        const char_t* chars = 0;
-        size_t length = 0;
-        
-        if ((chars = this->has_chars(length))) {
-            ssize_t amount = 0;
-
-            if (length <= (amount = writer.write(chars, length))) {
-                count = amount;
-                success = true;
-            }
-        }
+        bool success = this->write_this(count, writer);
         return success;
     }
 
@@ -168,6 +156,47 @@ public:
 protected:
     which_t which_;
     string_t of_;
+}; /// class statust
+typedef statust<> status;
+} /// namespace extended
+
+/// class statust
+template 
+<class TExtends = extended::status, class TImplements = typename TExtends::implements>
+class exported statust: virtual public TImplements, public TExtends {
+public:
+    typedef TImplements implements;
+    typedef TExtends extends;
+    typedef statust derives;
+
+    typedef typename extends::which_t which_t;
+    enum { none = extends::none };
+    typedef typename extends::part_t part_t;
+    typedef typename extends::string_t string_t;
+    typedef typename string_t::char_t char_t;
+    typedef typename extends::reader_t reader_t;
+    typedef typename extends::writer_t writer_t;
+
+    /// constructor / destructor
+    statust(const string_t& chars): extends(chars) {
+        this->set_which();
+    }
+    statust(const char_t* chars, size_t length): extends(chars, length) {
+        this->set_which();
+    }
+    statust(const char_t* chars): extends(chars) {
+        this->set_which();
+    }
+    statust(which_t which): extends(which) {
+        this->set_name();
+    }
+    statust(const statust& copy): extends(copy) {
+    }
+    statust() {
+        this->set_default();
+    }
+    virtual ~statust() {
+    }
 }; /// class statust
 typedef statust<> status;
 

@@ -30,15 +30,18 @@ namespace xttp {
 namespace message {
 namespace header {
 
+namespace extended {
 /// class fieldst
-template <class TExtends = part, class TImplements = typename TExtends::implements>
+template 
+<class TField = field, 
+ class TExtends = part, class TImplements = typename TExtends::implements>
 class exported fieldst: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;
     typedef TExtends extends;
     typedef fieldst derives;
 
-    typedef field field_t;
+    typedef TField field_t;
     typedef std::list<field_t*> list_t;
     typedef typename list_t::const_iterator const_iterator_t;
     typedef extends part_t;
@@ -48,52 +51,35 @@ public:
     typedef typename extends::writer_t writer_t;
 
     /// constructor / destructor
-    fieldst(const field_t* f, ...)
-    : content_length_(0), content_length_field_(0), 
-      content_type_field_(0), content_encoding_field_(0), field_(0) {
-        va_list va;
-        va_start(va, f);
-        setv(f, va);
-        va_end(va);
-    }
     fieldst(const field_t* f, va_list va)
     : content_length_(0), content_length_field_(0), 
       content_type_field_(0), content_encoding_field_(0), field_(0) {
-        setv(f, va);
     }
     fieldst(const field_t& f)
     : content_length_(0), content_length_field_(0), 
       content_type_field_(0), content_encoding_field_(0), field_(0) {
-        set(f);
     }
     fieldst(const string_t& chars)
     : extends(chars), content_length_(0), content_length_field_(0), 
       content_type_field_(0), content_encoding_field_(0), field_(0) {
-        separate();
     }
     fieldst(const char_t* chars, size_t length)
     : extends(chars, length), content_length_(0), content_length_field_(0), 
       content_type_field_(0), content_encoding_field_(0), field_(0) {
-        separate();
     }
     fieldst(const char_t* chars)
     : extends(chars), content_length_(0), content_length_field_(0), 
       content_type_field_(0), content_encoding_field_(0), field_(0) {
-        separate();
     }
     fieldst(const fieldst& copy)
     : extends(copy), content_length_(0), content_length_field_(0), 
       content_type_field_(0), content_encoding_field_(0), field_(0) {
-        separate();
     }
     fieldst()
     : content_length_(0), content_length_field_(0), 
       content_type_field_(0), content_encoding_field_(0), field_(0) {
-        set_default();
     }
     virtual ~fieldst() {
-        clear_list();
-        free_field();
     }
 
     /// set
@@ -522,6 +508,60 @@ protected:
     field_t *field_;
     list_t list_;
     part_t content_type_, content_encoding_;
+}; /// class fieldst
+typedef fieldst<> fields;
+} /// namespace extened
+
+/// class fieldst
+template 
+<class TExtends = extended::fields, class TImplements = typename TExtends::implements>
+class exported fieldst: virtual public TImplements, public TExtends {
+public:
+    typedef TImplements implements;
+    typedef TExtends extends;
+    typedef fieldst derives;
+
+    typedef typename extends::field_t field_t;
+    typedef typename extends::list_t list_t;
+    typedef typename list_t::const_iterator const_iterator_t;
+    typedef typename extends::part_t part_t;
+    typedef typename extends::string_t string_t;
+    typedef typename string_t::char_t char_t;
+    typedef typename extends::reader_t reader_t;
+    typedef typename extends::writer_t writer_t;
+
+    /// constructor / destructor
+    fieldst(const field_t* f, ...) {
+        va_list va;
+        va_start(va, f);
+        this->setv(f, va);
+        va_end(va);
+    }
+    fieldst(const field_t* f, va_list va): extends(f, va) {
+        this->setv(f, va);
+    }
+    fieldst(const field_t& f): extends(f) {
+        this->set(f);
+    }
+    fieldst(const string_t& chars): extends(chars) {
+        this->separate();
+    }
+    fieldst(const char_t* chars, size_t length): extends(chars, length) {
+        this->separate();
+    }
+    fieldst(const char_t* chars): extends(chars) {
+        this->separate();
+    }
+    fieldst(const fieldst& copy): extends(copy) {
+        this->separate();
+    }
+    fieldst() {
+        this->set_default();
+    }
+    virtual ~fieldst() {
+        this->clear_list();
+        this->free_field();
+    }
 }; /// class fieldst
 typedef fieldst<> fields;
 

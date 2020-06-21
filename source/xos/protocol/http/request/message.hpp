@@ -16,25 +16,24 @@
 ///   File: message.hpp
 ///
 /// Author: $author$
-///   Date: 3/14/2020
+///   Date: 6/16/2020
 ///////////////////////////////////////////////////////////////////////
-#ifndef XOS_PROTOCOL_XTTP_REQUEST_MESSAGE_HPP
-#define XOS_PROTOCOL_XTTP_REQUEST_MESSAGE_HPP
+#ifndef XOS_PROTOCOL_HTTP_REQUEST_MESSAGE_HPP
+#define XOS_PROTOCOL_HTTP_REQUEST_MESSAGE_HPP
 
-#include "xos/protocol/xttp/message/part.hpp"
-#include "xos/protocol/xttp/message/line.hpp"
-#include "xos/protocol/xttp/message/parts.hpp"
-#include "xos/protocol/xttp/message/body/content.hpp"
-#include "xos/protocol/xttp/request/line.hpp"
+#include "xos/protocol/xttp/request/message.hpp"
+#include "xos/protocol/http/message/parts.hpp"
+#include "xos/protocol/http/request/line.hpp"
 
 namespace xos {
 namespace protocol {
-namespace xttp {
+namespace http {
 namespace request {
 
 /// class messaget
 template 
-<class TExtends = message::partst<request::line>, class TImplements = typename TExtends::implements>
+<class TExtends = message::partst<http::request::line>, 
+ class TImplements = typename TExtends::implements>
 class exported messaget: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;
@@ -81,8 +80,8 @@ public:
 typedef messaget<> message;
 
 } /// namespace request
-} /// namespace xttp
+} /// namespace http
 } /// namespace protocol
 } /// namespace xos
 
-#endif /// ndef XOS_PROTOCOL_XTTP_REQUEST_MESSAGE_HPP 
+#endif /// ndef XOS_PROTOCOL_HTTP_REQUEST_MESSAGE_HPP 

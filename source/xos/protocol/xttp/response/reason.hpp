@@ -29,10 +29,10 @@ namespace protocol {
 namespace xttp {
 namespace response {
 
+namespace extended {
 /// class reasont
 template 
-<typename TStatus = status, 
- typename TWhich = typename TStatus::which_t, TWhich VNone = TStatus::none, 
+<typename TStatus = status,  typename TWhich = typename TStatus::which_t, TWhich VNone = TStatus::none, 
  class TExtends = message::part, class TImplements = typename TExtends::implements>
 class exported reasont: virtual public TImplements, public TExtends {
 public:
@@ -51,18 +51,18 @@ public:
 
     /// constructor / destructor
     reasont(const string_t& chars): extends(chars), which_(none) {
-        set_which();
     }
     reasont(const char_t* chars, size_t length): extends(chars, length), which_(none) {
-        set_which();
     }
     reasont(const char_t* chars): extends(chars), which_(none) {
-        set_which();
+    }
+    reasont(status_t status): which_(status.which()) {
+    }
+    reasont(which_t which): which_(which) {
     }
     reasont(const reasont& copy): extends(copy), which_(copy.which_) {
     }
     reasont(): which_(none) {
-        set_default();
     }
     virtual ~reasont() {
     }
@@ -159,6 +159,51 @@ public:
 
 protected:
     which_t which_;
+}; /// class reasont
+typedef reasont<> reason;
+} /// namespace extended
+
+/// class reasont
+template 
+<class TExtends = extended::reason, class TImplements = typename TExtends::implements>
+class exported reasont: virtual public TImplements, public TExtends {
+public:
+    typedef TImplements implements;
+    typedef TExtends extends;
+    typedef reasont derives;
+
+    typedef typename extends::status_t status_t;
+    typedef typename extends::which_t which_t;
+    enum { none = extends::none };
+    typedef typename extends::part_t part_t;
+    typedef typename extends::string_t string_t;
+    typedef typename string_t::char_t char_t;
+    typedef typename extends::reader_t reader_t;
+    typedef typename extends::writer_t writer_t;
+
+    /// constructor / destructor
+    reasont(const string_t& chars): extends(chars) {
+        this->set_which();
+    }
+    reasont(const char_t* chars, size_t length): extends(chars, length) {
+        this->set_which();
+    }
+    reasont(const char_t* chars): extends(chars) {
+        this->set_which();
+    }
+    reasont(status_t status): extends(status) {
+        this->set_name();
+    }
+    reasont(which_t which): extends(which) {
+        this->set_name();
+    }
+    reasont(const reasont& copy): extends(copy) {
+    }
+    reasont() {
+        this->set_default();
+    }
+    virtual ~reasont() {
+    }
 }; /// class reasont
 typedef reasont<> reason;
 

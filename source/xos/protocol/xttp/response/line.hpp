@@ -32,20 +32,23 @@ namespace protocol {
 namespace xttp {
 namespace response {
 
+namespace extended {
 /// class linet
 template 
-<class TExtends = message::line, class TImplements = typename TExtends::implements>
+<class TStatus = response::status, 
+ class TReason = response::reason, class TProtocol = protocol::identifier, 
+ class TExtends = message::line, class TImplements = typename TExtends::implements>
 class exported linet: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;
     typedef TExtends extends;
     typedef linet derives;
 
-    typedef response::status status_t;
-    typedef response::reason reason_t;
-    typedef protocol::identifier protocol_t;
+    typedef TStatus status_t;
+    typedef TReason reason_t;
+    typedef TProtocol protocol_t;
     typedef extends line_t;
-    typedef message::line::part_t part_t;
+    typedef typename extends::part_t part_t;
     typedef typename extends::string_t string_t;
     typedef typename string_t::char_t char_t;
     typedef typename extends::reader_t reader_t;
@@ -54,30 +57,23 @@ public:
     /// constructor / destructor
     linet(const protocol_t& protocol, const status_t& status, const reason_t& reason)
     : protocol_(protocol), status_(status), reason_(reason) {
-        combine();
     }
     linet(const string_t& protocol, const string_t& status, const string_t& reason)
     : protocol_(protocol), status_(status), reason_(reason) {
-        combine();
     }
     linet(const char_t* protocol, const char_t* status, const char_t* reason)
     : protocol_(protocol), status_(status), reason_(reason) {
-        combine();
     }
     linet(const string_t &copy): extends(copy) {
-        separate();
     }
     linet(const char_t* chars, size_t length): extends(chars, length) {
-        separate();
     }
     linet(const char_t* chars): extends(chars) {
-        separate();
     }
     linet(const linet& copy)
     : extends(copy), protocol_(copy.protocol_), status_(copy.status_), reason_(copy.reason_) {
     }
     linet() {
-        set_default();
     }
     virtual ~linet() {
     }
@@ -183,6 +179,55 @@ protected:
     protocol_t protocol_;
     status_t status_;
     reason_t reason_;
+}; /// class linet
+typedef linet<> line;
+} /// namespace extended
+
+/// class linet
+template 
+<class TExtends = extended::line, class TImplements = typename TExtends::implements>
+class exported linet: virtual public TImplements, public TExtends {
+public:
+    typedef TImplements implements;
+    typedef TExtends extends;
+    typedef linet derives;
+
+    typedef typename extends::status_t status_t;
+    typedef typename extends::reason_t reason_t;
+    typedef typename extends::protocol_t protocol_t;
+    typedef typename extends::line_t line_t;
+    typedef typename extends::part_t part_t;
+    typedef typename extends::string_t string_t;
+    typedef typename string_t::char_t char_t;
+    typedef typename extends::reader_t reader_t;
+    typedef typename extends::writer_t writer_t;
+
+    /// constructor / destructor
+    linet(const protocol_t& protocol, const status_t& status, const reason_t& reason): extends(protocol, status, reason) {
+        this->combine();
+    }
+    linet(const string_t& protocol, const string_t& status, const string_t& reason): extends(protocol, status, reason) {
+        this->combine();
+    }
+    linet(const char_t* protocol, const char_t* status, const char_t* reason): extends(protocol, status, reason) {
+        this->combine();
+    }
+    linet(const string_t &copy): extends(copy) {
+        this->separate();
+    }
+    linet(const char_t* chars, size_t length): extends(chars, length) {
+        this->separate();
+    }
+    linet(const char_t* chars): extends(chars) {
+        this->separate();
+    }
+    linet(const linet& copy): extends(copy) {
+    }
+    linet() {
+        this->set_default();
+    }
+    virtual ~linet() {
+    }
 }; /// class linet
 typedef linet<> line;
 
