@@ -80,22 +80,11 @@ public:
 
     /// read / write
     virtual bool read(ssize_t& count, char_t& c, reader_t& reader) {
-        bool success = false;
+        bool success = this->read_line(count, c, reader);
         return success;
     }
     virtual bool write(ssize_t& count, writer_t& writer) {
-        bool success = false;
-        const char_t* chars = 0;
-        size_t length = 0;
-        
-        if ((chars = this->has_chars(length))) {
-            ssize_t amount = 0;
-
-            if (length <= (amount = writer.write(chars, length))) {
-                count = amount;
-                success = true;
-            }
-        }
+        bool success = this->write_this(count, writer);
         return success;
     }
 
@@ -126,10 +115,10 @@ public:
                 if (' ' != (c = *chars)) {
                     part->append(&c, 1);
                 } else {
-                    if (part == &status) {
-                        if (status.has_chars()) {
+                    if (part == &protocol) {
+                        if (protocol.has_chars()) {
                             // ?' '
-                            part = &reason;
+                            part = &status;
                         } else {
                             // ' '
                             return false;
@@ -144,8 +133,8 @@ public:
                                 return false;
                             }
                         } else {
-                            // ?' '?'/'*' '
-                            return false;
+                            // ?' '?' '*' '
+                            part->append(&c, 1);
                         }
                     }
                 }
@@ -159,6 +148,16 @@ public:
             }
         }
         return success;
+    }
+
+    /// set
+    using extends::set;
+    virtual derives& set(const linet& to) {
+        protocol_.set(to.protocol_);
+        status_.set(to.status_);
+        reason_.set(to.reason_);
+        this->assign(to);
+        return *this;
     }
 
     /// set_default...

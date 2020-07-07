@@ -99,7 +99,9 @@ private:
 public:
 
 protected:
+    typedef typename extends::in_reader_t in_reader_t;
     typedef typename extends::out_writer_t out_writer_t;
+    typedef typename extends::err_writer_t err_writer_t;
 
     /// ...run
     int (derives::*run_)(int argc, char_t** argv, char_t** env);
@@ -108,23 +110,60 @@ protected:
         if ((run_)) {
             err = (this->*run_)(argc, argv, env);
         } else {
-            err = this->default_run(argc, argv, env);
+            err = extends::run(argc, argv, env);
         }
         return err;
     }
-    virtual int default_run(int argc, char_t** argv, char_t** env) {
-        int err = 0;
-        extends::run(argc, argv, env);
-        return err;
-    }
+
+    /// ...request_run
     virtual int request_run(int argc, char_t** argv, char_t** env) {
         int err = 0;
         err = this->usage(argc, argv, env);
         return err;
     }
+    virtual int before_request_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_request_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_request_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_request_run(argc, argv, env))) {
+            int err2 = 0;
+            err = request_run(argc, argv, env);
+            if ((err2 = after_request_run(argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...respond_run
     virtual int respond_run(int argc, char_t** argv, char_t** env) {
         int err = 0;
         err = this->usage(argc, argv, env);
+        return err;
+    }
+    virtual int before_respond_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_respond_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_respond_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_respond_run(argc, argv, env))) {
+            int err2 = 0;
+            err = respond_run(argc, argv, env);
+            if ((err2 = after_respond_run(argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
         return err;
     }
 
@@ -133,7 +172,7 @@ protected:
     (int optval, const char_t* optarg, const char_t* optname, 
      int optind, int argc, char_t**argv, char_t**env) {
         int err = 0;
-        run_ = &derives::request_run;
+        run_ = &derives::all_request_run;
         return err;
     }
     virtual const char_t* request_option_usage(const char_t*& optarg, const struct option* longopt) {
@@ -145,7 +184,7 @@ protected:
     (int optval, const char_t* optarg, const char_t* optname, 
      int optind, int argc, char_t**argv, char_t**env) {
         int err = 0;
-        run_ = &derives::respond_run;
+        run_ = &derives::all_respond_run;
         return err;
     }
     virtual const char_t* respond_option_usage(const char_t*& optarg, const struct option* longopt) {

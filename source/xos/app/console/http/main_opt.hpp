@@ -24,16 +24,16 @@
 #include "xos/app/console/protocol/http/main.hpp"
 #include "xos/app/console/network/main.hpp"
 
-#define XOS_NETWORK_PROTOCOL_HTTP_MAIN_OPTIONS_CHARS \
+#define XOS_APP_CONSOLE_HTTP_MAIN_OPTIONS_CHARS \
     XOS_PROTOCOL_HTTP_MAIN_OPTIONS_CHARS_EXTEND \
     XOS_NETWORK_MAIN_OPTIONS_CHARS
 
-#define XOS_NETWORK_PROTOCOL_HTTP_MAIN_OPTIONS_OPTIONS \
+#define XOS_APP_CONSOLE_HTTP_MAIN_OPTIONS_OPTIONS \
     XOS_PROTOCOL_HTTP_MAIN_OPTIONS_OPTIONS_EXTEND \
     XOS_NETWORK_MAIN_OPTIONS_OPTIONS
 
-#define XOS_NETWORK_PROTOCOL_HTTP_MAIN_ARUMENTS_CHARS 0
-#define XOS_NETWORK_PROTOCOL_HTTP_MAIN_ARUMENTS_ARGS 0
+#define XOS_APP_CONSOLE_HTTP_MAIN_ARUMENTS_CHARS 0
+#define XOS_APP_CONSOLE_HTTP_MAIN_ARUMENTS_ARGS 0
 
 namespace xos {
 namespace app {
@@ -51,6 +51,7 @@ public:
     typedef TExtends extends;
     typedef main_optt derives;
 
+    typedef typename extends::writer_t writer_t;
     typedef typename extends::file_t file_t;
     typedef typename extends::string_t string_t;
     typedef typename extends::char_t char_t;
@@ -68,14 +69,15 @@ public:
 protected:
     typedef typename extends::out_writer_t out_writer_t;
     typedef typename extends::request_t request_t;
+    typedef typename extends::response_t resppnse_t;
     typedef typename extends::message_t message_t;
 
 protected:
     /// ...options...
     virtual const char_t* options(const struct option*& longopts) {
-        static const char_t* chars = XOS_NETWORK_PROTOCOL_HTTP_MAIN_OPTIONS_CHARS;
+        static const char_t* chars = XOS_APP_CONSOLE_HTTP_MAIN_OPTIONS_CHARS;
         static struct option optstruct[]= {
-            XOS_NETWORK_PROTOCOL_HTTP_MAIN_OPTIONS_OPTIONS
+            XOS_APP_CONSOLE_HTTP_MAIN_OPTIONS_OPTIONS
             {0, 0, 0, 0}};
         longopts = optstruct;
         return chars;
@@ -83,8 +85,8 @@ protected:
 
     /// ...arguments...
     virtual const char_t* arguments(const char_t**& args) {
-        args = XOS_NETWORK_PROTOCOL_HTTP_MAIN_ARUMENTS_ARGS;
-        return XOS_NETWORK_PROTOCOL_HTTP_MAIN_ARUMENTS_CHARS;
+        args = XOS_APP_CONSOLE_HTTP_MAIN_ARUMENTS_ARGS;
+        return XOS_APP_CONSOLE_HTTP_MAIN_ARUMENTS_CHARS;
     }
 }; /// class main_optt
 typedef main_optt<> main_opt;

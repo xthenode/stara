@@ -81,6 +81,15 @@ public:
     }
     virtual ~linet() {
     }
+
+    /// ...path
+    virtual parameters_t& set_path(const string_t& to) {
+        return this->set_parameters(to);
+    }
+    virtual const parameters_t& path() const {
+        return this->parameters();
+    }
+
 }; /// class linet
 typedef linet<> line;
 

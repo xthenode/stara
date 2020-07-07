@@ -22,10 +22,14 @@
 #define XOS_APP_CONSOLE_PROTOCOL_HTTP_MAIN_HPP
 
 #include "xos/app/console/protocol/http/main_opt.hpp"
+
+#include "xos/protocol/xttp/content/json/number.hpp"
+
 #include "xos/protocol/http/protocol/name.hpp"
 #include "xos/protocol/http/protocol/version.hpp"
 #include "xos/protocol/http/protocol/identifier.hpp"
 #include "xos/protocol/http/content/type/nameof.hpp"
+
 #include "xos/protocol/http/message/body/content.hpp"
 #include "xos/protocol/http/message/header/content/type.hpp"
 #include "xos/protocol/http/message/header/content/length.hpp"
@@ -83,7 +87,11 @@ private:
 public:
 
 protected:
+    typedef typename extends::in_reader_t in_reader_t;
     typedef typename extends::out_writer_t out_writer_t;
+    typedef typename extends::err_writer_t err_writer_t;
+    typedef xos::protocol::xttp::content::json::number json_number_t;
+    typedef xos::protocol::http::request::method::name request_method_t;
     typedef xos::protocol::http::request::message request_t;
     typedef xos::protocol::http::response::message response_t;
     typedef xos::protocol::http::message::part message_t;
@@ -94,7 +102,7 @@ protected:
         request_t& request = this->request();
         ssize_t amount = 0;
         int err = 0;
-        request.write(amount, writer);
+        err = all_write_request(amount, writer, request, argc, argv, env);
         return err;
     }
     virtual int respond_run(int argc, char_t** argv, char_t** env) {
@@ -102,14 +110,77 @@ protected:
         response_t& response = this->response();
         ssize_t amount = 0;
         int err = 0;
-        response.write(amount, writer);
+        err = all_write_response(amount, writer, response, argc, argv, env);
         return err;
     }
 
-    /// request... / response... / message...
+    /// ...write_request
+    virtual int write_request(ssize_t& amount, writer_t& writer, request_t& request, int argc, char_t** argv, char** env) {
+        int err = 0;
+        request.write(amount, writer);
+        return err;
+    }
+    virtual int before_write_request(ssize_t& amount, writer_t& writer, request_t& request, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_write_request(ssize_t& amount, writer_t& writer, request_t& request, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_write_request(ssize_t& amount, writer_t& writer, request_t& request, int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_write_request(amount, writer, request, argc, argv, env))) {
+            int err2 = 0;
+            err = write_request(amount, writer, request, argc, argv, env);
+            if ((err2 = after_write_request(amount, writer, request, argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...write_response
+    virtual int write_response(ssize_t& amount, writer_t& writer, response_t& response, int argc, char_t** argv, char** env) {
+        int err = 0;
+        response.write(amount, writer);
+        return err;
+    }
+    virtual int before_write_response(ssize_t& amount, writer_t& writer, response_t& response, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_write_response(ssize_t& amount, writer_t& writer, response_t& response, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_write_response(ssize_t& amount, writer_t& writer, response_t& response, int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_write_response(amount, writer, response, argc, argv, env))) {
+            int err2 = 0;
+            err = write_response(amount, writer, response, argc, argv, env);
+            if ((err2 = after_write_response(amount, writer, response, argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// request...
     virtual request_t& request() const {
         return (request_t&)request_;
     }
+    virtual request_method_t& request_method_get() const {
+        return (request_method_t&)get_;
+    }
+    virtual request_method_t& request_method_post() const {
+        return (request_method_t&)post_;
+    }
+    virtual request_method_t& request_method() const {
+        return (request_method_t&)method_;
+    }
+
+    /// response... / message...
     virtual response_t& response() const {
         return (response_t&)response_;
     }
@@ -117,6 +188,47 @@ protected:
         return (message_t&)message_;
     }
 
+    /// content_type...
+    typedef xos::protocol::http::content::type::name content_type_t;
+    virtual content_type_t& content_type_text() const {
+        return (content_type_t&)text_;
+    }
+    virtual content_type_t& content_type_html() const {
+        return (content_type_t&)html_;
+    }
+    virtual content_type_t& content_type_xml() const {
+        return (content_type_t&)xml_;
+    }
+    virtual content_type_t& content_type_css() const {
+        return (content_type_t&)css_;
+    }
+    virtual content_type_t& content_type_json() const {
+        return (content_type_t&)json_;
+    }
+    virtual content_type_t& content_type_javasctipt() const {
+        return (content_type_t&)javascript_;
+    }
+    virtual content_type_t& content_type_urlencoded_form_data() const {
+        return (content_type_t&)urlencoded_form_data_;
+    }
+    virtual content_type_t& content_type_multipart_form_data() const {
+        return (content_type_t&)multipart_form_data_;
+    }
+    virtual content_type_t& content_type() const {
+        return (content_type_t&)content_type_;
+    }
+
+    /// content_length...
+    virtual size_t content_length() const {
+        return content_.length();
+    }
+    
+    /// content
+    typedef xos::protocol::http::message::body::content content_t;
+    virtual content_t& content() const {
+        return (content_t&)content_;
+    }
+    
 protected:
     xos::protocol::http::protocol::name http_name_;
     xos::protocol::http::protocol::version http_version_;

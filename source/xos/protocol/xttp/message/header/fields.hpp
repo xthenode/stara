@@ -44,6 +44,7 @@ public:
     typedef TField field_t;
     typedef std::list<field_t*> list_t;
     typedef typename list_t::const_iterator const_iterator_t;
+    typedef typename list_t::iterator iterator_t;
     typedef extends part_t;
     typedef typename extends::string_t string_t;
     typedef typename string_t::char_t char_t;
@@ -374,6 +375,28 @@ public:
         }
         return 0;
     }
+    
+    /// set_field_value
+    virtual field_t* set_field_value(const field_t* of, const string_t& to) {
+        if (of) {
+            for (iterator_t end = list_.end(), i = list_.begin(); i != end; ++i) {
+                field_t* f = *i;
+                if (f == of) {
+                    f->set_value(to);
+                    return f;
+                }
+            }
+        }
+        return 0;
+    }
+    virtual field_t* set_field_value(const field_t* of, const size_t& value) {
+        unsigned_to_string to(value);
+        return set_field_value(of, to);
+    }
+    virtual field_t* set_field_value(const field_t* of, const char_t* chars) {
+        string_t to(chars);
+        return set_field_value(of, to);
+    }
 
     /// get... / free... / clear...
     virtual field_t* get_field() {
@@ -435,8 +458,29 @@ public:
     }
 
     /// ...content_length...
+    virtual field_t* add_content_length_field(size_t len) {
+        string_t name(content_length_name_chars());
+        const char_t *chars = 0; size_t length = 0;
+        if ((chars = name.has_chars(length))) {
+            unsigned_to_string value(len);
+            field_t* f = 0;
+            if ((f = add_field(name, value))) {
+                content_length_field_ = f;
+                return f;
+            }
+        }
+        return 0;
+    }
+    virtual const field* content_length_field() const {
+        return content_length_field_;
+    }
     virtual size_t set_content_length(size_t to) {
+        const field* f = 0;
+        if (!(f = set_field_value(content_length_field_, to))) {
+            f = add_content_length_field(to);
+        }
         content_length_ = to;
+        combine();
         return content_length_;
     }
     virtual size_t clear_content_length() {
@@ -446,13 +490,39 @@ public:
     virtual size_t content_length() const {
         return content_length_;
     }
-    virtual const field* content_length_field() const {
-        return content_length_field_;
-    }
 
     /// ...content_type...
+    virtual field_t* add_content_type_field(const string_t& value) {
+        string_t name(content_type_name_chars());
+        const char_t *chars = 0; size_t length = 0;
+        if ((chars = name.has_chars(length))) {
+            field_t* f = 0;
+            if ((f = add_field(name, value))) {
+                content_type_field_ = f;
+                return f;
+            }
+        }
+        return 0;
+    }
+    virtual field_t* add_content_type_field(const char_t* chars) {
+        string_t value(chars);
+        return add_content_type_field(value);
+    }
     virtual const field* content_type_field() const {
         return content_type_field_;
+    }
+    virtual part& set_content_type(const string_t& to) {
+        const field* f = 0;
+        if (!(f = set_field_value(content_type_field_, to))) {
+            f = add_content_type_field(to);
+        }
+        content_type_.set(to);
+        combine();
+        return content_type_;
+    }
+    virtual part& set_content_type(const char_t* chars) {
+        string_t to(chars);
+        return set_content_type(to);
     }
     virtual const part& content_type() const {
         return content_type_;

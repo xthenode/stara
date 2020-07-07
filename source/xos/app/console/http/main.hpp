@@ -37,6 +37,7 @@ public:
     typedef TExtends extends;
     typedef maint derives;
 
+    typedef typename extends::writer_t writer_t;
     typedef typename extends::file_t file_t;
     typedef typename extends::string_t string_t;
     typedef typename extends::char_t char_t;
@@ -55,6 +56,7 @@ protected:
     typedef typename extends::out_writer_t out_writer_t;
     typedef typename extends::request_t request_t;
     typedef typename extends::response_t response_t;
+    typedef typename extends::content_t content_t;
     typedef typename extends::message_t message_t;
 
     /// recv_request
@@ -78,11 +80,7 @@ protected:
         char_t c = 0; ssize_t count = 0;
         int err = 0;
         if ((rq.read(count, c, reader))) {
-            const char_t* chars = 0; size_t length = 0;
-            if ((chars = rq.has_chars(length)) && (!chars[length])) {
-                this->errlln(__LOCATION__, "...request = \"", chars, "\"", null);
-            }
-            err = process_request(writer, rs, rq, reader, argc, argv, env);
+            err = all_process_request(writer, rs, rq, reader, argc, argv, env);
         }
         return err;
     }
@@ -92,7 +90,47 @@ protected:
      request_t &rq, xos::network::sockets::reader& reader, int argc, char_t** argv, char_t**env) {
         ssize_t amount = 0;
         int err = 0;
-        rs.write(amount, writer);
+        //rs.write(amount, writer);
+        err = this->all_write_response(amount, writer, rs, argc, argv, env);
+        return err;
+    }
+    virtual int before_process_request
+    (xos::network::sockets::writer& writer, response_t &rs,
+     request_t &rq, xos::network::sockets::reader& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        const char_t* chars = 0; size_t length = 0;
+        if ((chars = rq.has_chars(length)) && (!chars[length])) {
+            this->errlln(__LOCATION__, "...request = \"", chars, "\"", null);
+            if ((length = rq.content_length())) {
+                content_t& content = this->content();
+                char_t c = 0;
+                for (content.clear(); 0 < length; --length) {
+                    if (0 <= (reader.read(&c, 1))) {
+                        content.append(&c, 1);
+                    }
+                }
+                this->errlln(__LOCATION__, "...content[", unsigned_to_string(length).chars(), "] = \"", content.chars(), "\"", null);
+            }
+        }
+        return err;
+    }
+    virtual int after_process_request
+    (xos::network::sockets::writer& writer, response_t &rs,
+     request_t &rq, xos::network::sockets::reader& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_process_request
+    (xos::network::sockets::writer& writer, response_t &rs,
+     request_t &rq, xos::network::sockets::reader& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_process_request(writer, rs, rq, reader, argc, argv, env))) {
+            int err2 = 0;
+            err = process_request(writer, rs, rq, reader, argc, argv, env);
+            if ((err2 = after_process_request(writer, rs, rq, reader, argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
         return err;
     }
 
@@ -113,37 +151,62 @@ protected:
     virtual int send_request
     (xos::network::sockets::reader& reader, 
      xos::network::sockets::writer& writer, request_t &rq, int argc, char_t** argv, char_t**env) {
-        const char_t* chars = 0; size_t length = 0;
+        ssize_t amount = 0;
         int err = 0;
-        if ((chars = rq.has_chars(length))) {
-            ssize_t amount = 0, count = 0;
-            if (length <= (amount = writer.write(chars, length))) {
-                count += amount;
-                if ((chars = rq.content_chars(length))) {
-                    if (length <= (amount = writer.write(chars, length))) {
-                        count += amount;
-                    }
-                }
-            }
-        }
+        //rq.write(amount, writer);
+        err = this->all_write_request(amount, writer, rq, argc, argv, env);
         return err;
     }
 
-    /// recv_request / send_response
+    /// recv_response
     virtual int recv_response(xos::network::sockets::interface& cn, int argc, char_t** argv, char_t**env) {
-        message_t& message = this->message();
-        xos::network::sockets::reader reader(cn);
+        /*message_t& message = this->message();
+        xos::network::sockets::reader reader(cn);*/
+        response_t &rs = this->response();
         int err = 0;
-        if (!(err = this->recv(message, reader, argc, argv, env))) {
+        /*if (!(err = this->recv(message, reader, argc, argv, env))) {
             xos::network::sockets::sockchar_t c = 0;
             ssize_t count = 0, amount = 0;
             while (0 < (amount = reader.read(&c, 1))) {
                 this->out(&c, 1);
                 ++count;
             }
+        }*/
+        err = recv_response(rs, cn, argc, argv, env);
+        return err;
+    }
+    virtual int recv_response(response_t &rs, xos::network::sockets::interface& cn, int argc, char_t** argv, char_t**env) {
+        xos::network::sockets::reader reader(cn);
+        int err = 0;
+        err = recv_response(rs, reader, argc, argv, env);
+        return err;
+    }
+    virtual int recv_response(response_t &rs, xos::network::sockets::reader& reader, int argc, char_t** argv, char_t**env) {
+        char_t c = 0; ssize_t count = 0;
+        int err = 0;
+        if ((rs.read(count, c, reader))) {
+            const char_t* chars = 0; size_t length = 0;
+            if ((chars = rs.has_chars(length)) && (!chars[length])) {
+                this->errlln(__LOCATION__, "...response = \"", chars, "\"", null);
+            }
+            err = process_response(rs, reader, argc, argv, env);
         }
         return err;
     }
+    
+    /// process_response
+    virtual int process_response(response_t &rs, xos::network::sockets::reader& reader, int argc, char_t** argv, char_t**env) {
+        const char_t* chars = 0; size_t length = 0;
+        int err = 0;
+        if ((chars = rs.has_chars(length))) {
+            this->out(chars, length);
+            if ((chars = rs.headers().content_type().has_chars(length))) {
+            }
+        }
+        return err;
+    }
+
+    /// send_response
     virtual int send_response(xos::network::sockets::interface& cn, int argc, char_t** argv, char_t**env) {
         message_t& message = this->message();
         const char_t* chars = 0; size_t length = 0;

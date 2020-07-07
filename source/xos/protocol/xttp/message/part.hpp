@@ -41,6 +41,7 @@ public:
     typedef partt derives;
     
     typedef TExtends string_t;
+    typedef typename string_t::sstream_t sstream_t;
     typedef typename string_t::char_t char_t;
     typedef io::sequencet<char_t> sequence_t;
     typedef io::seekert<sequence_t> seeker_t;
@@ -71,7 +72,38 @@ public:
         return success;
     }
 
-    /// read_this / write_this
+    /// read_line / read_this / write_this
+    virtual bool read_line(ssize_t& count, char_t& c, reader_t& reader) {
+        bool success = false;
+        char_t cr = 0;
+        ssize_t amount = 0;
+        string_t chars;
+
+        this->set_default();
+        do {
+            if (0 < (amount = reader.read(&c, 1))) {
+                count += amount;
+                if (('\r' != c)) {
+                    if (('\n' != c)) {
+                        chars.append(&c, 1);
+                    } else {
+                        success = this->set(chars);
+                        break;
+                    }
+                } else {
+                    if (cr != c) {
+                        cr = c;
+                    } else {
+                        chars.append(&cr, 1);
+                    }
+                }
+            } else {
+                count = amount;
+                break;
+            }
+        } while (0 < amount);
+        return success;
+    }
     virtual bool read_this(ssize_t& count, char_t& c, reader_t& reader) {
         bool success = false;
         ssize_t amount = 0;

@@ -215,6 +215,22 @@ public:
     virtual const content_t* content() const {
         return content_;
     }
+    virtual const content_t* set_content(const string_t& to) {
+        content_ = &this_content_;
+        this_content_.assign(to);
+        this->combine();
+        return content_;
+    }
+    virtual part_t set_content_type(const string_t& to) {
+        part_t content_type(headers_.set_content_type(to));
+        this->combine();
+        return content_type;
+    }
+    virtual size_t set_content_length(size_t to) {
+        size_t content_length = headers_.set_content_length(to);
+        this->combine();
+        return content_length;
+    }
     virtual size_t content_length() const {
         return headers_.content_length();
     }
@@ -237,6 +253,7 @@ protected:
     line_t line_;
     headers_t headers_;
     const content_t* content_;
+    content_t this_content_;
 }; /// class partst
 typedef partst<> parts;
 } /// namespace extended

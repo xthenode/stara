@@ -76,7 +76,6 @@ public:
     }
     virtual ~messaget() {
     }
-
 }; /// class messaget
 typedef messaget<> message;
 
