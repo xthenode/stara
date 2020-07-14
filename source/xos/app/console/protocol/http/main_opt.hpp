@@ -167,12 +167,63 @@ protected:
         return err;
     }
 
+    /// ...set_request_run
+    virtual int set_request_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        run_ = &derives::all_request_run;
+        return err;
+    }
+    virtual int before_set_request_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_set_request_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_set_request_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_set_request_run(argc, argv, env))) {
+            int err2 = 0;
+            err = set_request_run(argc, argv, env);
+            if ((err2 = after_set_request_run(argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+    /// ...set_respond_run
+    virtual int set_respond_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        run_ = &derives::all_respond_run;
+        return err;
+    }
+    virtual int before_set_respond_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_set_respond_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_set_respond_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_set_respond_run(argc, argv, env))) {
+            int err2 = 0;
+            err = set_respond_run(argc, argv, env);
+            if ((err2 = after_set_respond_run(argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+
     /// ...options...
     virtual int on_request_option
     (int optval, const char_t* optarg, const char_t* optname, 
      int optind, int argc, char_t**argv, char_t**env) {
         int err = 0;
-        run_ = &derives::all_request_run;
+        err = all_set_request_run(argc, argv, env);
         return err;
     }
     virtual const char_t* request_option_usage(const char_t*& optarg, const struct option* longopt) {
@@ -184,7 +235,7 @@ protected:
     (int optval, const char_t* optarg, const char_t* optname, 
      int optind, int argc, char_t**argv, char_t**env) {
         int err = 0;
-        run_ = &derives::all_respond_run;
+        err = all_set_respond_run(argc, argv, env);
         return err;
     }
     virtual const char_t* respond_option_usage(const char_t*& optarg, const struct option* longopt) {

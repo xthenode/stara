@@ -23,24 +23,63 @@
 
 #include "xos/app/console/http/main.hpp"
 
+#define XOS_APP_CONSOLE_SONY_MAIN_PREVIOUS_OPT "previous"
+#define XOS_APP_CONSOLE_SONY_MAIN_PREVIOUS_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_NONE
+#define XOS_APP_CONSOLE_SONY_MAIN_PREVIOUS_OPTARG_RESULT 0
+#define XOS_APP_CONSOLE_SONY_MAIN_PREVIOUS_OPTARG "PLay previous"
+#define XOS_APP_CONSOLE_SONY_MAIN_PREVIOUS_OPTUSE ""
+#define XOS_APP_CONSOLE_SONY_MAIN_PREVIOUS_OPTVAL_S "e"
+#define XOS_APP_CONSOLE_SONY_MAIN_PREVIOUS_OPTVAL_C 'e'
+#define XOS_APP_CONSOLE_SONY_MAIN_PREVIOUS_OPTION \
+   {XOS_APP_CONSOLE_SONY_MAIN_PREVIOUS_OPT, \
+    XOS_APP_CONSOLE_SONY_MAIN_PREVIOUS_OPTARG_REQUIRED, \
+    XOS_APP_CONSOLE_SONY_MAIN_PREVIOUS_OPTARG_RESULT, \
+    XOS_APP_CONSOLE_SONY_MAIN_PREVIOUS_OPTVAL_C}, \
+
 #define XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPT "next"
 #define XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_NONE
 #define XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPTARG_RESULT 0
 #define XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPTARG ""
-#define XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPTUSE ""
-#define XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPTVAL_S "n"
-#define XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPTVAL_C 'n'
+#define XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPTUSE "Play next"
+#define XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPTVAL_S "x"
+#define XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPTVAL_C 'x'
 #define XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPTION \
    {XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPT, \
     XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPTARG_REQUIRED, \
     XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPTARG_RESULT, \
     XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPTVAL_C}, \
 
+#define XOS_APP_CONSOLE_SONY_MAIN_STOP_OPT "stop"
+#define XOS_APP_CONSOLE_SONY_MAIN_STOP_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_NONE
+#define XOS_APP_CONSOLE_SONY_MAIN_STOP_OPTARG_RESULT 0
+#define XOS_APP_CONSOLE_SONY_MAIN_STOP_OPTARG "Stop play"
+#define XOS_APP_CONSOLE_SONY_MAIN_STOP_OPTUSE ""
+#define XOS_APP_CONSOLE_SONY_MAIN_STOP_OPTVAL_S "t"
+#define XOS_APP_CONSOLE_SONY_MAIN_STOP_OPTVAL_C 't'
+#define XOS_APP_CONSOLE_SONY_MAIN_STOP_OPTION \
+   {XOS_APP_CONSOLE_SONY_MAIN_STOP_OPT, \
+    XOS_APP_CONSOLE_SONY_MAIN_STOP_OPTARG_REQUIRED, \
+    XOS_APP_CONSOLE_SONY_MAIN_STOP_OPTARG_RESULT, \
+    XOS_APP_CONSOLE_SONY_MAIN_STOP_OPTVAL_C}, \
+
+#define XOS_APP_CONSOLE_SONY_MAIN_RESUME_OPT "resume"
+#define XOS_APP_CONSOLE_SONY_MAIN_RESUME_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_NONE
+#define XOS_APP_CONSOLE_SONY_MAIN_RESUME_OPTARG_RESULT 0
+#define XOS_APP_CONSOLE_SONY_MAIN_RESUME_OPTARG "Resume play"
+#define XOS_APP_CONSOLE_SONY_MAIN_RESUME_OPTUSE ""
+#define XOS_APP_CONSOLE_SONY_MAIN_RESUME_OPTVAL_S "u"
+#define XOS_APP_CONSOLE_SONY_MAIN_RESUME_OPTVAL_C 'u'
+#define XOS_APP_CONSOLE_SONY_MAIN_RESUME_OPTION \
+   {XOS_APP_CONSOLE_SONY_MAIN_RESUME_OPT, \
+    XOS_APP_CONSOLE_SONY_MAIN_RESUME_OPTARG_REQUIRED, \
+    XOS_APP_CONSOLE_SONY_MAIN_RESUME_OPTARG_RESULT, \
+    XOS_APP_CONSOLE_SONY_MAIN_RESUME_OPTVAL_C}, \
+
 #define XOS_APP_CONSOLE_SONY_MAIN_VOLUME_OPT "volume"
 #define XOS_APP_CONSOLE_SONY_MAIN_VOLUME_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_REQUIRED
 #define XOS_APP_CONSOLE_SONY_MAIN_VOLUME_OPTARG_RESULT 0
-#define XOS_APP_CONSOLE_SONY_MAIN_VOLUME_OPTARG ""
-#define XOS_APP_CONSOLE_SONY_MAIN_VOLUME_OPTUSE ""
+#define XOS_APP_CONSOLE_SONY_MAIN_VOLUME_OPTARG "{ 0..n }"
+#define XOS_APP_CONSOLE_SONY_MAIN_VOLUME_OPTUSE "Set Volume level"
 #define XOS_APP_CONSOLE_SONY_MAIN_VOLUME_OPTVAL_S "v:"
 #define XOS_APP_CONSOLE_SONY_MAIN_VOLUME_OPTVAL_C 'v'
 #define XOS_APP_CONSOLE_SONY_MAIN_VOLUME_OPTION \
@@ -49,13 +88,34 @@
     XOS_APP_CONSOLE_SONY_MAIN_VOLUME_OPTARG_RESULT, \
     XOS_APP_CONSOLE_SONY_MAIN_VOLUME_OPTVAL_C}, \
 
+#define XOS_APP_CONSOLE_SONY_MAIN_POWER_OPT "power"
+#define XOS_APP_CONSOLE_SONY_MAIN_POWER_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_REQUIRED
+#define XOS_APP_CONSOLE_SONY_MAIN_POWER_OPTARG_RESULT 0
+#define XOS_APP_CONSOLE_SONY_MAIN_POWER_OPTARG "{ on | off }"
+#define XOS_APP_CONSOLE_SONY_MAIN_POWER_OPTUSE "Turn Power on/off"
+#define XOS_APP_CONSOLE_SONY_MAIN_POWER_OPTVAL_S "w:"
+#define XOS_APP_CONSOLE_SONY_MAIN_POWER_OPTVAL_C 'w'
+#define XOS_APP_CONSOLE_SONY_MAIN_POWER_OPTION \
+   {XOS_APP_CONSOLE_SONY_MAIN_POWER_OPT, \
+    XOS_APP_CONSOLE_SONY_MAIN_POWER_OPTARG_REQUIRED, \
+    XOS_APP_CONSOLE_SONY_MAIN_POWER_OPTARG_RESULT, \
+    XOS_APP_CONSOLE_SONY_MAIN_POWER_OPTVAL_C}, \
+
 #define XOS_APP_CONSOLE_SONY_MAIN_OPTIONS_CHARS_EXTEND \
+    XOS_APP_CONSOLE_SONY_MAIN_PREVIOUS_OPTVAL_S \
    XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPTVAL_S \
+    XOS_APP_CONSOLE_SONY_MAIN_STOP_OPTVAL_S \
+    XOS_APP_CONSOLE_SONY_MAIN_RESUME_OPTVAL_S \
    XOS_APP_CONSOLE_SONY_MAIN_VOLUME_OPTVAL_S \
+   XOS_APP_CONSOLE_SONY_MAIN_POWER_OPTVAL_S \
 
 #define XOS_APP_CONSOLE_SONY_MAIN_OPTIONS_OPTIONS_EXTEND \
+    XOS_APP_CONSOLE_SONY_MAIN_PREVIOUS_OPTION \
    XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPTION \
+    XOS_APP_CONSOLE_SONY_MAIN_STOP_OPTION \
+    XOS_APP_CONSOLE_SONY_MAIN_RESUME_OPTION \
    XOS_APP_CONSOLE_SONY_MAIN_VOLUME_OPTION \
+   XOS_APP_CONSOLE_SONY_MAIN_POWER_OPTION \
 
 #define XOS_APP_CONSOLE_SONY_MAIN_OPTIONS_CHARS \
    XOS_APP_CONSOLE_SONY_MAIN_OPTIONS_CHARS_EXTEND \
@@ -106,13 +166,34 @@ protected:
     typedef typename extends::out_writer_t out_writer_t;
     typedef typename extends::err_writer_t err_writer_t;
     typedef typename extends::json_number_t json_number_t;
+    typedef typename extends::json_node_t json_node_t;
+    typedef typename extends::json_array_t json_array_t;
+    typedef typename extends::json_object_t json_object_t;
     typedef typename extends::request_method_t request_method_t;
     typedef typename extends::request_t request_t;
     typedef typename extends::response_t response_t;
     typedef typename extends::message_t message_t;
 
     /// ...option...
+    virtual int on_previous_option
+    (int optval, const char_t* optarg, const char_t* optname, 
+     int optind, int argc, char_t**argv, char_t**env) {
+        int err = 0;
+        return err;
+    }
     virtual int on_next_option
+    (int optval, const char_t* optarg, const char_t* optname, 
+     int optind, int argc, char_t**argv, char_t**env) {
+        int err = 0;
+        return err;
+    }
+    virtual int on_stop_option
+    (int optval, const char_t* optarg, const char_t* optname, 
+     int optind, int argc, char_t**argv, char_t**env) {
+        int err = 0;
+        return err;
+    }
+    virtual int on_resume_option
     (int optval, const char_t* optarg, const char_t* optname, 
      int optind, int argc, char_t**argv, char_t**env) {
         int err = 0;
@@ -124,25 +205,58 @@ protected:
         int err = 0;
         return err;
     }
+    virtual int on_power_option
+    (int optval, const char_t* optarg, const char_t* optname, 
+     int optind, int argc, char_t**argv, char_t**env) {
+        int err = 0;
+        return err;
+    }
     virtual int on_option
     (int optval, const char_t* optarg, const char_t* optname, 
      int optind, int argc, char_t**argv, char_t**env) {
         int err = 0;
         switch(optval) {
+        case XOS_APP_CONSOLE_SONY_MAIN_PREVIOUS_OPTVAL_C:
+            err = this->on_previous_option(optval, optarg, optname, optind, argc, argv, env);
+            break;
         case XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPTVAL_C:
             err = this->on_next_option(optval, optarg, optname, optind, argc, argv, env);
             break;
+        case XOS_APP_CONSOLE_SONY_MAIN_STOP_OPTVAL_C:
+            err = this->on_stop_option(optval, optarg, optname, optind, argc, argv, env);
+            break;
+        case XOS_APP_CONSOLE_SONY_MAIN_RESUME_OPTVAL_C:
+            err = this->on_resume_option(optval, optarg, optname, optind, argc, argv, env);
+            break;
         case XOS_APP_CONSOLE_SONY_MAIN_VOLUME_OPTVAL_C:
             err = this->on_volume_option(optval, optarg, optname, optind, argc, argv, env);
+            break;
+        case XOS_APP_CONSOLE_SONY_MAIN_POWER_OPTVAL_C:
+            err = this->on_power_option(optval, optarg, optname, optind, argc, argv, env);
             break;
         default:
             err = extends::on_option(optval, optarg, optname, optind, argc, argv, env);
         }
         return err;
     }
+    virtual const char_t* previous_option_usage(const char_t*& optarg, const struct option* longopt) {
+        optarg = XOS_APP_CONSOLE_SONY_MAIN_PREVIOUS_OPTARG;
+        const char_t* chars = XOS_APP_CONSOLE_SONY_MAIN_PREVIOUS_OPTUSE;
+        return chars;
+    }
     virtual const char_t* next_option_usage(const char_t*& optarg, const struct option* longopt) {
         optarg = XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPTARG;
         const char_t* chars = XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPTUSE;
+        return chars;
+    }
+    virtual const char_t* stop_option_usage(const char_t*& optarg, const struct option* longopt) {
+        optarg = XOS_APP_CONSOLE_SONY_MAIN_STOP_OPTARG;
+        const char_t* chars = XOS_APP_CONSOLE_SONY_MAIN_STOP_OPTUSE;
+        return chars;
+    }
+    virtual const char_t* resume_option_usage(const char_t*& optarg, const struct option* longopt) {
+        optarg = XOS_APP_CONSOLE_SONY_MAIN_RESUME_OPTARG;
+        const char_t* chars = XOS_APP_CONSOLE_SONY_MAIN_RESUME_OPTUSE;
         return chars;
     }
     virtual const char_t* volume_option_usage(const char_t*& optarg, const struct option* longopt) {
@@ -150,14 +264,31 @@ protected:
         const char_t* chars = XOS_APP_CONSOLE_SONY_MAIN_VOLUME_OPTUSE;
         return chars;
     }
+    virtual const char_t* power_option_usage(const char_t*& optarg, const struct option* longopt) {
+        optarg = XOS_APP_CONSOLE_SONY_MAIN_POWER_OPTARG;
+        const char_t* chars = XOS_APP_CONSOLE_SONY_MAIN_POWER_OPTUSE;
+        return chars;
+    }
     virtual const char_t* option_usage(const char_t*& optarg, const struct option* longopt) {
         const char_t* chars = "";
         switch(longopt->val) {
+        case XOS_APP_CONSOLE_SONY_MAIN_PREVIOUS_OPTVAL_C:
+            chars = previous_option_usage(optarg, longopt);
+            break;
         case XOS_APP_CONSOLE_SONY_MAIN_NEXT_OPTVAL_C:
             chars = next_option_usage(optarg, longopt);
             break;
+        case XOS_APP_CONSOLE_SONY_MAIN_STOP_OPTVAL_C:
+            chars = stop_option_usage(optarg, longopt);
+            break;
+        case XOS_APP_CONSOLE_SONY_MAIN_RESUME_OPTVAL_C:
+            chars = resume_option_usage(optarg, longopt);
+            break;
         case XOS_APP_CONSOLE_SONY_MAIN_VOLUME_OPTVAL_C:
             chars = volume_option_usage(optarg, longopt);
+            break;
+        case XOS_APP_CONSOLE_SONY_MAIN_POWER_OPTVAL_C:
+            chars = power_option_usage(optarg, longopt);
             break;
         default:
             chars = extends::option_usage(optarg, longopt);

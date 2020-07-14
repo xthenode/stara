@@ -167,7 +167,7 @@ public:
                                     return false;
                                 }
                             } else {
-                                if ((line = line_.set(first, length = ((last - first) + 1)))) {
+                                if ((line = line_.is_set(first, length = ((last - first) + 1)))) {
                                     first += length + 2;
                                     last = 0;
                                     success = true;

@@ -61,6 +61,26 @@ public:
     virtual ~stringt() {
     }
 
+    /// to_literal
+    virtual string_t& to_literal(string_t& to) const {
+        const char_t quot = this->quot(), esc = this->esc();
+        const char_t* chars = 0; size_t length = 0;
+        to.assign(&quot, 1);
+        if ((chars = this->has_chars(length))) {
+            for (char_t c = 0; (0 < length); ++chars, --length) {
+                switch (((char)(c = *chars))) {
+                case '"':
+                    to.append(&esc, 1);
+                default:
+                    to.append(&c, 1);
+                    break;
+                }
+            }
+        }
+        to.append(&quot, 1);
+        return to;
+    }
+    
     /// read / write
     virtual bool read(ssize_t& count, char_t& c, reader_t& reader) {
         bool success = false;
@@ -68,7 +88,32 @@ public:
         return success;
     }
     virtual bool write(ssize_t& count, writer_t& writer) {
-        bool success = this->write_this(count, writer);
+        const char_t quot = this->quot(), esc = this->esc();
+        const char_t* chars = 0; size_t length = 0; ssize_t amount = 0;
+        bool success = false;
+
+        if (0 < (amount = writer.write(&quot, 1))) {
+            count += amount;
+            if ((chars = this->has_chars(length))) {
+                for (char_t c = 0; (0 < length); ++chars, --length) {
+                    switch (((char)(c = *chars))) {
+                    case '"':
+                        if (0 >= (amount = writer.write(&esc, 1))) {
+                            return false; }
+                        count += amount;
+                    default:
+                        if (0 >= (amount = writer.write(&c, 1))) {
+                            return false; }
+                        count += amount;
+                        break;
+                    }
+                }
+            }
+            if (0 < (amount = writer.write(&quot, 1))) {
+                count += amount;
+                success = true;
+            }
+        }        
         return success;
     }
 
@@ -92,40 +137,14 @@ public:
         return *this;
     }
 
-    /// ...to
-    virtual string_t& assign_to(string_t& to) const {
-        to.clear();
-        append_to(to);
-        return to;
+    /// ...
+    virtual const char_t& esc() const {
+        static const char_t c = '\\';
+        return c;
     }
-    virtual string_t& append_to(string_t& to) const {
-        const char_t* chars = 0; size_t length = 0;
-        if ((chars = this->has_chars(length))) {
-            to.append(chars, length);
-        }
-        return to;
-    }
-    virtual string_t& assign_literal_to(string_t& to) const {
-        to.clear();
-        append_literal_to(to);
-        return to;
-    }
-    virtual string_t& append_literal_to(string_t& to) const {
-        const char_t* chars = 0; size_t length = 0;
-        to.append("\"");
-        if ((chars = this->has_chars(length))) {
-            for (char c = 0; (0 < length); ++chars, --length) {
-                switch (c = ((char)(*chars))) {
-                case '"':
-                    to.append("\\", 1);
-                default:
-                    to.append(chars, 1);
-                    break;
-                }
-            }
-        }
-        to.append("\"");
-        return to;
+    virtual const char_t& quot() const {
+        static const char_t c = '"';
+        return c;
     }
 }; /// class stringt
 typedef stringt<> string;

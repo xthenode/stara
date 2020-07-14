@@ -87,7 +87,7 @@ public:
                     if (('\n' != c)) {
                         chars.append(&c, 1);
                     } else {
-                        success = this->set(chars);
+                        success = this->is_set(chars);
                         break;
                     }
                 } else {
@@ -145,32 +145,47 @@ public:
         return success;
     }
 
-    /// set / clear
+    /// clear / ...set
+    virtual derives& clear() {
+        extends::clear();
+        return *this;
+    }
     virtual derives& set(const partt& to) {
         this->assign(to);
         return *this;
     }
-    virtual bool set(const string_t& to) {
+    virtual derives& set(const string_t& to) {
+        this->assign(to);
+        separate();
+        return *this;
+    }
+    virtual derives& set(const char_t* to, size_t length) {
+        this->assign(to, length);
+        separate();
+        return *this;
+    }
+    virtual derives& set(const char_t* to) {
+        this->assign(to);
+        separate();
+        return *this;
+    }
+    virtual bool is_set(const string_t& to) {
         bool success = false;
         this->assign(to);
         success = separate();
         return success;
     }
-    virtual bool set(const char_t* to, size_t length) {
+    virtual bool is_set(const char_t* to, size_t length) {
         bool success = false;
         this->assign(to, length);
         success = separate();
         return success;
     }
-    virtual bool set(const char_t* to) {
+    virtual bool is_set(const char_t* to) {
         bool success = false;
         this->assign(to);
         success = separate();
         return success;
-    }
-    virtual derives& clear() {
-        extends::clear();
-        return *this;
     }
 
     /// combine / separate

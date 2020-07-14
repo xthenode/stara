@@ -23,7 +23,9 @@
 
 #include "xos/app/console/protocol/http/main_opt.hpp"
 
-#include "xos/protocol/xttp/content/json/number.hpp"
+#include "xos/protocol/xttp/content/json/node.hpp"
+#include "xos/protocol/xttp/content/json/array.hpp"
+#include "xos/protocol/xttp/content/json/object.hpp"
 
 #include "xos/protocol/http/protocol/name.hpp"
 #include "xos/protocol/http/protocol/version.hpp"
@@ -90,7 +92,12 @@ protected:
     typedef typename extends::in_reader_t in_reader_t;
     typedef typename extends::out_writer_t out_writer_t;
     typedef typename extends::err_writer_t err_writer_t;
+    typedef xos::protocol::xttp::content::json::boolean json_boolean_t;
     typedef xos::protocol::xttp::content::json::number json_number_t;
+    typedef xos::protocol::xttp::content::json::string json_string_t;
+    typedef xos::protocol::xttp::content::json::node json_node_t;
+    typedef xos::protocol::xttp::content::json::array json_array_t;
+    typedef xos::protocol::xttp::content::json::object json_object_t;
     typedef xos::protocol::http::request::method::name request_method_t;
     typedef xos::protocol::http::request::message request_t;
     typedef xos::protocol::http::response::message response_t;

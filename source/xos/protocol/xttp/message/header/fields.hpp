@@ -84,7 +84,7 @@ public:
     }
 
     /// set
-    virtual bool setl(const field_t* f, ...) {
+    virtual bool is_setl(const field_t* f, ...) {
         bool success = true;
         va_list va;
         va_start(va, f);
@@ -93,25 +93,25 @@ public:
         success = combine();
         return success;
     }
-    virtual bool setv(const field_t* f, va_list va) {
+    virtual bool is_setv(const field_t* f, va_list va) {
         bool success = true;
         addv(f, va);
         success = combine();
         return success;
     }
-    virtual bool set(const field_t& f) {
+    virtual bool is_set(const field_t& f) {
         bool success = true;
         add(f);
         success = combine();
         return success;
     }
-    virtual bool set(const string_t& name, const string_t& value) {
+    virtual bool is_set(const string_t& name, const string_t& value) {
         bool success = true;
         add(name, value);
         success = combine();
         return success;
     }
-    virtual bool set(const string_t& name_value) {
+    virtual bool is_set(const string_t& name_value) {
         bool success = true;
         add(name_value);
         success = combine();

@@ -75,7 +75,7 @@ public:
                     if (('\n' != c)) {
                         chars.append(&c, 1);
                     } else {
-                        success = this->set(chars);
+                        success = this->is_set(chars);
                         break;
                     }
                 } else {

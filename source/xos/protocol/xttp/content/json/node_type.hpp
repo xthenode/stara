@@ -30,8 +30,7 @@ namespace content {
 namespace json {
 
 /// enum node_type
-typedef int node_type;
-enum {
+enum node_type {
     unknown_node = 0,
     
     object_node,
