@@ -53,6 +53,8 @@ $${stara_DEFINES} \
 # sony HEADERS
 #
 sony_HEADERS += \
+$${NADIR_SRC}/xos/base/string.hpp \
+\
 $${RETE_SRC}/xos/app/console/network/main_opt.hpp \
 $${RETE_SRC}/xos/app/console/network/main.hpp \
 \
@@ -63,9 +65,12 @@ $${STARA_SRC}/xos/protocol/xttp/request/line.hpp \
 $${STARA_SRC}/xos/protocol/xttp/request/message.hpp \
 \
 $${STARA_SRC}/xos/protocol/xttp/content/json/node_type.hpp \
+$${STARA_SRC}/xos/protocol/xttp/content/json/boolean.hpp \
 $${STARA_SRC}/xos/protocol/xttp/content/json/number.hpp \
 $${STARA_SRC}/xos/protocol/xttp/content/json/string.hpp \
 $${STARA_SRC}/xos/protocol/xttp/content/json/node.hpp \
+$${STARA_SRC}/xos/protocol/xttp/content/json/array.hpp \
+$${STARA_SRC}/xos/protocol/xttp/content/json/object.hpp \
 \
 $${STARA_SRC}/xos/app/console/protocol/xttp/main_opt.hpp \
 $${STARA_SRC}/xos/app/console/protocol/xttp/main.hpp \
@@ -87,10 +92,15 @@ $${STARA_SRC}/xos/app/console/sony/main.hpp \
 # sony SOURCES
 #
 sony_SOURCES += \
+$${NADIR_SRC}/xos/base/string.cpp \
+\
 $${STARA_SRC}/xos/protocol/xttp/content/json/node_type.cpp \
-$${STARA_SRC}/xos/protocol/xttp/content/json/string.cpp \
+$${STARA_SRC}/xos/protocol/xttp/content/json/boolean.cpp \
 $${STARA_SRC}/xos/protocol/xttp/content/json/number.cpp \
+$${STARA_SRC}/xos/protocol/xttp/content/json/string.cpp \
 $${STARA_SRC}/xos/protocol/xttp/content/json/node.cpp \
+$${STARA_SRC}/xos/protocol/xttp/content/json/array.cpp \
+$${STARA_SRC}/xos/protocol/xttp/content/json/object.cpp \
 \
 $${STARA_SRC}/xos/app/console/sony/main_opt.cpp \
 $${STARA_SRC}/xos/app/console/sony/main.cpp \
