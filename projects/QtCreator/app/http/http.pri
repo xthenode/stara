@@ -55,6 +55,9 @@ $${stara_DEFINES} \
 http_HEADERS += \
 $${RETE_SRC}/xos/network/sockets/posix/interface.hpp \
 \
+$${RETE_SRC}/xos/app/console/network/main_opt.hpp \
+$${RETE_SRC}/xos/app/console/network/main.hpp \
+\
 $${STARA_SRC}/xos/protocol/http/message/header/field.hpp \
 $${STARA_SRC}/xos/protocol/http/message/header/fields.hpp \
 $${STARA_SRC}/xos/protocol/http/message/header/content/type.hpp \
@@ -68,6 +71,9 @@ $${STARA_SRC}/xos/protocol/http/protocol/identifier.hpp \
 \
 $${STARA_SRC}/xos/protocol/http/request/resource/which.hpp \
 $${STARA_SRC}/xos/protocol/http/request/resource/identifier.hpp \
+$${STARA_SRC}/xos/protocol/http/request/method/which.hpp \
+$${STARA_SRC}/xos/protocol/http/request/method/name.hpp \
+$${STARA_SRC}/xos/protocol/http/request/method/nameof.hpp \
 $${STARA_SRC}/xos/protocol/http/request/line.hpp \
 $${STARA_SRC}/xos/protocol/http/request/message.hpp \
 \
