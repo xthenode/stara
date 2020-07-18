@@ -80,7 +80,9 @@ public:
     
     /// ...method
     virtual method_t& set_method(const method_t& to) {
-        return this->line_.set_method(to);
+        method_t& method = this->line_.set_method(to);
+        this->combine();
+        return method;
     }
     virtual const method_t& method() const {
         return this->line_.method();
@@ -88,7 +90,9 @@ public:
     
     /// ...path
     virtual path_t& set_path(const string_t& to) {
-        return this->line_.set_parameters(to);
+        path_t& path = this->line_.set_parameters(to);
+        this->combine();
+        return path;
     }
     virtual const path_t& path() const {
         return this->line_.parameters();

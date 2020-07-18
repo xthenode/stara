@@ -62,6 +62,7 @@ public:
     typedef TExtends extends;
     typedef maint derives;
 
+    typedef typename extends::reader_t reader_t;
     typedef typename extends::writer_t writer_t;
     typedef typename extends::file_t file_t;
     typedef typename extends::string_t string_t;
@@ -118,6 +119,387 @@ protected:
         ssize_t amount = 0;
         int err = 0;
         err = all_write_response(amount, writer, response, argc, argv, env);
+        return err;
+    }
+    virtual int before_set_request_method_run(const char_t* method, int argc, char_t** argv, char** env) {
+        int err = 0;
+        set_request_method(method);
+        return err;
+    }
+
+    /// ...process_response_to_CONNECT
+    virtual int process_response_to_CONNECT(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        err = this->all_process_response_to_unknown(amount, writer, response, request, reader, argc, argv, env);
+        return err;
+    }
+    virtual int before_process_response_to_CONNECT(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_process_response_to_CONNECT(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_process_response_to_CONNECT(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_process_response_to_CONNECT(amount, writer, response, request, reader, argc, argv, env))) {
+            int err2 = 0;
+            err = process_response_to_CONNECT(amount, writer, response, request, reader, argc, argv, env);
+            if ((err2 = after_process_response_to_CONNECT(amount, writer, response, request, reader, argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...process_response_to_HEAD
+    virtual int process_response_to_HEAD(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        err = this->all_process_response_to_unknown(amount, writer, response, request, reader, argc, argv, env);
+        return err;
+    }
+    virtual int before_process_response_to_HEAD(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_process_response_to_HEAD(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_process_response_to_HEAD(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_process_response_to_HEAD(amount, writer, response, request, reader, argc, argv, env))) {
+            int err2 = 0;
+            err = process_response_to_HEAD(amount, writer, response, request, reader, argc, argv, env);
+            if ((err2 = after_process_response_to_HEAD(amount, writer, response, request, reader, argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...process_response_to_GET
+    virtual int process_response_to_GET(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        err = this->all_process_response_to_unknown(amount, writer, response, request, reader, argc, argv, env);
+        return err;
+    }
+    virtual int before_process_response_to_GET(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_process_response_to_GET(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_process_response_to_GET(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_process_response_to_GET(amount, writer, response, request, reader, argc, argv, env))) {
+            int err2 = 0;
+            err = process_response_to_GET(amount, writer, response, request, reader, argc, argv, env);
+            if ((err2 = after_process_response_to_GET(amount, writer, response, request, reader, argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...process_response_to_POST
+    virtual int process_response_to_POST(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        err = this->all_process_response_to_unknown(amount, writer, response, request, reader, argc, argv, env);
+        return err;
+    }
+    virtual int before_process_response_to_POST(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_process_response_to_POST(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_process_response_to_POST(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_process_response_to_POST(amount, writer, response, request, reader, argc, argv, env))) {
+            int err2 = 0;
+            err = process_response_to_POST(amount, writer, response, request, reader, argc, argv, env);
+            if ((err2 = after_process_response_to_POST(amount, writer, response, request, reader, argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...process_response_to_PATCH
+    virtual int process_response_to_PATCH(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        err = this->all_process_response_to_unknown(amount, writer, response, request, reader, argc, argv, env);
+        return err;
+    }
+    virtual int before_process_response_to_PATCH(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_process_response_to_PATCH(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_process_response_to_PATCH(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_process_response_to_PATCH(amount, writer, response, request, reader, argc, argv, env))) {
+            int err2 = 0;
+            err = process_response_to_PATCH(amount, writer, response, request, reader, argc, argv, env);
+            if ((err2 = after_process_response_to_PATCH(amount, writer, response, request, reader, argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...process_response_to_PUT
+    virtual int process_response_to_PUT(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        err = this->all_process_response_to_unknown(amount, writer, response, request, reader, argc, argv, env);
+        return err;
+    }
+    virtual int before_process_response_to_PUT(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_process_response_to_PUT(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_process_response_to_PUT(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_process_response_to_PUT(amount, writer, response, request, reader, argc, argv, env))) {
+            int err2 = 0;
+            err = process_response_to_PUT(amount, writer, response, request, reader, argc, argv, env);
+            if ((err2 = after_process_response_to_PUT(amount, writer, response, request, reader, argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...process_response_to_DELETE
+    virtual int process_response_to_DELETE(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        err = this->all_process_response_to_unknown(amount, writer, response, request, reader, argc, argv, env);
+        return err;
+    }
+    virtual int before_process_response_to_DELETE(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_process_response_to_DELETE(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_process_response_to_DELETE(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_process_response_to_DELETE(amount, writer, response, request, reader, argc, argv, env))) {
+            int err2 = 0;
+            err = process_response_to_DELETE(amount, writer, response, request, reader, argc, argv, env);
+            if ((err2 = after_process_response_to_DELETE(amount, writer, response, request, reader, argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...process_response_to_OPTIONS
+    virtual int process_response_to_OPTIONS(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        err = this->all_process_response_to_unknown(amount, writer, response, request, reader, argc, argv, env);
+        return err;
+    }
+    virtual int before_process_response_to_OPTIONS(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_process_response_to_OPTIONS(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_process_response_to_OPTIONS(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_process_response_to_OPTIONS(amount, writer, response, request, reader, argc, argv, env))) {
+            int err2 = 0;
+            err = process_response_to_OPTIONS(amount, writer, response, request, reader, argc, argv, env);
+            if ((err2 = after_process_response_to_OPTIONS(amount, writer, response, request, reader, argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...process_response_to_TRACE
+    virtual int process_response_to_TRACE(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        err = this->all_process_response_to_unknown(amount, writer, response, request, reader, argc, argv, env);
+        return err;
+    }
+    virtual int before_process_response_to_TRACE(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_process_response_to_TRACE(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_process_response_to_TRACE(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_process_response_to_TRACE(amount, writer, response, request, reader, argc, argv, env))) {
+            int err2 = 0;
+            err = process_response_to_TRACE(amount, writer, response, request, reader, argc, argv, env);
+            if ((err2 = after_process_response_to_TRACE(amount, writer, response, request, reader, argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...process_response_to_restart
+    virtual int process_response_to_restart(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        err = this->all_write_response(amount, writer, response, argc, argv, env);
+        return err;
+    }
+    virtual int before_process_response_to_restart(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_process_response_to_restart(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_process_response_to_restart(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_process_response_to_restart(amount, writer, response, request, reader, argc, argv, env))) {
+            int err2 = 0;
+            err = process_response_to_restart(amount, writer, response, request, reader, argc, argv, env);
+            if ((err2 = after_process_response_to_restart(amount, writer, response, request, reader, argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...process_response_to_stop
+    virtual int process_response_to_stop(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        err = this->all_write_response(amount, writer, response, argc, argv, env);
+        return err;
+    }
+    virtual int before_process_response_to_stop(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_process_response_to_stop(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_process_response_to_stop(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_process_response_to_stop(amount, writer, response, request, reader, argc, argv, env))) {
+            int err2 = 0;
+            err = process_response_to_stop(amount, writer, response, request, reader, argc, argv, env);
+            if ((err2 = after_process_response_to_stop(amount, writer, response, request, reader, argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...process_response_to_unknown
+    virtual int process_response_to_unknown(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        err = this->all_write_response(amount, writer, response, argc, argv, env);
+        return err;
+    }
+    virtual int before_process_response_to_unknown(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_process_response_to_unknown(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_process_response_to_unknown(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_process_response_to_unknown(amount, writer, response, request, reader, argc, argv, env))) {
+            int err2 = 0;
+            err = process_response_to_unknown(amount, writer, response, request, reader, argc, argv, env);
+            if ((err2 = after_process_response_to_unknown(amount, writer, response, request, reader, argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...write_response_to...
+    virtual int write_response_to(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        switch (request.line().method().which()) {
+        case xos::protocol::http::request::method::CONNECT:
+            err = this->all_process_response_to_CONNECT(amount, writer, response, request, reader, argc, argv, env);
+            break;
+        case xos::protocol::http::request::method::DELETE:
+            err = this->all_process_response_to_DELETE(amount, writer, response, request, reader, argc, argv, env);
+            break;
+        case xos::protocol::http::request::method::GET:
+            err = this->all_process_response_to_GET(amount, writer, response, request, reader, argc, argv, env);
+            break;
+        case xos::protocol::http::request::method::HEAD:
+            err = this->all_process_response_to_HEAD(amount, writer, response, request, reader, argc, argv, env);
+            break;
+        case xos::protocol::http::request::method::OPTIONS:
+            err = this->all_process_response_to_OPTIONS(amount, writer, response, request, reader, argc, argv, env);
+            break;
+        case xos::protocol::http::request::method::PATCH:
+            err = this->all_process_response_to_PATCH(amount, writer, response, request, reader, argc, argv, env);
+            break;
+        case xos::protocol::http::request::method::POST:
+            err = this->all_process_response_to_POST(amount, writer, response, request, reader, argc, argv, env);
+            break;
+        case xos::protocol::http::request::method::PUT:
+            err = this->all_process_response_to_PUT(amount, writer, response, request, reader, argc, argv, env);
+            break;
+        case xos::protocol::http::request::method::TRACE:
+            err = this->all_process_response_to_TRACE(amount, writer, response, request, reader, argc, argv, env);
+            break;
+        case xos::protocol::http::request::method::restart:
+            err = this->all_process_response_to_restart(amount, writer, response, request, reader, argc, argv, env);
+            break;
+        case xos::protocol::http::request::method::stop:
+            err = this->all_process_response_to_stop(amount, writer, response, request, reader, argc, argv, env);
+            break;
+        case xos::protocol::http::request::method::unknown:
+        default:
+            err = this->all_process_response_to_unknown(amount, writer, response, request, reader, argc, argv, env);
+            break;
+        }
+        return err;
+    }
+    virtual int before_write_response_to(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_write_response_to(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_write_response_to(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_write_response_to(amount, writer, response, request, reader, argc, argv, env))) {
+            int err2 = 0;
+            err = write_response_to(amount, writer, response, request, reader, argc, argv, env);
+            if ((err2 = after_write_response_to(amount, writer, response, request, reader, argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
         return err;
     }
 
@@ -182,6 +564,11 @@ protected:
     }
     virtual request_method_t& request_method_post() const {
         return (request_method_t&)post_;
+    }
+    virtual request_method_t& set_request_method(const char_t* to) {
+        method_.set(to);
+        request_.set_method(method_);
+        return (request_method_t&)method_;
     }
     virtual request_method_t& request_method() const {
         return (request_method_t&)method_;

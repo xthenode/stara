@@ -68,13 +68,14 @@ protected:
     /// ...run
     virtual int default_run(int argc, char_t** argv, char_t** env) {
         int err = 0;
-        err = this->accept(argc, argv, env);
+        err = this->accept_run(argc, argv, env);
         return err;
     }
 
     /// ...accept / ...connect
-    virtual int after_accept(int argc, char_t** argv, char_t**env) {
+    virtual int after_accept(xos::network::sockets::interface& cn, int argc, char_t** argv, char_t**env) {
         int err = 0;
+        output_ = 0;
         writer_.closed();
         return err;
     }

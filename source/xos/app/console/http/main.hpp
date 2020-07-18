@@ -37,6 +37,7 @@ public:
     typedef TExtends extends;
     typedef maint derives;
 
+    typedef typename extends::reader_t reader_t;
     typedef typename extends::writer_t writer_t;
     typedef typename extends::file_t file_t;
     typedef typename extends::string_t string_t;
@@ -91,7 +92,7 @@ protected:
         ssize_t amount = 0;
         int err = 0;
         //rs.write(amount, writer);
-        err = this->all_write_response(amount, writer, rs, argc, argv, env);
+        err = this->all_write_response_to(amount, writer, rs, rq, reader, argc, argv, env);
         return err;
     }
     virtual int before_process_request
@@ -131,6 +132,24 @@ protected:
                 if (!(err)) err = err2;
             }
         }
+        return err;
+    }
+    virtual int before_process_response_to_restart(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_process_response_to_restart(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        this->set_accept_restart();
+        return err;
+    }
+    virtual int before_process_response_to_stop(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_process_response_to_stop(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
+        int err = 0;
+        this->set_accept_done();
         return err;
     }
 

@@ -23,6 +23,19 @@
 
 #include "xos/app/console/main.hpp"
 
+#define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPT "method"
+#define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_REQUIRED
+#define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTARG_RESULT 0
+#define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTARG "{ GET | POST | ...}"
+#define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTUSE "Http request method"
+#define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTVAL_S "m:"
+#define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTVAL_C 'm'
+#define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTION \
+   {XOS_PROTOCOL_HTTP_MAIN_METHOD_OPT, \
+    XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTARG_REQUIRED, \
+    XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTARG_RESULT, \
+    XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTVAL_C}, \
+
 #define XOS_PROTOCOL_HTTP_MAIN_REQUEST_OPT "request"
 #define XOS_PROTOCOL_HTTP_MAIN_REQUEST_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_NONE
 #define XOS_PROTOCOL_HTTP_MAIN_REQUEST_OPTARG_RESULT 0
@@ -50,10 +63,12 @@
     XOS_PROTOCOL_HTTP_MAIN_RESPOND_OPTVAL_C}, \
 
 #define XOS_PROTOCOL_HTTP_MAIN_OPTIONS_CHARS_EXTEND \
+    XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTVAL_S \
     XOS_PROTOCOL_HTTP_MAIN_REQUEST_OPTVAL_S \
     XOS_PROTOCOL_HTTP_MAIN_RESPOND_OPTVAL_S
 
 #define XOS_PROTOCOL_HTTP_MAIN_OPTIONS_OPTIONS_EXTEND \
+    XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTION \
     XOS_PROTOCOL_HTTP_MAIN_REQUEST_OPTION \
     XOS_PROTOCOL_HTTP_MAIN_RESPOND_OPTION 
 
@@ -83,6 +98,7 @@ public:
     typedef TExtends extends;
     typedef main_optt derives;
 
+    typedef typename extends::reader_t reader_t;
     typedef typename extends::writer_t writer_t;
     typedef typename extends::file_t file_t;
     typedef typename extends::string_t string_t;
@@ -167,6 +183,30 @@ protected:
         return err;
     }
 
+    /// ...set_request_method_run
+    virtual int set_request_method_run(const char_t* method, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int before_set_request_method_run(const char_t* method, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_set_request_method_run(const char_t* method, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_set_request_method_run(const char_t* method, int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_set_request_method_run(method, argc, argv, env))) {
+            int err2 = 0;
+            err = set_request_method_run(method, argc, argv, env);
+            if ((err2 = after_set_request_method_run(method, argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
     /// ...set_request_run
     virtual int set_request_run(int argc, char_t** argv, char** env) {
         int err = 0;
@@ -219,17 +259,24 @@ protected:
     }
 
     /// ...options...
+    virtual int on_method_option
+    (int optval, const char_t* optarg, const char_t* optname, 
+     int optind, int argc, char_t**argv, char_t**env) {
+        int err = 0;
+        const char_t* arg = 0;
+        if ((arg = optarg) && (arg[0])) {
+            err = all_set_request_method_run(arg,argc, argv, env);
+        } else  {
+            err = all_set_request_run(argc, argv, env);
+        }
+        return err;
+    }
     virtual int on_request_option
     (int optval, const char_t* optarg, const char_t* optname, 
      int optind, int argc, char_t**argv, char_t**env) {
         int err = 0;
         err = all_set_request_run(argc, argv, env);
         return err;
-    }
-    virtual const char_t* request_option_usage(const char_t*& optarg, const struct option* longopt) {
-        const char_t* chars = "";
-        chars = XOS_PROTOCOL_HTTP_MAIN_REQUEST_OPTUSE;
-        return chars;
     }
     virtual int on_respond_option
     (int optval, const char_t* optarg, const char_t* optname, 
@@ -238,16 +285,14 @@ protected:
         err = all_set_respond_run(argc, argv, env);
         return err;
     }
-    virtual const char_t* respond_option_usage(const char_t*& optarg, const struct option* longopt) {
-        const char_t* chars = "";
-        chars = XOS_PROTOCOL_HTTP_MAIN_RESPOND_OPTUSE;
-        return chars;
-    }
     virtual int on_option
     (int optval, const char_t* optarg, const char_t* optname, 
      int optind, int argc, char_t**argv, char_t**env) {
         int err = 0;
         switch(optval) {
+        case XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTVAL_C:
+            err = this->on_method_option(optval, optarg, optname, optind, argc, argv, env);
+            break;
         case XOS_PROTOCOL_HTTP_MAIN_REQUEST_OPTVAL_C:
             err = this->on_request_option(optval, optarg, optname, optind, argc, argv, env);
             break;
@@ -259,9 +304,27 @@ protected:
         }
         return err;
     }
+    virtual const char_t* method_option_usage(const char_t*& optarg, const struct option* longopt) {
+        optarg = XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTARG;
+        const char_t* chars = XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTUSE;
+        return chars;
+    }
+    virtual const char_t* request_option_usage(const char_t*& optarg, const struct option* longopt) {
+        optarg = XOS_PROTOCOL_HTTP_MAIN_REQUEST_OPTARG;
+        const char_t* chars = XOS_PROTOCOL_HTTP_MAIN_REQUEST_OPTUSE;
+        return chars;
+    }
+    virtual const char_t* respond_option_usage(const char_t*& optarg, const struct option* longopt) {
+        optarg = XOS_PROTOCOL_HTTP_MAIN_RESPOND_OPTARG;
+        const char_t* chars = XOS_PROTOCOL_HTTP_MAIN_RESPOND_OPTUSE;
+        return chars;
+    }
     virtual const char_t* option_usage(const char_t*& optarg, const struct option* longopt) {
         const char_t* chars = "";
         switch(longopt->val) {
+        case XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTVAL_C:
+            chars = method_option_usage(optarg, longopt);
+            break;
         case XOS_PROTOCOL_HTTP_MAIN_REQUEST_OPTVAL_C:
             chars = request_option_usage(optarg, longopt);
             break;
