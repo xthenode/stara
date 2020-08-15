@@ -101,7 +101,7 @@ public:
                             configure::value& what = operator[](which);
         
                             if (&null_ != (&what)) {
-                                if ((what.set(which, value))) {
+                                if ((what.is_set(which, value))) {
                                     what.set_setting();
                                     ++count;
                                 }

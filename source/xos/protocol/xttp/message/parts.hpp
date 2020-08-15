@@ -76,7 +76,7 @@ public:
     virtual ~partst() {
     }
 
-    /// read / write
+    /// read... / write...
     virtual bool read(ssize_t& count, char_t& c, reader_t& reader) {
         bool success = false;
         ssize_t amount = 0;
@@ -89,6 +89,27 @@ public:
                 if ((combine())) {
                     success = true;
                 }
+            }
+        }
+        return success;
+    }
+    virtual bool read_with_content(ssize_t& count, char_t& c, reader_t& reader) {
+        bool success = false;
+        ssize_t amount = 0;
+        if ((read(count, c, reader))) {
+            if ((read_content(amount, c, reader))) {
+                count += amount;
+                return true;
+            }
+        }
+        return success;
+    }
+    virtual bool read_content(ssize_t& count, char_t& c, reader_t& reader) {
+        bool success = true;
+        size_t content_length = 0;
+        if (0 < (content_length = headers_.content_length())) {
+            if ((success = this_content_.read(count, c, reader, content_length))) {
+                content_ = &this_content_;
             }
         }
         return success;

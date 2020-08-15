@@ -58,8 +58,17 @@ public:
     }
 
     /// read / write
-    virtual bool read(ssize_t& count, char_t& c, reader_t& reader) {
-        bool success = false;
+    virtual bool read(ssize_t& count, char_t& c, reader_t& reader, size_t length) {
+        bool success = true;
+        set_default();
+        for (ssize_t amount = 0; 0 < length; --length, count += amount) {
+            if (0 < (amount = reader.read(&c, 1))) {
+                this->append(&c, 1);
+            } else {
+                success = false;
+                break;
+            }
+        }
         return success;
     }
     virtual bool write(ssize_t& count, writer_t& writer) {
@@ -79,6 +88,16 @@ public:
             }
         }
         return success;
+    }
+    
+    /// set_default...
+    virtual derives& set_default() {
+        this->clear();
+        set_defaults();
+        return *this;
+    }
+    virtual derives& set_defaults() {
+        return *this;
     }
 }; /// class contentt
 typedef contentt<> content;

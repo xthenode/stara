@@ -66,7 +66,7 @@ public:
     }
 
     /// set
-    virtual bool set(variable::which_t to) {
+    virtual bool is_set(variable::which_t to) {
         bool success = false;
         const char_t* chars = 0;
         this->clear();
@@ -77,19 +77,19 @@ public:
         }
         return success;
     }
-    virtual bool set(const string_t& chars) {
+    virtual bool is_set(const string_t& chars) {
         bool success = false;
         this->assign(chars);
         success = separate();
         return success;
     }
-    virtual bool set(const char_t* chars, size_t length) {
+    virtual bool is_set(const char_t* chars, size_t length) {
         bool success = false;
         this->assign(chars, length);
         success = separate();
         return success;
     }
-    virtual bool set(const char_t* chars) {
+    virtual bool is_set(const char_t* chars) {
         bool success = false;
         this->assign(chars);
         success = separate();

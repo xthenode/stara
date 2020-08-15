@@ -164,11 +164,11 @@ public:
             }
             if ((chars = name.has_chars(length))) {
                 /// ?'='
-                name_.set(name);
-                value_.set(name_.which());
+                name_.is_set(name);
+                value_.is_set(name_.which());
                 if ((chars = value.has_chars(length))) {
                     /// ?'='?
-                    value_.set(value);
+                    value_.is_set(value);
                 }
                 success = true;
             }
@@ -183,8 +183,8 @@ public:
         return *this;
     }
     virtual derives& set_defaults() {
-        name_.set(variable::none);
-        value_.set(variable::none);
+        name_.is_set(variable::none);
+        value_.is_set(variable::none);
         which_ = variable::none;
         return *this;
     }
@@ -198,8 +198,8 @@ public:
     }
     virtual variable::which_t set_which(variable::which_t to) {
         which_ = to;
-        name_.set(to);
-        value_.set(to);
+        name_.is_set(to);
+        value_.is_set(to);
         return (variable::which_t)which_;
     }
     virtual variable::which_t which() const {

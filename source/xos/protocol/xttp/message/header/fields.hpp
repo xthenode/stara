@@ -604,14 +604,14 @@ public:
     fieldst(const field_t* f, ...) {
         va_list va;
         va_start(va, f);
-        this->setv(f, va);
+        this->is_setv(f, va);
         va_end(va);
     }
     fieldst(const field_t* f, va_list va): extends(f, va) {
-        this->setv(f, va);
+        this->is_setv(f, va);
     }
     fieldst(const field_t& f): extends(f) {
-        this->set(f);
+        this->is_set(f);
     }
     fieldst(const string_t& chars): extends(chars) {
         this->separate();

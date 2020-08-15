@@ -63,7 +63,7 @@ public:
                 if (('&' != c)) {
                     chars.append(&c, 1);
                 } else {
-                    success = this->set(chars);
+                    success = this->is_set(chars);
                     break;
                 }
             } else {
@@ -71,7 +71,7 @@ public:
                     count = amount;
                     break;
                 } else {
-                    success = this->set(chars);
+                    success = this->is_set(chars);
                 }
             }
         } while (0 < amount);
@@ -126,8 +126,8 @@ public:
                 }
             }
             if ((name.has_chars())) {
-                name_.set(name);
-                value_.set(value);
+                name_.is_set(name);
+                value_.is_set(value);
             } else {
                 return false;
             }
@@ -149,15 +149,15 @@ public:
 
     /// ...name
     virtual part_t& set_name(const string_t& to) {
-        name_.set(to);
+        name_.is_set(to);
         return name_;
     }
     virtual part_t& set_name(const char_t* to, size_t length) {
-        name_.set(to, length);
+        name_.is_set(to, length);
         return name_;
     }
     virtual part_t& set_name(const char_t* to) {
-        name_.set(to);
+        name_.is_set(to);
         return name_;
     }
     virtual part_t& name() const {
@@ -166,15 +166,15 @@ public:
     
     /// ...value
     virtual part_t& set_value(const string_t& to) {
-        value_.set(to);
+        value_.is_set(to);
         return value_;
     }
     virtual part_t& set_value(const char_t* to, size_t length) {
-        value_.set(to, length);
+        value_.is_set(to, length);
         return value_;
     }
     virtual part_t& set_value(const char_t* to) {
-        value_.set(to);
+        value_.is_set(to);
         return value_;
     }
     virtual part_t& value() const {

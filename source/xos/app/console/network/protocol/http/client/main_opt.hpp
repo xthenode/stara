@@ -13,60 +13,49 @@
 /// or otherwise) arising in any way out of the use of this software, 
 /// even if advised of the possibility of such damage.
 ///
-///   File: name.hpp
+///   File: main_opt.hpp
 ///
 /// Author: $author$
-///   Date: 4/1/2020
+///   Date: 8/13/2020
 ///////////////////////////////////////////////////////////////////////
-#ifndef XOS_PROTOCOL_HTTP_CGI_NAME_HPP
-#define XOS_PROTOCOL_HTTP_CGI_NAME_HPP
+#ifndef XOS_APP_CONSOLE_NETWORK_PROTOCOL_HTTP_CLIENT_MAIN_OPT_HPP
+#define XOS_APP_CONSOLE_NETWORK_PROTOCOL_HTTP_CLIENT_MAIN_OPT_HPP
 
-#include "xos/protocol/xttp/protocol/name.hpp"
+#include "xos/app/console/network/client/main.hpp"
 
 namespace xos {
+namespace app {
+namespace console {
+namespace network {
 namespace protocol {
 namespace http {
-namespace cgi {
+namespace client {
 
-/// class namet
-template <class TExtends = xttp::protocol::extended::name, class TImplements = typename TExtends::implements>
-class exported namet: virtual public TImplements, public TExtends {
+/// class main_optt
+template <class TExtends = network::client::main, class TImplements = typename TExtends::implements>
+class exported main_optt: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;
     typedef TExtends extends;
-    typedef namet derives;
+    typedef main_optt derives; 
+    
+    /// constructors / destructor
+    main_optt() {
+    }
+    virtual ~main_optt() {
+    }
+private:
+    main_optt(const main_optt& copy): extends(copy) {
+    }
+}; /// class main_optt
+typedef main_optt<> main_opt;
 
-    typedef extends part_t;
-    typedef typename extends::string_t string_t;
-    typedef typename string_t::char_t char_t;
-    typedef typename extends::reader_t reader_t;
-    typedef typename extends::writer_t writer_t;
-
-    /// constructor / destructor
-    namet(const string_t &copy): extends(copy) {
-    }
-    namet(const char_t* chars, size_t length): extends(chars, length) {
-    }
-    namet(const char_t* chars): extends(chars) {
-    }
-    namet(const namet& copy): extends(copy) {
-    }
-    namet() {
-        this->set_default();
-    }
-    virtual ~namet() {
-    }
-
-    /// ...name_chars
-    virtual const char_t* default_name_chars() const {
-        return "CGI";
-    }
-}; /// class namet
-typedef namet<> name;
-
-} /// namespace cgi
+} /// namespace client
 } /// namespace http
 } /// namespace protocol
+} /// namespace network
+} /// namespace console
+} /// namespace app
 } /// namespace xos
 
-#endif /// ndef XOS_PROTOCOL_HTTP_CGI_NAME_HPP 
+#endif /// XOS_APP_CONSOLE_NETWORK_PROTOCOL_HTTP_CLIENT_MAIN_OPT_HPP

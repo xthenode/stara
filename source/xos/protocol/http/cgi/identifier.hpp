@@ -88,7 +88,7 @@ public:
             LOGGER_IS_LOGGED_DEBUG("::getenv(\"" << chars << "\")...");
             if ((value = ::getenv(chars))) {
                 LOGGER_IS_LOGGED_DEBUG("...\"" << value << "\" = ::getenv(\"" << chars << "\")");
-                if ((this->set(value))) {
+                if ((this->is_set(value))) {
                     return this->has_chars();
                 }
             } else {

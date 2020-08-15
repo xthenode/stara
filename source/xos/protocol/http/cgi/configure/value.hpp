@@ -68,43 +68,43 @@ public:
     }
 
     /// set
-    virtual bool set(configure::which_t to) {
+    virtual bool is_set(configure::which_t to) {
         bool success = true;
         this->clear();
         set_which(to);
         return success;
     }
-    virtual bool set(configure::which_t to, const string_t& chars) {
+    virtual bool is_set(configure::which_t to, const string_t& chars) {
         bool success = true;
         set_which(to);
-        success = set(chars);
+        success = is_set(chars);
         return success;
     }
-    virtual bool set(configure::which_t to, const char_t* chars, size_t length) {
+    virtual bool is_set(configure::which_t to, const char_t* chars, size_t length) {
         bool success = true;
         set_which(to);
-        success = set(chars, length);
+        success = is_set(chars, length);
         return success;
     }
-    virtual bool set(configure::which_t to, const char_t* chars) {
+    virtual bool is_set(configure::which_t to, const char_t* chars) {
         bool success = true;
         set_which(to);
-        success = set(chars);
+        success = is_set(chars);
         return success;
     }
-    virtual bool set(const string_t& to) {
+    virtual bool is_set(const string_t& to) {
         bool success = true;
         this->clear();
         this->assign(to);
         return success;
     }
-    virtual bool set(const char_t* to, size_t length) {
+    virtual bool is_set(const char_t* to, size_t length) {
         bool success = true;
         this->clear();
         this->assign(to, length);
         return success;
     }
-    virtual bool set(const char_t* to) {
+    virtual bool is_set(const char_t* to) {
         bool success = true;
         this->clear();
         this->assign(to);
@@ -167,7 +167,7 @@ public:
 
     /// ...setting
     const char_t* set_setting(const char_t* chars) {
-        if ((set(chars))) {
+        if ((is_set(chars))) {
             set_setting();
         }
         return setting_;
