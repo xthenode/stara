@@ -22,7 +22,7 @@
 
 //#define XOS_APP_CONSOLE_NETWORK_PROTOCOL_HTTP_CLIENT_MAIN_INSTANCE
 #if defined(XOS_APP_CONSOLE_NETWORK_PROTOCOL_HTTP_CLIENT_MAIN_INSTANCE)
-//#include "xos/app/console/network/protocol/http/client/main.cpp"
+#include "xos/console/main_main.cpp"
 #endif /// defined(XOS_APP_CONSOLE_NETWORK_PROTOCOL_HTTP_CLIENT_MAIN_INSTANCE)
 
 namespace xos {
@@ -35,7 +35,7 @@ namespace client {
 
 ///  Class: maint
 #if defined(XOS_APP_CONSOLE_NETWORK_PROTOCOL_HTTP_CLIENT_MAIN_INSTANCE)
-//static main themain;
+static main the_main;
 #endif /// defined(XOS_APP_CONSOLE_NETWORK_PROTOCOL_HTTP_CLIENT_MAIN_INSTANCE)
 
 

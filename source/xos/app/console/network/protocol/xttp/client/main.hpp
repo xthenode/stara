@@ -22,6 +22,9 @@
 #define XOS_APP_CONSOLE_NETWORK_PROTOCOL_XTTP_CLIENT_MAIN_HPP
 
 #include "xos/app/console/network/protocol/xttp/client/main_opt.hpp"
+#include "xos/protocol/xttp/content/json/node.hpp"
+#include "xos/protocol/xttp/content/json/array.hpp"
+#include "xos/protocol/xttp/content/json/object.hpp"
 #include "xos/protocol/xttp/request/message.hpp"
 #include "xos/protocol/xttp/response/message.hpp"
 #include "xos/protocol/xttp/message/parts.hpp"
@@ -44,13 +47,6 @@ public:
     typedef TExtends extends;
     typedef maint derives; 
     
-    typedef xos::protocol::xttp::request::message request_t;
-    typedef xos::protocol::xttp::response::message response_t;
-    typedef xos::protocol::xttp::message::body::content content_t;
-    typedef xos::protocol::xttp::content::reader content_reader_t;
-    typedef xos::protocol::xttp::message::writer message_writer_t;
-    typedef xos::protocol::xttp::message::parts message_t;
-
     typedef typename extends::in_reader_t in_reader_t;
     typedef typename extends::out_writer_t out_writer_t;
     typedef typename extends::err_writer_t err_writer_t;
@@ -70,6 +66,19 @@ private:
     }
     
 protected:
+    typedef xos::protocol::xttp::content::json::boolean json_boolean_t;
+    typedef xos::protocol::xttp::content::json::number json_number_t;
+    typedef xos::protocol::xttp::content::json::string json_string_t;
+    typedef xos::protocol::xttp::content::json::node json_node_t;
+    typedef xos::protocol::xttp::content::json::array json_array_t;
+    typedef xos::protocol::xttp::content::json::object json_object_t;
+    typedef xos::protocol::xttp::request::message request_t;
+    typedef xos::protocol::xttp::response::message response_t;
+    typedef xos::protocol::xttp::message::body::content content_t;
+    typedef xos::protocol::xttp::content::reader content_reader_t;
+    typedef xos::protocol::xttp::message::writer message_writer_t;
+    typedef xos::protocol::xttp::message::parts message_t;
+
     /// send_request
     virtual int send_request(xos::network::sockets::interface& cn, int argc, char_t** argv, char_t**env) {
         request_t &rq = this->request();

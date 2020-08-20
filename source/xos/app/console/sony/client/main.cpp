@@ -20,7 +20,7 @@
 ///////////////////////////////////////////////////////////////////////
 #include "xos/app/console/sony/client/main.hpp"
 
-//#define XOS_APP_CONSOLE_SONY_CLIENT_MAIN_INSTANCE
+#define XOS_APP_CONSOLE_SONY_CLIENT_MAIN_INSTANCE
 #if defined(XOS_APP_CONSOLE_SONY_CLIENT_MAIN_INSTANCE)
 #include "xos/console/main_main.cpp"
 #endif /// defined(XOS_APP_CONSOLE_SONY_CLIENT_MAIN_INSTANCE)

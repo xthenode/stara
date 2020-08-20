@@ -16,15 +16,12 @@
 ///   File: main.hpp
 ///
 /// Author: $author$
-///   Date: 8/14/2020
+///   Date: 8/18/2020
 ///////////////////////////////////////////////////////////////////////
-#ifndef XOS_APP_CONSOLE_PROTOCOL_XTTP_CLIENT_MAIN_HPP
-#define XOS_APP_CONSOLE_PROTOCOL_XTTP_CLIENT_MAIN_HPP
+#ifndef XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_HPP
+#define XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_HPP
 
-#include "xos/app/console/protocol/xttp/client/main_opt.hpp"
-#include "xos/protocol/xttp/content/json/node.hpp"
-#include "xos/protocol/xttp/content/json/array.hpp"
-#include "xos/protocol/xttp/content/json/object.hpp"
+#include "xos/app/console/protocol/http/client/main_opt.hpp"
 #include "xos/protocol/http/content/type/nameof.hpp"
 #include "xos/protocol/http/message/body/content.hpp"
 #include "xos/protocol/http/message/header/content/type.hpp"
@@ -42,7 +39,7 @@ namespace xos {
 namespace app {
 namespace console {
 namespace protocol {
-namespace xttp {
+namespace http {
 namespace client {
 
 /// class maint
@@ -63,29 +60,17 @@ public:
     typedef typename extends::char_t char_t;
 
     /// constructors / destructor
-    maint()
-    : content_type_(text_), content_type_header_(content_type_),
-      hello_("Hello\r\n"), bye_("Bye\r\n"), content_(hello_), content_length_header_(content_),
-      http_(http_name_, http_version_), protocol_(http_),
-      method_(get_), resource_(path_), request_line_(method_, resource_, protocol_),
-      request_headers_(&content_type_header_, &content_length_header_, null),
-      request_(request_line_, request_headers_, content_) {
+    maint() {
     }
     virtual ~maint() {
     }
 private:
     maint(const maint& copy): extends(copy) {
     }
-    
+
 protected:
-    typedef xos::protocol::xttp::content::json::boolean json_boolean_t;
-    typedef xos::protocol::xttp::content::json::number json_number_t;
-    typedef xos::protocol::xttp::content::json::string json_string_t;
-    typedef xos::protocol::xttp::content::json::node json_node_t;
-    typedef xos::protocol::xttp::content::json::array json_array_t;
-    typedef xos::protocol::xttp::content::json::object json_object_t;
-    typedef xos::protocol::xttp::request::extended::method request_method_t;
-    typedef xos::protocol::xttp::request::message request_t;
+    typedef xos::protocol::http::request::method::name request_method_t;
+    typedef xos::protocol::http::request::message request_t;
 
     /// ...run
     virtual int request_run(int argc, char_t** argv, char_t** env) {
@@ -225,10 +210,10 @@ protected:
 typedef maint<> main;
 
 } /// namespace client
-} /// namespace xttp
+} /// namespace http
 } /// namespace protocol
 } /// namespace console
 } /// namespace app
 } /// namespace xos
 
-#endif /// XOS_APP_CONSOLE_PROTOCOL_XTTP_CLIENT_MAIN_HPP
+#endif /// XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_HPP

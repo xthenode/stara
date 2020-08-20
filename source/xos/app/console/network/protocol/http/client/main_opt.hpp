@@ -21,7 +21,19 @@
 #ifndef XOS_APP_CONSOLE_NETWORK_PROTOCOL_HTTP_CLIENT_MAIN_OPT_HPP
 #define XOS_APP_CONSOLE_NETWORK_PROTOCOL_HTTP_CLIENT_MAIN_OPT_HPP
 
+#include "xos/app/console/protocol/http/client/main.hpp"
 #include "xos/app/console/network/client/main.hpp"
+
+#define XOS_NETWORK_PROTOCOL_HTTP_MAIN_OPTIONS_CHARS \
+    XOS_NETWORK_MAIN_OPTIONS_CHARS_EXTEND \
+    XOS_PROTOCOL_HTTP_MAIN_OPTIONS_CHARS
+
+#define XOS_NETWORK_PROTOCOL_HTTP_MAIN_OPTIONS_OPTIONS \
+    XOS_NETWORK_MAIN_OPTIONS_OPTIONS_EXTEND \
+    XOS_PROTOCOL_HTTP_MAIN_OPTIONS_OPTIONS
+
+#define XOS_NETWORK_PROTOCOL_HTTP_MAIN_ARUMENTS_CHARS 0
+#define XOS_NETWORK_PROTOCOL_HTTP_MAIN_ARUMENTS_ARGS 0
 
 namespace xos {
 namespace app {
@@ -32,13 +44,22 @@ namespace http {
 namespace client {
 
 /// class main_optt
-template <class TExtends = network::client::main, class TImplements = typename TExtends::implements>
+template <class TExtends = network::client::maint<network::client::main_optt<console::protocol::http::client::main> >, class TImplements = typename TExtends::implements>
 class exported main_optt: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;
     typedef TExtends extends;
     typedef main_optt derives; 
     
+    typedef typename extends::in_reader_t in_reader_t;
+    typedef typename extends::out_writer_t out_writer_t;
+    typedef typename extends::err_writer_t err_writer_t;
+    typedef typename extends::reader_t reader_t;
+    typedef typename extends::writer_t writer_t;
+    typedef typename extends::file_t file_t;
+    typedef typename extends::string_t string_t;
+    typedef typename extends::char_t char_t;
+
     /// constructors / destructor
     main_optt() {
     }
@@ -46,6 +67,26 @@ public:
     }
 private:
     main_optt(const main_optt& copy): extends(copy) {
+    }
+
+protected:
+    typedef typename extends::request_method_t request_method_t;
+    typedef typename extends::request_t request_t;
+
+    /// ...options...
+    virtual const char_t* options(const struct option*& longopts) {
+        static const char_t* chars = XOS_NETWORK_PROTOCOL_HTTP_MAIN_OPTIONS_CHARS;
+        static struct option optstruct[]= {
+            XOS_NETWORK_PROTOCOL_HTTP_MAIN_OPTIONS_OPTIONS
+            {0, 0, 0, 0}};
+        longopts = optstruct;
+        return chars;
+    }
+
+    /// ...arguments...
+    virtual const char_t* arguments(const char_t**& args) {
+        args = XOS_NETWORK_PROTOCOL_HTTP_MAIN_ARUMENTS_ARGS;
+        return XOS_NETWORK_PROTOCOL_HTTP_MAIN_ARUMENTS_CHARS;
     }
 }; /// class main_optt
 typedef main_optt<> main_opt;
