@@ -58,8 +58,12 @@ $${RETE_SRC}/xos/app/console/network/client/main_opt.hpp \
 $${RETE_SRC}/xos/app/console/network/client/main.hpp \
 $${STARA_SRC}/xos/app/console/protocol/xttp/client/main_opt.hpp \
 $${STARA_SRC}/xos/app/console/protocol/xttp/client/main.hpp \
+$${STARA_SRC}/xos/app/console/protocol/http/client/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/http/client/main.hpp \
 $${STARA_SRC}/xos/app/console/network/protocol/xttp/client/main_opt.hpp \
 $${STARA_SRC}/xos/app/console/network/protocol/xttp/client/main.hpp \
+$${STARA_SRC}/xos/app/console/network/protocol/http/client/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/network/protocol/http/client/main.hpp \
 $${STARA_SRC}/xos/app/console/sony/client/main_opt.hpp \
 $${STARA_SRC}/xos/app/console/sony/client/main.hpp \
 $${STARA_SRC}/xos/app/console/sony/cgi/main_opt.hpp \
@@ -68,7 +72,7 @@ $${STARA_SRC}/xos/app/console/sony/cgi/main.hpp \
 # sonycgi SOURCES
 #
 sonycgi_SOURCES += \
-$${STARA_SRC}/xos/app/console/network/protocol/xttp/client/main.cpp \
+$${STARA_SRC}/xos/app/console/sony/client/main.cpp \
 
 ########################################################################
 # sonycgi FRAMEWORKS
