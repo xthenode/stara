@@ -13,69 +13,68 @@
 # or otherwise) arising in any way out of the use of this software,
 # even if advised of the possibility of such damage.
 #
-#   File: xttp.pri
+#   File: httpd.pri
 #
 # Author: $author$
-#   Date: 4/22/2020
+#   Date: 9/8/2020
 #
-# QtCreator .pri file for stara executable xttp
+# QtCreator .pri file for stara executable httpd
 ########################################################################
 
 ########################################################################
-# xttp
+# httpd
 
-# xttp TARGET
+# httpd TARGET
 #
-xttp_TARGET = xttp
+httpd_TARGET = httpd
 
-# xttp INCLUDEPATH
+# httpd INCLUDEPATH
 #
-xttp_INCLUDEPATH += \
+httpd_INCLUDEPATH += \
 $${stara_INCLUDEPATH} \
 
-# xttp DEFINES
+# httpd DEFINES
 #
-xttp_DEFINES += \
+httpd_DEFINES += \
 $${stara_DEFINES} \
-XOS_APP_CONSOLE_PROTOCOL_XTTP_MAIN_INSTANCE \
 
 ########################################################################
-# xttp OBJECTIVE_HEADERS
+# httpd OBJECTIVE_HEADERS
 #
-#xttp_OBJECTIVE_HEADERS += \
+#httpd_OBJECTIVE_HEADERS += \
 #$${STARA_SRC}/stara/base/Base.hh \
 
-# xttp OBJECTIVE_SOURCES
+# httpd OBJECTIVE_SOURCES
 #
-#xttp_OBJECTIVE_SOURCES += \
+#httpd_OBJECTIVE_SOURCES += \
 #$${STARA_SRC}/stara/base/Base.mm \
 
 ########################################################################
-# xttp HEADERS
+# httpd HEADERS
 #
-xttp_HEADERS += \
-$${STARA_SRC}/xos/app/console/protocol/xttp/main_opt.hpp \
-$${STARA_SRC}/xos/app/console/protocol/xttp/main.hpp \
+httpd_HEADERS += \
+$${STARA_SRC}/xos/app/console/http/server/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/http/server/main.hpp \
 \
 $${NADIR_SRC}/xos/console/main_main.hpp \
 
-# xttp SOURCES
+# httpd SOURCES
 #
-xttp_SOURCES += \
-$${STARA_SRC}/xos/app/console/protocol/xttp/main_opt.cpp \
-$${STARA_SRC}/xos/app/console/protocol/xttp/main.cpp \
+httpd_SOURCES += \
+$${STARA_SRC}/xos/app/console/http/server/main_opt.cpp \
+$${STARA_SRC}/xos/app/console/http/server/main.cpp \
 \
 $${NADIR_SRC}/xos/console/main_main.cpp \
 
 ########################################################################
-# xttp FRAMEWORKS
+# httpd FRAMEWORKS
 #
-xttp_FRAMEWORKS += \
+httpd_FRAMEWORKS += \
 $${stara_FRAMEWORKS} \
 
-# xttp LIBS
+# httpd LIBS
 #
-xttp_LIBS += \
+httpd_LIBS += \
 $${stara_LIBS} \
 
 

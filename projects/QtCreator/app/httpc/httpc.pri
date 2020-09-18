@@ -13,69 +13,83 @@
 # or otherwise) arising in any way out of the use of this software,
 # even if advised of the possibility of such damage.
 #
-#   File: xttp.pri
+#   File: httpc.pri
 #
 # Author: $author$
-#   Date: 4/22/2020
+#   Date: 9/10/2020
 #
-# QtCreator .pri file for stara executable xttp
+# QtCreator .pri file for stara executable httpc
 ########################################################################
 
 ########################################################################
-# xttp
+# httpc
 
-# xttp TARGET
+# httpc TARGET
 #
-xttp_TARGET = xttp
+httpc_TARGET = httpc
 
-# xttp INCLUDEPATH
+# httpc INCLUDEPATH
 #
-xttp_INCLUDEPATH += \
+httpc_INCLUDEPATH += \
 $${stara_INCLUDEPATH} \
 
-# xttp DEFINES
+# httpc DEFINES
 #
-xttp_DEFINES += \
+httpc_DEFINES += \
 $${stara_DEFINES} \
-XOS_APP_CONSOLE_PROTOCOL_XTTP_MAIN_INSTANCE \
+XOS_APP_CONSOLE_XTTP_SERVER_MAIN_INSTANCE \
 
 ########################################################################
-# xttp OBJECTIVE_HEADERS
+# httpc OBJECTIVE_HEADERS
 #
-#xttp_OBJECTIVE_HEADERS += \
+#httpc_OBJECTIVE_HEADERS += \
 #$${STARA_SRC}/stara/base/Base.hh \
 
-# xttp OBJECTIVE_SOURCES
+# httpc OBJECTIVE_SOURCES
 #
-#xttp_OBJECTIVE_SOURCES += \
+#httpc_OBJECTIVE_SOURCES += \
 #$${STARA_SRC}/stara/base/Base.mm \
 
 ########################################################################
-# xttp HEADERS
+# httpc HEADERS
 #
-xttp_HEADERS += \
-$${STARA_SRC}/xos/app/console/protocol/xttp/main_opt.hpp \
-$${STARA_SRC}/xos/app/console/protocol/xttp/main.hpp \
+httpc_HEADERS += \
+$${STARA_SRC}/xos/protocol/xttp/response/reason.hpp \
+$${STARA_SRC}/xos/protocol/http/response/status/which.hpp \
+$${STARA_SRC}/xos/protocol/http/response/status/code.hpp \
+$${STARA_SRC}/xos/protocol/http/response/status/reason.hpp \
+\
+$${STARA_SRC}/xos/app/console/protocol/xttp/base/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/base/main.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/client/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/client/main.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/server/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/server/main.hpp \
+\
+$${STARA_SRC}/xos/app/console/xttp/server/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/xttp/server/main.hpp \
 \
 $${NADIR_SRC}/xos/console/main_main.hpp \
 
-# xttp SOURCES
+# httpc SOURCES
 #
-xttp_SOURCES += \
-$${STARA_SRC}/xos/app/console/protocol/xttp/main_opt.cpp \
-$${STARA_SRC}/xos/app/console/protocol/xttp/main.cpp \
+httpc_SOURCES += \
+$${STARA_SRC}/xos/protocol/http/response/status/reason.cpp \
+\
+$${STARA_SRC}/xos/app/console/xttp/server/main_opt.cpp \
+$${STARA_SRC}/xos/app/console/xttp/server/main.cpp \
 \
 $${NADIR_SRC}/xos/console/main_main.cpp \
 
 ########################################################################
-# xttp FRAMEWORKS
+# httpc FRAMEWORKS
 #
-xttp_FRAMEWORKS += \
+httpc_FRAMEWORKS += \
 $${stara_FRAMEWORKS} \
 
-# xttp LIBS
+# httpc LIBS
 #
-xttp_LIBS += \
+httpc_LIBS += \
 $${stara_LIBS} \
 
 

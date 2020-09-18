@@ -55,6 +55,10 @@ $${stara_DEFINES} \
 http_HEADERS += \
 $${RETE_SRC}/xos/network/sockets/posix/interface.hpp \
 \
+$${RETE_SRC}/xos/app/console/network/base/main_opt.hpp \
+$${RETE_SRC}/xos/app/console/network/base/main.hpp \
+$${RETE_SRC}/xos/app/console/network/client/main_opt.hpp \
+$${RETE_SRC}/xos/app/console/network/client/main.hpp \
 $${RETE_SRC}/xos/app/console/network/main_opt.hpp \
 $${RETE_SRC}/xos/app/console/network/main.hpp \
 \
@@ -86,6 +90,8 @@ $${STARA_SRC}/xos/protocol/http/response/message.hpp \
 \
 $${STARA_SRC}/xos/app/console/protocol/http/main_opt.hpp \
 $${STARA_SRC}/xos/app/console/protocol/http/main.hpp \
+$${STARA_SRC}/xos/app/console/http/client/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/http/client/main.hpp \
 $${STARA_SRC}/xos/app/console/http/main_opt.hpp \
 $${STARA_SRC}/xos/app/console/http/main.hpp \
 
@@ -110,8 +116,8 @@ $${STARA_SRC}/xos/protocol/http/response/status/reason.cpp \
 $${STARA_SRC}/xos/protocol/http/response/line.cpp \
 $${STARA_SRC}/xos/protocol/http/response/message.cpp \
 \
-$${STARA_SRC}/xos/app/console/http/main_opt.cpp \
-$${STARA_SRC}/xos/app/console/http/main.cpp \
+$${STARA_SRC}/xos/app/console/http/client/main_opt.cpp \
+$${STARA_SRC}/xos/app/console/http/client/main.cpp \
 $${NADIR_SRC}/xos/console/main_main.cpp \
 
 ########################################################################
