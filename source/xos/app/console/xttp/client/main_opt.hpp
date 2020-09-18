@@ -16,53 +16,56 @@
 ///   File: main_opt.hpp
 ///
 /// Author: $author$
-///   Date: 6/12/2020
+///   Date: 9/16/2020
 ///////////////////////////////////////////////////////////////////////
-#ifndef XOS_APP_CONSOLE_HTTP_MAIN_OPT_HPP
-#define XOS_APP_CONSOLE_HTTP_MAIN_OPT_HPP
+#ifndef XOS_APP_CONSOLE_XTTP_CLIENT_MAIN_OPT_HPP
+#define XOS_APP_CONSOLE_XTTP_CLIENT_MAIN_OPT_HPP
 
-#include "xos/app/console/protocol/http/main.hpp"
+#include "xos/app/console/protocol/xttp/client/main.hpp"
 #include "xos/app/console/network/client/main.hpp"
-//#include "xos/app/console/network/main.hpp"
+#include "xos/protocol/http/response/status/codeof.hpp"
+#include "xos/protocol/http/response/status/reason.hpp"
+#include "xos/protocol/http/response/line.hpp"
+#include "xos/protocol/http/response/message.hpp"
 
-#define XOS_APP_CONSOLE_HTTP_MAIN_OPTIONS_CHARS \
-    XOS_PROTOCOL_HTTP_MAIN_OPTIONS_CHARS_EXTEND \
+#define XOS_APP_CONSOLE_XTTP_CLIENT_MAIN_OPTIONS_CHARS \
+    XOS_PROTOCOL_XTTP_CLIENT_MAIN_OPTIONS_CHARS_EXTEND \
     XOS_NETWORK_CLIENT_MAIN_OPTIONS_CHARS
-/*
-    XOS_NETWORK_MAIN_OPTIONS_CHARS
-*/
-#define XOS_APP_CONSOLE_HTTP_MAIN_OPTIONS_OPTIONS \
-    XOS_PROTOCOL_HTTP_MAIN_OPTIONS_OPTIONS_EXTEND \
+
+#define XOS_APP_CONSOLE_XTTP_CLIENT_MAIN_OPTIONS_OPTIONS \
+    XOS_PROTOCOL_XTTP_CLIENT_MAIN_OPTIONS_OPTIONS_EXTEND \
     XOS_NETWORK_CLIENT_MAIN_OPTIONS_OPTIONS
-/*
-    XOS_NETWORK_MAIN_OPTIONS_OPTIONS
-*/
-#define XOS_APP_CONSOLE_HTTP_MAIN_ARUMENTS_CHARS 0
-#define XOS_APP_CONSOLE_HTTP_MAIN_ARUMENTS_ARGS 0
+
+#define XOS_APP_CONSOLE_XTTP_CLIENT_MAIN_ARUMENTS_CHARS 0
+#define XOS_APP_CONSOLE_XTTP_CLIENT_MAIN_ARUMENTS_ARGS 0
 
 namespace xos {
 namespace app {
 namespace console {
-namespace http {
+namespace xttp {
+namespace client {
 
 /// class main_optt
 template 
-<class TExtends = console::protocol::http::maint
- <console::protocol::http::main_optt<network::client::main> >, 
- class TImplements = typename TExtends::implements>
+<class TExtends = protocol::xttp::client::maint
+ <protocol::xttp::client::main_optt<console::protocol::xttp::base::maint
+ <console::protocol::xttp::base::main_optt<network::client::main> > > >, class TImplements = typename TExtends::implements>
 class exported main_optt: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;
     typedef TExtends extends;
-    typedef main_optt derives;
-
+    typedef main_optt derives; 
+    
+    typedef typename extends::in_reader_t in_reader_t;
+    typedef typename extends::out_writer_t out_writer_t;
+    typedef typename extends::err_writer_t err_writer_t;
     typedef typename extends::reader_t reader_t;
     typedef typename extends::writer_t writer_t;
     typedef typename extends::file_t file_t;
     typedef typename extends::string_t string_t;
     typedef typename extends::char_t char_t;
 
-    /// constructor / destructor
+    /// constructors / destructor
     main_optt() {
     }
     virtual ~main_optt() {
@@ -70,20 +73,18 @@ public:
 private:
     main_optt(const main_optt& copy) {
     }
-public:
 
 protected:
-    typedef typename extends::out_writer_t out_writer_t;
+    typedef typename extends::content_t content_t;
+    typedef typename extends::request_method_t request_method_t;
     typedef typename extends::request_t request_t;
-    typedef typename extends::response_t resppnse_t;
-    typedef typename extends::message_t message_t;
+    typedef xos::protocol::http::response::message response_t;
 
-protected:
     /// ...options...
     virtual const char_t* options(const struct option*& longopts) {
-        static const char_t* chars = XOS_APP_CONSOLE_HTTP_MAIN_OPTIONS_CHARS;
+        static const char_t* chars = XOS_APP_CONSOLE_XTTP_CLIENT_MAIN_OPTIONS_CHARS;
         static struct option optstruct[]= {
-            XOS_APP_CONSOLE_HTTP_MAIN_OPTIONS_OPTIONS
+            XOS_APP_CONSOLE_XTTP_CLIENT_MAIN_OPTIONS_OPTIONS
             {0, 0, 0, 0}};
         longopts = optstruct;
         return chars;
@@ -91,15 +92,24 @@ protected:
 
     /// ...arguments...
     virtual const char_t* arguments(const char_t**& args) {
-        args = XOS_APP_CONSOLE_HTTP_MAIN_ARUMENTS_ARGS;
-        return XOS_APP_CONSOLE_HTTP_MAIN_ARUMENTS_CHARS;
+        args = XOS_APP_CONSOLE_XTTP_CLIENT_MAIN_ARUMENTS_ARGS;
+        return XOS_APP_CONSOLE_XTTP_CLIENT_MAIN_ARUMENTS_CHARS;
     }
+
+    /// response... / message...
+    virtual response_t& response() const {
+        return (response_t&)response_;
+    }
+
+protected:
+    xos::protocol::http::response::message response_;
 }; /// class main_optt
 typedef main_optt<> main_opt;
 
-} /// namespace http
+} /// namespace client
+} /// namespace xttp
 } /// namespace console
 } /// namespace app
 } /// namespace xos
 
-#endif /// ndef XOS_APP_CONSOLE_HTTP_MAIN_OPT_HPP 
+#endif /// XOS_APP_CONSOLE_XTTP_CLIENT_MAIN_OPT_HPP

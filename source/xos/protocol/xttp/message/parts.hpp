@@ -76,6 +76,15 @@ public:
     virtual ~partst() {
     }
 
+    /// set
+    using extends::set;
+    virtual derives& set(const line_t& line, const headers_t& headers, const content_t& content) {
+        set_line(line);
+        set_headers(headers);
+        set_content(content);
+        return *this;
+    }
+
     /// read... / write...
     virtual bool read(ssize_t& count, char_t& c, reader_t& reader) {
         bool success = false;
@@ -229,6 +238,11 @@ public:
     }
     virtual const line_t& line() const {
         return line_;
+    }
+    virtual headers_t& set_headers(const headers_t& to) {
+        headers_.set(to);
+        combine();
+        return headers_;
     }
     virtual const headers_t& headers() const {
         return headers_;

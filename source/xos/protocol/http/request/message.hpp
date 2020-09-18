@@ -43,7 +43,10 @@ public:
     typedef extends parts_t;
     typedef typename parts_t::line_t line_t;
     typedef typename line_t::method_t method_t;
+    typedef typename line_t::parameters_t parameters_t;
+    typedef typename line_t::parameters_t resource_t;
     typedef typename line_t::parameters_t path_t;
+    typedef typename line_t::parameters_t url_t;
     typedef typename parts_t::headers_t headers_t;
     typedef typename parts_t::content_t content_t;
     typedef typename extends::part_t part_t;
@@ -95,6 +98,26 @@ public:
         return path;
     }
     virtual const path_t& path() const {
+        return this->line_.parameters();
+    }
+
+    /// ...resource
+    virtual resource_t& set_resource(const string_t& to) {
+        resource_t& resource = this->line_.set_parameters(to);
+        this->combine();
+        return resource;
+    }
+    virtual const resource_t& resource() const {
+        return this->line_.parameters();
+    }
+
+    /// ...parameters
+    virtual parameters_t& set_parameters(const string_t& to) {
+        parameters_t& parameters = this->line_.set_parameters(to);
+        this->combine();
+        return parameters;
+    }
+    virtual const parameters_t& parameters() const {
         return this->line_.parameters();
     }
 }; /// class messaget

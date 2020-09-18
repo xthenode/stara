@@ -16,31 +16,29 @@
 ///   File: main_opt.cpp
 ///
 /// Author: $author$
-///   Date: 8/18/2020
+///   Date: 9/14/2020
 ///////////////////////////////////////////////////////////////////////
-#include "xos/app/console/protocol/http/client/main_opt.hpp"
+#include "xos/app/console/xttp/server/main_opt.hpp"
 
-//#define XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_OPT_INSTANCE
-#if defined(XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_OPT_INSTANCE)
+//#define XOS_APP_CONSOLE_XTTP_SERVER_MAIN_OPT_INSTANCE
+#if defined(XOS_APP_CONSOLE_XTTP_SERVER_MAIN_OPT_INSTANCE)
 //#include "xos/console/main_main.cpp"
-#endif /// defined(XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_OPT_INSTANCE)
+#endif /// defined(XOS_APP_CONSOLE_XTTP_SERVER_MAIN_OPT_INSTANCE)
 
 namespace xos {
 namespace app {
 namespace console {
-namespace protocol {
-namespace http {
-namespace client {
+namespace xttp {
+namespace server {
 
 ///  Class: main_optt
-#if defined(XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_OPT_INSTANCE)
+#if defined(XOS_APP_CONSOLE_XTTP_SERVER_MAIN_OPT_INSTANCE)
 static main_opt the_main_opt;
-#endif /// defined(XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_OPT_INSTANCE)
+#endif /// defined(XOS_APP_CONSOLE_XTTP_SERVER_MAIN_OPT_INSTANCE)
 
 
-} /// namespace client
-} /// namespace http
-} /// namespace protocol
+} /// namespace server
+} /// namespace xttp
 } /// namespace console
 } /// namespace app
 } /// namespace xos

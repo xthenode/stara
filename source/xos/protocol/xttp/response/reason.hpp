@@ -56,15 +56,27 @@ public:
     }
     reasont(const char_t* chars): extends(chars), which_(none) {
     }
-    reasont(status_t status): which_(status.which()) {
+    reasont(const status_t& status): which_(status.which()) {
     }
-    reasont(which_t which): which_(which) {
+    reasont(const which_t& which): which_(which) {
     }
     reasont(const reasont& copy): extends(copy), which_(copy.which_) {
     }
     reasont(): which_(none) {
     }
     virtual ~reasont() {
+    }
+
+    /// set
+    using extends::set;
+    virtual derives& set(const status_t& to) {
+        set(to.which());
+        return *this;
+    }
+    virtual derives& set(const which_t& to) {
+        which_ = to;
+        set_name();
+        return *this;
     }
 
     /// read / write

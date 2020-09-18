@@ -83,11 +83,26 @@ public:
     virtual ~fieldst() {
     }
 
-    /// set
+    /// ...set
+    using extends::set;
+    virtual derives& set(const fieldst& to) {
+        clear_list();
+        add(to);
+        this->assign(to);
+        return *this;
+    }
+    virtual bool is_set(const fieldst& to) {
+        bool success = true;
+        clear_list();
+        add(to);
+        success = combine();
+        return success;
+    }
     virtual bool is_setl(const field_t* f, ...) {
         bool success = true;
         va_list va;
         va_start(va, f);
+        clear_list();
         addv(f, va);
         va_end(va);
         success = combine();
@@ -95,24 +110,28 @@ public:
     }
     virtual bool is_setv(const field_t* f, va_list va) {
         bool success = true;
+        clear_list();
         addv(f, va);
         success = combine();
         return success;
     }
     virtual bool is_set(const field_t& f) {
         bool success = true;
+        clear_list();
         add(f);
         success = combine();
         return success;
     }
     virtual bool is_set(const string_t& name, const string_t& value) {
         bool success = true;
+        clear_list();
         add(name, value);
         success = combine();
         return success;
     }
     virtual bool is_set(const string_t& name_value) {
         bool success = true;
+        clear_list();
         add(name_value);
         success = combine();
         return success;
@@ -253,6 +272,20 @@ public:
     }
 
     /// add...
+    virtual list_t& add(const fieldst& f) {
+        add(f.list_);
+        return list_;
+    }
+    virtual list_t& add(const list_t& list) {
+        const field_t* f = 0;
+        const_iterator_t e = list.end();
+        for (const_iterator_t i = list.begin(); i != e; ++i) {
+            if (f = *i) {
+                add(*f);
+            }
+        }
+        return list_;
+    }
     virtual list_t& addl(const field_t* f, ...) {
         va_list va;
         va_start(va, f);

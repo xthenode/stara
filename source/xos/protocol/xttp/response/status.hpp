@@ -94,6 +94,18 @@ public:
         return success;
     }
 
+    /// combine / separate
+    virtual bool combine() {
+        bool success = true;
+        set_name();
+        return success;
+    }
+    virtual bool separate() {
+        bool success = true;
+        set_which();
+        return success;
+    }
+
     /// set_default...
     virtual derives& set_default() {
         this->clear();

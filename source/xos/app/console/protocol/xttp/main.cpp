@@ -20,13 +20,21 @@
 ///////////////////////////////////////////////////////////////////////
 #include "xos/app/console/protocol/xttp/main.hpp"
 
+//#define XOS_APP_CONSOLE_PROTOCOL_XTTP_MAIN_INSTANCE
+#if defined(XOS_APP_CONSOLE_PROTOCOL_XTTP_MAIN_INSTANCE)
+//#include "xos/console/main_main.cpp"
+#endif /// defined(XOS_APP_CONSOLE_PROTOCOL_XTTP_MAIN_INSTANCE)
+
 namespace xos {
 namespace app {
 namespace console {
 namespace protocol {
 namespace xttp {
 
-/// class maint
+///  Class: maint
+#if defined(XOS_APP_CONSOLE_PROTOCOL_XTTP_MAIN_INSTANCE)
+static main the_main;
+#endif /// defined(XOS_APP_CONSOLE_PROTOCOL_XTTP_MAIN_INSTANCE)
 
 } /// namespace xttp
 } /// namespace protocol

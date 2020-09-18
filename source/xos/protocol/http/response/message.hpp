@@ -41,6 +41,9 @@ public:
 
     typedef extends parts_t;
     typedef typename parts_t::line_t line_t;
+    typedef typename line_t::protocol_t protocol_t;
+    typedef typename line_t::status_t status_t;
+    typedef typename line_t::reason_t reason_t;
     typedef typename parts_t::headers_t headers_t;
     typedef typename parts_t::content_t content_t;
     typedef typename extends::part_t part_t;
@@ -73,6 +76,36 @@ public:
     messaget() {
     }
     virtual ~messaget() {
+    }
+
+    /// ...protocol
+    virtual protocol_t& set_protocol(const protocol_t& to) {
+        protocol_t& protocol = this->line_.set_protocol(to);
+        this->combine();
+        return protocol;
+    }
+    virtual const protocol_t& protocol() const {
+        return this->line_.protocol();
+    }
+
+    /// ...status
+    virtual status_t& set_status(const status_t& to) {
+        status_t& status = this->line_.set_status(to);
+        this->combine();
+        return status;
+    }
+    virtual const status_t& status() const {
+        return this->line_.status();
+    }
+
+    /// ...reason
+    virtual reason_t& set_reason(const reason_t& to) {
+        reason_t& reason = this->line_.set_reason(to);
+        this->combine();
+        return reason;
+    }
+    virtual const reason_t& reason() const {
+        return this->line_.reason();
     }
 }; /// class messaget
 typedef messaget<> message;

@@ -40,8 +40,8 @@ public:
     typedef typename extends::file_t file_t;
     typedef typename extends::string_t string_t;
     typedef typename extends::char_t char_t;
-    typedef typename extends::end_char_t end_char_t;
-    enum { end_char = extends::end_char };
+    /*typedef typename extends::end_char_t end_char_t;
+    enum { end_char = extends::end_char };*/
 
     /// constructor / destructor
     maint() {
@@ -51,7 +51,6 @@ public:
 private:
     maint(const maint& copy): extends(copy) {
     }
-public:
 protected:
 }; /// class maint
 typedef maint<> main;

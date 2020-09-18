@@ -13,33 +13,33 @@
 /// or otherwise) arising in any way out of the use of this software, 
 /// even if advised of the possibility of such damage.
 ///
-///   File: main_opt.cpp
+///   File: main.cpp
 ///
 /// Author: $author$
-///   Date: 8/18/2020
+///   Date: 9/10/2020
 ///////////////////////////////////////////////////////////////////////
-#include "xos/app/console/protocol/http/client/main_opt.hpp"
+#include "xos/app/console/protocol/xttp/base/main.hpp"
 
-//#define XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_OPT_INSTANCE
-#if defined(XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_OPT_INSTANCE)
+//#define XOS_APP_CONSOLE_PROTOCOL_XTTP_BASE_MAIN_INSTANCE
+#if defined(XOS_APP_CONSOLE_PROTOCOL_XTTP_BASE_MAIN_INSTANCE)
 //#include "xos/console/main_main.cpp"
-#endif /// defined(XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_OPT_INSTANCE)
+#endif /// defined(XOS_APP_CONSOLE_PROTOCOL_XTTP_BASE_MAIN_INSTANCE)
 
 namespace xos {
 namespace app {
 namespace console {
 namespace protocol {
-namespace http {
-namespace client {
+namespace xttp {
+namespace base {
 
-///  Class: main_optt
-#if defined(XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_OPT_INSTANCE)
-static main_opt the_main_opt;
-#endif /// defined(XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_OPT_INSTANCE)
+///  Class: maint
+#if defined(XOS_APP_CONSOLE_PROTOCOL_XTTP_BASE_MAIN_INSTANCE)
+static main the_main;
+#endif /// defined(XOS_APP_CONSOLE_PROTOCOL_XTTP_BASE_MAIN_INSTANCE)
 
 
-} /// namespace client
-} /// namespace http
+} /// namespace base
+} /// namespace xttp
 } /// namespace protocol
 } /// namespace console
 } /// namespace app

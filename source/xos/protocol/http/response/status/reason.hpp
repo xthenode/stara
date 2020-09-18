@@ -74,7 +74,13 @@ public:
     virtual ~reasont() {
     }
 
-    /// ...name_chars / ...which
+    /// ...name... / ...which
+    virtual which_t of_name(const char_t* name) const {
+        return which::of_name(name);
+    }
+    virtual const char_t* name_of_chars(which_t which) const {
+        return which::name_of(which);
+    }
     virtual const char_t* default_name_chars() const {
         return which::name_of(default_which());
     }

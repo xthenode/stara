@@ -22,7 +22,7 @@
 
 //#define XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_INSTANCE
 #if defined(XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_INSTANCE)
-#include "xos/console/main_main.cpp"
+//#include "xos/console/main_main.cpp"
 #endif /// defined(XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_INSTANCE)
 
 namespace xos {

@@ -22,7 +22,10 @@
 #define XOS_APP_CONSOLE_PROTOCOL_XTTP_MAIN_OPT_HPP
 
 #include "xos/app/console/main.hpp"
+#include "xos/app/console/protocol/xttp/client/main.hpp"
+#include "xos/app/console/protocol/xttp/server/main.hpp"
 
+/*
 #define XOS_PROTOCOL_XTTP_MAIN_REQUEST_OPT "request"
 #define XOS_PROTOCOL_XTTP_MAIN_REQUEST_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_NONE
 #define XOS_PROTOCOL_XTTP_MAIN_REQUEST_OPTARG_RESULT 0
@@ -48,22 +51,28 @@
     XOS_PROTOCOL_XTTP_MAIN_RESPOND_OPTARG_REQUIRED, \
     XOS_PROTOCOL_XTTP_MAIN_RESPOND_OPTARG_RESULT, \
     XOS_PROTOCOL_XTTP_MAIN_RESPOND_OPTVAL_C}, \
-
+*/
 #define XOS_PROTOCOL_XTTP_MAIN_OPTIONS_CHARS_EXTEND \
-    XOS_PROTOCOL_XTTP_MAIN_REQUEST_OPTVAL_S \
-    XOS_PROTOCOL_XTTP_MAIN_RESPOND_OPTVAL_S
+    XOS_PROTOCOL_XTTP_SERVER_MAIN_OPTIONS_CHARS_EXTEND \
+    XOS_PROTOCOL_XTTP_CLIENT_MAIN_OPTIONS_CHARS_EXTEND \
+    /*XOS_PROTOCOL_XTTP_MAIN_REQUEST_OPTVAL_S \
+    XOS_PROTOCOL_XTTP_MAIN_RESPOND_OPTVAL_S */
 
 #define XOS_PROTOCOL_XTTP_MAIN_OPTIONS_OPTIONS_EXTEND \
-    XOS_PROTOCOL_XTTP_MAIN_REQUEST_OPTION \
-    XOS_PROTOCOL_XTTP_MAIN_RESPOND_OPTION 
+    XOS_PROTOCOL_XTTP_SERVER_MAIN_OPTIONS_OPTIONS_EXTEND \
+    XOS_PROTOCOL_XTTP_CLIENT_MAIN_OPTIONS_OPTIONS_EXTEND \
+    /*XOS_PROTOCOL_XTTP_MAIN_REQUEST_OPTION \
+    XOS_PROTOCOL_XTTP_MAIN_RESPOND_OPTION */
 
 #define XOS_PROTOCOL_XTTP_MAIN_OPTIONS_CHARS \
     XOS_PROTOCOL_XTTP_MAIN_OPTIONS_CHARS_EXTEND \
-    XOS_CONSOLE_MAIN_OPTIONS_CHARS
+    XOS_PROTOCOL_XTTP_BASE_MAIN_OPTIONS_CHARS \
+    /*XOS_CONSOLE_MAIN_OPTIONS_CHARS */
 
 #define XOS_PROTOCOL_XTTP_MAIN_OPTIONS_OPTIONS \
     XOS_PROTOCOL_XTTP_MAIN_OPTIONS_OPTIONS_EXTEND \
-    XOS_CONSOLE_MAIN_OPTIONS_OPTIONS
+    XOS_PROTOCOL_XTTP_BASE_MAIN_OPTIONS_OPTIONS \
+    /*XOS_CONSOLE_MAIN_OPTIONS_OPTIONS */
 
 #define XOS_PROTOCOL_XTTP_MAIN_ARUMENTS_CHARS 0
 #define XOS_PROTOCOL_XTTP_MAIN_ARUMENTS_ARGS 0
@@ -75,7 +84,9 @@ namespace protocol {
 namespace xttp {
 
 /// class main_optt
-template <class TExtends = console::main, class TImplements = typename TExtends::implements>
+template 
+<class TExtends = /*console::main*/server::maint
+ <server::main_optt<client::main> >, class TImplements = typename TExtends::implements>
 class exported main_optt: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;
@@ -85,11 +96,11 @@ public:
     typedef typename extends::file_t file_t;
     typedef typename extends::string_t string_t;
     typedef typename extends::char_t char_t;
-    typedef typename extends::end_char_t end_char_t;
-    enum { end_char = extends::end_char };
+    /*typedef typename extends::end_char_t end_char_t;
+    enum { end_char = extends::end_char };*/
 
     /// constructor / destructor
-    main_optt(): run_(0) {
+    main_optt(/*): run_(0*/) {
     }
     virtual ~main_optt() {
     }
@@ -99,7 +110,7 @@ private:
 public:
 
 protected:
-    /// ...run
+    /*/// ...run
     int (derives::*run_)(int argc, char_t** argv, char_t** env);
     virtual int run(int argc, char_t** argv, char_t** env) {
         int err = 0;
@@ -119,10 +130,10 @@ protected:
         int err = 0;
         err = this->usage(argc, argv, env);
         return err;
-    }
+    }*/
 
     /// ...options...
-    virtual int on_request_option
+    /*virtual int on_request_option
     (int optval, const char_t* optarg, const char_t* optname, 
      int optind, int argc, char_t**argv, char_t**env) {
         int err = 0;
@@ -176,7 +187,7 @@ protected:
             break;
         }
         return chars;
-    }
+    }*/
     virtual const char_t* options(const struct option*& longopts) {
         static const char_t* chars = XOS_PROTOCOL_XTTP_MAIN_OPTIONS_CHARS;
         static struct option optstruct[]= {

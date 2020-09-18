@@ -174,6 +174,36 @@ public:
         return *this;
     }
 
+    /// ...protocol
+    virtual protocol_t& set_protocol(const protocol_t& to) {
+        protocol_.set(to);
+        combine();
+        return protocol_;
+    }
+    virtual const protocol_t& protocol() const {
+        return protocol_;
+    }
+
+    /// ...status
+    virtual status_t& set_status(const status_t& to) {
+        status_.set(to);
+        combine();
+        return status_;
+    }
+    virtual const status_t& status() const {
+        return status_;
+    }
+
+    /// ...reason
+    virtual reason_t& set_reason(const reason_t& to) {
+        reason_.set(to);
+        combine();
+        return reason_;
+    }
+    virtual const reason_t& reason() const {
+        return reason_;
+    }
+
 protected:
     protocol_t protocol_;
     status_t status_;
