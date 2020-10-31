@@ -21,22 +21,57 @@
 #ifndef XOS_APP_CONSOLE_HTTP_MAIN_OPT_HPP
 #define XOS_APP_CONSOLE_HTTP_MAIN_OPT_HPP
 
+#include "xos/app/console/network/main.hpp"
+#include "xos/app/console/xttp/base/main.hpp"
+#include "xos/app/console/xttp/client/main.hpp"
+#include "xos/app/console/xttp/server/main.hpp"
+#include "xos/app/console/xttp/main.hpp"
+#include "xos/app/console/protocol/http/base/main.hpp"
+#include "xos/app/console/protocol/http/client/main.hpp"
+#include "xos/app/console/protocol/http/server/main.hpp"
 #include "xos/app/console/protocol/http/main.hpp"
-#include "xos/app/console/network/client/main.hpp"
-//#include "xos/app/console/network/main.hpp"
+
+#if defined(XOS_APP_CONSOLE_HTTP_MAIN_OPT_EXTENDS_XOS_APP_CONSOLE_PROTOCOL_HTTP_MAIN)
+#define XOS_APP_CONSOLE_HTTP_MAIN_OPTIONS_CHARS_EXTEND \
+    XOS_PROTOCOL_HTTP_MAIN_OPTIONS_CHARS_EXTEND 
+    
+#define XOS_APP_CONSOLE_HTTP_MAIN_OPTIONS_OPTIONS_EXTEND \
+    XOS_PROTOCOL_HTTP_MAIN_OPTIONS_OPTIONS_EXTEND 
+
+#define XOS_APP_CONSOLE_HTTP_MAIN_OPT_EXTEND \
+    console::protocol::http::maint \
+     <console::protocol::http::main_optt<network::main> >
+#else /// defined(XOS_APP_CONSOLE_HTTP_MAIN_OPT_EXTENDS_XOS_APP_CONSOLE_PROTOCOL_HTTP_MAIN)
+#define XOS_APP_CONSOLE_HTTP_MAIN_OPTIONS_CHARS_EXTEND \
+    XOS_PROTOCOL_HTTP_SERVER_MAIN_OPTIONS_CHARS_EXTEND \
+    XOS_PROTOCOL_HTTP_CLIENT_MAIN_OPTIONS_CHARS_EXTEND \
+    XOS_PROTOCOL_HTTP_BASE_MAIN_OPTIONS_CHARS_EXTEND 
+    
+#define XOS_APP_CONSOLE_HTTP_MAIN_OPTIONS_OPTIONS_EXTEND \
+    XOS_PROTOCOL_HTTP_SERVER_MAIN_OPTIONS_OPTIONS_EXTEND \
+    XOS_PROTOCOL_HTTP_CLIENT_MAIN_OPTIONS_OPTIONS_EXTEND \
+    XOS_PROTOCOL_HTTP_BASE_MAIN_OPTIONS_OPTIONS_EXTEND 
+
+#define XOS_APP_CONSOLE_HTTP_MAIN_OPT_EXTEND \
+    console::xttp::server::maint<console::xttp::server::main_optt \
+      <protocol::http::server::maint<protocol::http::server::main_optt \
+       <protocol::xttp::server::maint<protocol::xttp::server::main_optt \
+       <console::xttp::client::maint<console::xttp::client::main_optt \
+        <protocol::http::client::maint<protocol::http::client::main_optt \
+          <protocol::xttp::client::maint<protocol::xttp::client::main_optt \
+           <protocol::http::base::maint<protocol::http::base::main_optt \
+             <protocol::xttp::base::maint<protocol::xttp::base::main_optt \
+               <network::main> > > > > > > > > > > > > > > >
+#endif /// defined(XOS_APP_CONSOLE_HTTP_MAIN_OPT_EXTENDS_XOS_APP_CONSOLE_PROTOCOL_HTTP_MAIN)
 
 #define XOS_APP_CONSOLE_HTTP_MAIN_OPTIONS_CHARS \
-    XOS_PROTOCOL_HTTP_MAIN_OPTIONS_CHARS_EXTEND \
-    XOS_NETWORK_CLIENT_MAIN_OPTIONS_CHARS
-/*
-    XOS_NETWORK_MAIN_OPTIONS_CHARS
-*/
+    XOS_APP_CONSOLE_HTTP_MAIN_OPTIONS_CHARS_EXTEND \
+    XOS_APP_CONSOLE_NETWORK_MAIN_OPTIONS_CHARS 
+
 #define XOS_APP_CONSOLE_HTTP_MAIN_OPTIONS_OPTIONS \
-    XOS_PROTOCOL_HTTP_MAIN_OPTIONS_OPTIONS_EXTEND \
-    XOS_NETWORK_CLIENT_MAIN_OPTIONS_OPTIONS
-/*
-    XOS_NETWORK_MAIN_OPTIONS_OPTIONS
-*/
+    XOS_APP_CONSOLE_HTTP_MAIN_OPTIONS_OPTIONS_EXTEND \
+    XOS_APP_CONSOLE_NETWORK_MAIN_OPTIONS_OPTIONS 
+
 #define XOS_APP_CONSOLE_HTTP_MAIN_ARUMENTS_CHARS 0
 #define XOS_APP_CONSOLE_HTTP_MAIN_ARUMENTS_ARGS 0
 
@@ -47,8 +82,18 @@ namespace http {
 
 /// class main_optt
 template 
-<class TExtends = console::protocol::http::maint
- <console::protocol::http::main_optt<network::client::main> >, 
+<class TExtends = /*console::protocol::http::maint
+ <console::protocol::http::main_optt<network::main> >*/
+ /*console::xttp::server::maint<console::xttp::server::main_optt
+   <protocol::http::server::maint<protocol::http::server::main_optt
+    <protocol::xttp::server::maint<protocol::xttp::server::main_optt
+    <console::xttp::client::maint<console::xttp::client::main_optt
+     <protocol::http::client::maint<protocol::http::client::main_optt
+       <protocol::xttp::client::maint<protocol::xttp::client::main_optt
+        <protocol::http::base::maint<protocol::http::base::main_optt
+          <protocol::xttp::base::maint<protocol::xttp::base::main_optt
+            <network::main> > > > > > > > > > > > > > > >*/
+ XOS_APP_CONSOLE_HTTP_MAIN_OPT_EXTEND, 
  class TImplements = typename TExtends::implements>
 class exported main_optt: virtual public TImplements, public TExtends {
 public:
@@ -56,6 +101,9 @@ public:
     typedef TExtends extends;
     typedef main_optt derives;
 
+    typedef typename extends::in_reader_t in_reader_t;
+    typedef typename extends::err_writer_t err_writer_t;
+    typedef typename extends::out_writer_t out_writer_t;
     typedef typename extends::reader_t reader_t;
     typedef typename extends::writer_t writer_t;
     typedef typename extends::file_t file_t;
@@ -73,10 +121,10 @@ private:
 public:
 
 protected:
-    typedef typename extends::out_writer_t out_writer_t;
+    typedef typename extends::content_t content_t;
+    typedef typename extends::message_t message_t;
     typedef typename extends::request_t request_t;
     typedef typename extends::response_t resppnse_t;
-    typedef typename extends::message_t message_t;
 
 protected:
     /// ...options...

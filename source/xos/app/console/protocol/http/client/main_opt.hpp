@@ -22,6 +22,7 @@
 #define XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_OPT_HPP
 
 #include "xos/app/console/protocol/xttp/client/main.hpp"
+#include "xos/app/console/protocol/http/base/main.hpp"
 
 #define XOS_PROTOCOL_HTTP_MAIN_REQUEST_OPT "request"
 #define XOS_PROTOCOL_HTTP_MAIN_REQUEST_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_NONE
@@ -66,7 +67,7 @@
 #define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_REQUIRED
 #define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTARG_RESULT 0
 #define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTARG "{ GET | POST | ...}"
-#define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTUSE "http request method"
+#define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTUSE "Http request method"
 #define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTVAL_S "m:"
 #define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTVAL_C 'm'
 #define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTION \
@@ -75,25 +76,40 @@
     XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTARG_RESULT, \
     XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTVAL_C}, \
 
-#define XOS_PROTOCOL_HTTP_MAIN_OPTIONS_CHARS_EXTEND \
+#define XOS_PROTOCOL_HTTP_MAIN_PARAMETER_OPT "parameter"
+#define XOS_PROTOCOL_HTTP_MAIN_PARAMETER_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_REQUIRED
+#define XOS_PROTOCOL_HTTP_MAIN_PARAMETER_OPTARG_RESULT 0
+#define XOS_PROTOCOL_HTTP_MAIN_PARAMETER_OPTARG "{ / | ...}"
+#define XOS_PROTOCOL_HTTP_MAIN_PARAMETER_OPTUSE "Http request parameter"
+#define XOS_PROTOCOL_HTTP_MAIN_PARAMETER_OPTVAL_S "a:"
+#define XOS_PROTOCOL_HTTP_MAIN_PARAMETER_OPTVAL_C 'a'
+#define XOS_PROTOCOL_HTTP_MAIN_PARAMETER_OPTION \
+   {XOS_PROTOCOL_HTTP_MAIN_PARAMETER_OPT, \
+    XOS_PROTOCOL_HTTP_MAIN_PARAMETER_OPTARG_REQUIRED, \
+    XOS_PROTOCOL_HTTP_MAIN_PARAMETER_OPTARG_RESULT, \
+    XOS_PROTOCOL_HTTP_MAIN_PARAMETER_OPTVAL_C}, \
+
+#define XOS_PROTOCOL_HTTP_CLIENT_MAIN_OPTIONS_CHARS_EXTEND \
     XOS_PROTOCOL_HTTP_MAIN_REQUEST_OPTVAL_S \
     XOS_PROTOCOL_HTTP_MAIN_METHOD_GET_OPTVAL_S \
     XOS_PROTOCOL_HTTP_MAIN_METHOD_POST_OPTVAL_S \
     XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTVAL_S \
+    XOS_PROTOCOL_HTTP_MAIN_PARAMETER_OPTVAL_S \
 
-#define XOS_PROTOCOL_HTTP_MAIN_OPTIONS_OPTIONS_EXTEND \
+#define XOS_PROTOCOL_HTTP_CLIENT_MAIN_OPTIONS_OPTIONS_EXTEND \
     XOS_PROTOCOL_HTTP_MAIN_REQUEST_OPTION \
     XOS_PROTOCOL_HTTP_MAIN_METHOD_GET_OPTION \
     XOS_PROTOCOL_HTTP_MAIN_METHOD_POST_OPTION \
     XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTION \
+    XOS_PROTOCOL_HTTP_MAIN_PARAMETER_OPTION \
 
-#define XOS_PROTOCOL_HTTP_MAIN_OPTIONS_CHARS \
-    XOS_PROTOCOL_HTTP_MAIN_OPTIONS_CHARS_EXTEND \
-    XOS_CONSOLE_MAIN_OPTIONS_CHARS
+#define XOS_PROTOCOL_HTTP_CLIENT_MAIN_OPTIONS_CHARS \
+    XOS_PROTOCOL_HTTP_CLIENT_MAIN_OPTIONS_CHARS_EXTEND \
+    XOS_PROTOCOL_HTTP_BASE_MAIN_OPTIONS_CHARS
 
-#define XOS_PROTOCOL_HTTP_MAIN_OPTIONS_OPTIONS \
-    XOS_PROTOCOL_HTTP_MAIN_OPTIONS_OPTIONS_EXTEND \
-    XOS_CONSOLE_MAIN_OPTIONS_OPTIONS
+#define XOS_PROTOCOL_HTTP_CLIENT_MAIN_OPTIONS_OPTIONS \
+    XOS_PROTOCOL_HTTP_CLIENT_MAIN_OPTIONS_OPTIONS_EXTEND \
+    XOS_PROTOCOL_HTTP_BASE_MAIN_OPTIONS_OPTIONS
 
 #define XOS_PROTOCOL_HTTP_MAIN_ARUMENTS_CHARS 0
 #define XOS_PROTOCOL_HTTP_MAIN_ARUMENTS_ARGS 0
@@ -106,7 +122,7 @@ namespace http {
 namespace client {
 
 /// class main_optt
-template <class TExtends = xttp::client::main_opt, class TImplements = typename TExtends::implements>
+template <class TExtends = xttp::client::maint<xttp::client::main_optt<http::base::main> >, class TImplements = typename TExtends::implements>
 class exported main_optt: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;
@@ -128,13 +144,17 @@ public:
     virtual ~main_optt() {
     }
 private:
-    main_optt(const main_optt& copy): extends(copy) {
+    main_optt(const main_optt& copy) {
     }
 
 protected:
+    typedef typename extends::content_type_header_t content_type_header_t;
+    typedef typename extends::content_length_header_t content_length_header_t;
+    typedef typename extends::content_t content_t;
+
     /// ...options...
     virtual const char_t* request_option_usage(const char_t*& optarg, const struct option* longopt) {
-        const char_t* chars = "";
+        const char_t* chars = XOS_PROTOCOL_HTTP_MAIN_REQUEST_OPTARG;
         chars = XOS_PROTOCOL_HTTP_MAIN_REQUEST_OPTUSE;
         return chars;
     }
@@ -153,6 +173,11 @@ protected:
         const char_t* chars = XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTUSE;
         return chars;
     }
+    virtual const char_t* parameter_option_usage(const char_t*& optarg, const struct option* longopt) {
+        optarg = XOS_PROTOCOL_HTTP_MAIN_PARAMETER_OPTARG;
+        const char_t* chars = XOS_PROTOCOL_HTTP_MAIN_PARAMETER_OPTUSE;
+        return chars;
+    }
     virtual int on_option
     (int optval, const char_t* optarg, const char_t* optname, 
      int optind, int argc, char_t**argv, char_t**env) {
@@ -169,6 +194,9 @@ protected:
             break;
         case XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTVAL_C:
             err = this->on_method_option(optval, optarg, optname, optind, argc, argv, env);
+            break;
+        case XOS_PROTOCOL_HTTP_MAIN_PARAMETER_OPTVAL_C:
+            err = this->on_parameter_option(optval, optarg, optname, optind, argc, argv, env);
             break;
         default:
             err = extends::on_option(optval, optarg, optname, optind, argc, argv, env);
@@ -197,9 +225,9 @@ protected:
         return chars;
     }
     virtual const char_t* options(const struct option*& longopts) {
-        static const char_t* chars = XOS_PROTOCOL_HTTP_MAIN_OPTIONS_CHARS;
+        static const char_t* chars = XOS_PROTOCOL_HTTP_CLIENT_MAIN_OPTIONS_CHARS;
         static struct option optstruct[]= {
-            XOS_PROTOCOL_HTTP_MAIN_OPTIONS_OPTIONS
+            XOS_PROTOCOL_HTTP_CLIENT_MAIN_OPTIONS_OPTIONS
             {0, 0, 0, 0}};
         longopts = optstruct;
         return chars;

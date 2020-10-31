@@ -78,7 +78,14 @@ protected:
     typedef xos::protocol::xttp::content::json::array json_array_t;
     typedef xos::protocol::xttp::content::json::object json_object_t;
 
-    /// ...set_content...
+    /// ...set_content_type
+    virtual int before_set_content_type(const char_t* content_type, int argc, char_t** argv, char** env) {
+        int err = 0;
+        set_content_type(content_type);
+        return err;
+    }
+
+    /// ...set_content
     virtual int before_set_content(const char_t* content, int argc, char_t** argv, char** env) {
         int err = 0;
         set_content(content);
@@ -90,6 +97,10 @@ protected:
     virtual content_type_header_t& content_type_header() const {
         return (content_type_header_t&)content_type_header_;
     }
+    enum { content_type_type_text = xos::protocol::http::content::media::type::text };
+    typedef xos::protocol::http::content::media::type::which_t content_type_type_which_t;
+    typedef xos::protocol::http::content::media::type::name content_type_type_t;
+    typedef xos::protocol::http::content::type::which_t content_type_which_t;
     typedef xos::protocol::http::content::type::name content_type_t;
     virtual content_type_t& content_type_text() const {
         return (content_type_t&)text_;
@@ -108,6 +119,13 @@ protected:
     }
     virtual content_type_t& content_type_javascript() const {
         return (content_type_t&)javascript_;
+    }
+    virtual content_type_t& set_content_type(const char_t* to) {
+        content_type_t& content_type = this->content_type();
+        content_type_header_t& content_type_header = this->content_type_header();
+        content_type.set(to);
+        content_type_header.set_type(content_type);
+        return (content_type_t&)content_type;
     }
     virtual content_type_t& content_type() const {
         return (content_type_t&)content_type_;

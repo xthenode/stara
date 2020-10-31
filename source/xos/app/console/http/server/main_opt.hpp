@@ -21,15 +21,17 @@
 #ifndef XOS_APP_CONSOLE_HTTP_SERVER_MAIN_OPT_HPP
 #define XOS_APP_CONSOLE_HTTP_SERVER_MAIN_OPT_HPP
 
-#include "xos/app/console/protocol/http/main.hpp"
-#include "xos/app/console/network/server/main.hpp"
+#include "xos/app/console/xttp/server/main.hpp"
+#include "xos/app/console/protocol/http/server/main.hpp"
 
 #define XOS_APP_CONSOLE_HTTP_SERVER_MAIN_OPTIONS_CHARS \
-    XOS_PROTOCOL_HTTP_MAIN_OPTIONS_CHARS_EXTEND \
+    XOS_PROTOCOL_HTTP_SERVER_MAIN_OPTIONS_CHARS_EXTEND \
+    XOS_PROTOCOL_HTTP_BASE_MAIN_OPTIONS_CHARS_EXTEND \
     XOS_NETWORK_SERVER_MAIN_OPTIONS_CHARS
 
 #define XOS_APP_CONSOLE_HTTP_SERVER_MAIN_OPTIONS_OPTIONS \
-    XOS_PROTOCOL_HTTP_MAIN_OPTIONS_OPTIONS_EXTEND \
+    XOS_PROTOCOL_HTTP_SERVER_MAIN_OPTIONS_OPTIONS_EXTEND \
+    XOS_PROTOCOL_HTTP_BASE_MAIN_OPTIONS_OPTIONS_EXTEND \
     XOS_NETWORK_SERVER_MAIN_OPTIONS_OPTIONS
 
 #define XOS_APP_CONSOLE_HTTP_SERVER_MAIN_ARUMENTS_CHARS 0
@@ -43,17 +45,21 @@ namespace server {
 
 /// class main_optt
 template 
-<class TExtends = console::protocol::http::maint
- <console::protocol::http::main_optt<network::server::main> >, class TImplements = typename TExtends::implements>
+<class TExtends = console::xttp::server::maint<console::xttp::server::main_optt
+  <protocol::http::server::maint<protocol::http::server::main_optt
+   <protocol::xttp::server::maint<protocol::xttp::server::main_optt
+    <protocol::http::base::maint<protocol::http::base::main_optt
+      <protocol::xttp::base::maint<protocol::xttp::base::main_optt
+       <network::server::main> > > > > > > > > >, class TImplements = typename TExtends::implements>
 class exported main_optt: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;
     typedef TExtends extends;
     typedef main_optt derives; 
     
-    typedef typename extends::err_writer_t err_writer_t;
-    typedef typename extends::out_writer_t out_writer_t;
     typedef typename extends::in_reader_t in_reader_t;
+    typedef typename extends::out_writer_t out_writer_t;
+    typedef typename extends::err_writer_t err_writer_t;
     typedef typename extends::reader_t reader_t;
     typedef typename extends::writer_t writer_t;
     typedef typename extends::file_t file_t;
@@ -70,10 +76,10 @@ private:
     }
 
 protected:
-    typedef typename extends::request_t request_t;
-    typedef typename extends::response_t resppnse_t;
     typedef typename extends::content_t content_t;
     typedef typename extends::message_t message_t;
+    typedef typename extends::request_t request_t;
+    typedef typename extends::response_t response_t;
 
 protected:
     /// ...options...

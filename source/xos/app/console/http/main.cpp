@@ -20,13 +20,19 @@
 ///////////////////////////////////////////////////////////////////////
 #include "xos/app/console/http/main.hpp"
 
+#if !defined(XOS_APP_CONSOLE_HTTP_MAIN_INSTANCE)
+//#define XOS_APP_CONSOLE_HTTP_MAIN_INSTANCE
+#endif /// !defined(XOS_APP_CONSOLE_HTTP_MAIN_INSTANCE)
+
 namespace xos {
 namespace app {
 namespace console {
 namespace http {
 
 /// class maint
+#if defined(XOS_APP_CONSOLE_HTTP_MAIN_INSTANCE)
 static main the_main;
+#endif /// defined(XOS_APP_CONSOLE_HTTP_MAIN_INSTANCE)
 
 } /// namespace http
 } /// namespace console

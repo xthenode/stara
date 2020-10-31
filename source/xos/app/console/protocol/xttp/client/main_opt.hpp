@@ -189,6 +189,8 @@ protected:
         }
         return err;
     }
+
+    /// ...set_request_run
     virtual int set_request_run(int argc, char_t** argv, char_t** env) {
         int err = 0;
         run_ = &derives::all_request_run;
@@ -213,6 +215,8 @@ protected:
         }
         return err;
     }
+
+    /// ...set_method...
     virtual int set_method_get(int argc, char_t** argv, char** env) {
         int err = 0;
         return err;
@@ -283,6 +287,7 @@ protected:
         return err;
     }
 
+    /// ...set_parameter
     virtual int set_parameter(const char_t* parameter, int argc, char_t** argv, char** env) {
         int err = 0;
         return err;

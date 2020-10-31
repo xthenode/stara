@@ -59,6 +59,9 @@ protected:
     typedef typename extends::request_t request_t;
     typedef typename extends::response_t response_t;
     typedef typename extends::content_t content_t;
+    typedef typename extends::content_type_t content_type_t;
+    typedef typename extends::content_type_type_which_t content_type_type_which_t;
+    enum { content_type_type_text = extends::content_type_type_text };
 
     /// send_request
     virtual int send_request(xos::network::sockets::interface& cn, int argc, char_t** argv, char_t**env) {
@@ -116,8 +119,8 @@ protected:
         if ((chars = rs.has_chars(length))) {
             this->out(chars, length);
             if ((chars = rs.headers().content_type().has_chars(length))) {
-                if ((!(this->content_type_text().compare(chars)))
-                    || (!(this->content_type_html().compare(chars)))) {
+                content_type_t content_type(chars);
+                if (content_type_type_text == (content_type.type_name().which())) {
                     if (0 < (length = rs.headers().content_length())) {
                         err = recv_response_content(reader, length, argc, argv, env);
                     } else {                    

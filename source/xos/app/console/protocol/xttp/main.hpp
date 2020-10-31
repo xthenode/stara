@@ -49,9 +49,19 @@ public:
     virtual ~maint() {
     }
 private:
-    maint(const maint& copy): extends(copy) {
+    maint(const maint& copy) {
     }
+
 protected:
+    typedef typename extends::content_t content_t;
+    typedef typename extends::headers_t headers_t;
+    
+    /// ...set_response_content
+    virtual int after_set_response_content(headers_t& headers, content_t& content, int argc, char_t** argv, char** env) {
+        int err = 0;
+        err = this->all_set_request_content(headers, content, argc, argv, env);
+        return err;
+    }
 }; /// class maint
 typedef maint<> main;
 

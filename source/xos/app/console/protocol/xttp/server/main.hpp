@@ -67,9 +67,10 @@ protected:
     typedef typename extends::content_type_header_t content_type_header_t;
     typedef typename extends::content_length_header_t content_length_header_t;
     typedef typename extends::content_t content_t;
+    typedef xos::protocol::http::message::header::fields headers_t;
     typedef xos::protocol::http::response::status::code response_status_t;
+    typedef xos::protocol::http::response::status::reason response_reason_t;
     typedef xos::protocol::http::response::line response_line_t;
-    typedef xos::protocol::http::message::header::fields response_headers_t;
     typedef xos::protocol::http::response::message response_t;
 
     /// ...run
@@ -82,18 +83,56 @@ protected:
         return err;
     }
     
-    /// ...set_content...
+    /// ...set_content
     virtual int after_set_content(const char_t* content, int argc, char_t** argv, char** env) {
         content_type_header_t& content_type_header = this->content_type_header();
         content_length_header_t& content_length_header = this->content_length_header();
-        response_line_t& response_line = this->response_line();
-        response_headers_t& response_headers = this->response_headers();
+        headers_t& response_headers = this->response_headers();
         content_t& response_content = this->content();
-        response_t& response = this->response();
         int err = 0;
         content_length_header.set_length(response_content.length());
         response_headers.is_setl(&content_type_header, &content_length_header, null);
-        response.set(response_line, response_headers, response_content);
+        err = all_set_response_content(response_headers, response_content, argc, argv, env);
+        return err;
+    }
+
+    /// ...set_content_type
+    virtual int after_set_content_type(const char_t* content_type, int argc, char_t** argv, char** env) {
+        content_type_header_t& content_type_header = this->content_type_header();
+        content_length_header_t& content_length_header = this->content_length_header();
+        headers_t& response_headers = this->response_headers();
+        content_t& response_content = this->content();
+        int err = 0;
+        response_headers.is_setl(&content_type_header, &content_length_header, null);
+        err = all_set_response_content(response_headers, response_content, argc, argv, env);
+        return err;
+    }
+
+    /// ...set_response_content
+    virtual int set_response_content(headers_t& headers, content_t& content, int argc, char_t** argv, char** env) {
+        response_line_t& response_line = this->response_line();
+        response_t& response = this->response();
+        int err = 0;
+        response.set(response_line, headers, content);
+        return err;
+    }
+    virtual int before_set_response_content(headers_t& headers, content_t& content, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_set_response_content(headers_t& headers, content_t& content, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_set_response_content(headers_t& headers, content_t& content, int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_set_response_content(headers, content, argc, argv, env))) {
+            int err2 = 0;
+            err = set_response_content(headers, content, argc, argv, env);
+            if ((err2 = after_set_response_content(headers, content, argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
         return err;
     }
 
@@ -141,14 +180,17 @@ protected:
     }
 
     /// response...
+    virtual response_t& response() const {
+        return (response_t&)response_;
+    }
+    virtual headers_t& response_headers() const {
+        return (headers_t&)response_headers_;
+    }
     virtual response_line_t& response_line() const {
         return (response_line_t&)response_line_;
     }
-    virtual response_headers_t& response_headers() const {
-        return (response_headers_t&)response_headers_;
-    }
-    virtual response_t& response() const {
-        return (response_t&)response_;
+    virtual response_reason_t& response_reason() const {
+        return (response_reason_t&)reason_;
     }
     virtual response_status_t& set_response_status_ok() {
         return set_response_status(response_status_ok());
@@ -166,8 +208,14 @@ protected:
         return set_response_status(to.chars());
     }
     virtual response_status_t& set_response_status(const char_t* to) {
+        response_status_t& status_ = this->response_status();
+        response_reason_t& reason_ = this->response_reason();
+        response_line_t& response_line_ = this->response_line();
+        response_t& response_ = this->response();
         status_.set(to);
         reason_.set(status_);
+        response_line_.set_status(status_);
+        response_line_.set_reason(reason_);
         response_.set_status(status_);
         response_.set_reason(reason_);
         return (response_status_t&)status_;

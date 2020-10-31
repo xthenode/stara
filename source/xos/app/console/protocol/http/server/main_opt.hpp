@@ -22,6 +22,7 @@
 #define XOS_APP_CONSOLE_PROTOCOL_HTTP_SERVER_MAIN_OPT_HPP
 
 #include "xos/app/console/protocol/xttp/server/main.hpp"
+#include "xos/app/console/protocol/http/base/main.hpp"
 
 #define XOS_PROTOCOL_HTTP_MAIN_RESPOND_OPT "respond"
 #define XOS_PROTOCOL_HTTP_MAIN_RESPOND_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_NONE
@@ -74,11 +75,11 @@
 
 #define XOS_PROTOCOL_HTTP_SERVER_MAIN_OPTIONS_CHARS \
     XOS_PROTOCOL_HTTP_SERVER_MAIN_OPTIONS_CHARS_EXTEND \
-    XOS_CONSOLE_MAIN_OPTIONS_CHARS
+    XOS_PROTOCOL_HTTP_BASE_MAIN_OPTIONS_CHARS
 
 #define XOS_PROTOCOL_HTTP_SERVER_MAIN_OPTIONS_OPTIONS \
     XOS_PROTOCOL_HTTP_SERVER_MAIN_OPTIONS_OPTIONS_EXTEND \
-    XOS_CONSOLE_MAIN_OPTIONS_OPTIONS
+    XOS_PROTOCOL_HTTP_BASE_MAIN_OPTIONS_OPTIONS
 
 #define XOS_PROTOCOL_HTTP_SERVER_MAIN_ARUMENTS_CHARS 0
 #define XOS_PROTOCOL_HTTP_SERVER_MAIN_ARUMENTS_ARGS 0
@@ -91,7 +92,7 @@ namespace http {
 namespace server {
 
 /// class main_optt
-template <class TExtends = xttp::server::main_opt, class TImplements = typename TExtends::implements>
+template <class TExtends = xttp::server::maint<xttp::server::main_optt<http::base::main> >, class TImplements = typename TExtends::implements>
 class exported main_optt: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;
@@ -117,6 +118,10 @@ private:
     }
 
 protected:
+    typedef typename extends::content_type_header_t content_type_header_t;
+    typedef typename extends::content_length_header_t content_length_header_t;
+    typedef typename extends::content_t content_t;
+
     /// ...options...
     virtual const char_t* respond_option_usage(const char_t*& optarg, const struct option* longopt) {
         const char_t* chars = "";

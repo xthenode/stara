@@ -28,12 +28,20 @@
 #include "xos/protocol/http/response/line.hpp"
 #include "xos/protocol/http/response/message.hpp"
 
-#define XOS_APP_CONSOLE_XTTP_CLIENT_MAIN_OPTIONS_CHARS \
+#define XOS_APP_CONSOLE_XTTP_CLIENT_MAIN_OPTIONS_CHARS_EXTEND \
     XOS_PROTOCOL_XTTP_CLIENT_MAIN_OPTIONS_CHARS_EXTEND \
+
+#define XOS_APP_CONSOLE_XTTP_CLIENT_MAIN_OPTIONS_OPTIONS_EXTEND \
+    XOS_PROTOCOL_XTTP_CLIENT_MAIN_OPTIONS_OPTIONS_EXTEND \
+
+#define XOS_APP_CONSOLE_XTTP_CLIENT_MAIN_OPTIONS_CHARS \
+    XOS_APP_CONSOLE_XTTP_CLIENT_MAIN_OPTIONS_CHARS_EXTEND \
+    XOS_PROTOCOL_XTTP_BASE_MAIN_OPTIONS_CHARS_EXTEND \
     XOS_NETWORK_CLIENT_MAIN_OPTIONS_CHARS
 
 #define XOS_APP_CONSOLE_XTTP_CLIENT_MAIN_OPTIONS_OPTIONS \
-    XOS_PROTOCOL_XTTP_CLIENT_MAIN_OPTIONS_OPTIONS_EXTEND \
+    XOS_APP_CONSOLE_XTTP_CLIENT_MAIN_OPTIONS_OPTIONS_EXTEND \
+    XOS_PROTOCOL_XTTP_BASE_MAIN_OPTIONS_OPTIONS_EXTEND \
     XOS_NETWORK_CLIENT_MAIN_OPTIONS_OPTIONS
 
 #define XOS_APP_CONSOLE_XTTP_CLIENT_MAIN_ARUMENTS_CHARS 0
@@ -48,8 +56,8 @@ namespace client {
 /// class main_optt
 template 
 <class TExtends = protocol::xttp::client::maint
- <protocol::xttp::client::main_optt<console::protocol::xttp::base::maint
- <console::protocol::xttp::base::main_optt<network::client::main> > > >, class TImplements = typename TExtends::implements>
+ <protocol::xttp::client::main_optt<protocol::xttp::base::maint
+ <protocol::xttp::base::main_optt<network::client::main> > > >, class TImplements = typename TExtends::implements>
 class exported main_optt: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;
@@ -75,6 +83,7 @@ private:
     }
 
 protected:
+    typedef typename extends::content_type_t content_type_t;
     typedef typename extends::content_t content_t;
     typedef typename extends::request_method_t request_method_t;
     typedef typename extends::request_t request_t;

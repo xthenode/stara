@@ -44,6 +44,7 @@ public:
 
     typedef typename extends::method_t method_t;
     typedef typename extends::parameters_t parameters_t;
+    typedef typename extends::parameters_t resource_t;
     typedef typename extends::protocol_t protocol_t;
     typedef typename extends::line_t line_t;
     typedef typename extends::part_t part_t;
@@ -90,6 +91,13 @@ public:
         return this->parameters();
     }
 
+    /// ...resource
+    virtual parameters_t& set_resource(const string_t& to) {
+        return this->set_parameters(to);
+    }
+    virtual const parameters_t& resource() const {
+        return this->parameters();
+    }
 }; /// class linet
 typedef linet<> line;
 

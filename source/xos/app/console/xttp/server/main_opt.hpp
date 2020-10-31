@@ -28,12 +28,20 @@
 #include "xos/protocol/http/request/line.hpp"
 #include "xos/protocol/http/request/message.hpp"
 
-#define XOS_APP_CONSOLE_XTTP_SERVER_MAIN_OPTIONS_CHARS \
+#define XOS_APP_CONSOLE_XTTP_SERVER_MAIN_OPTIONS_CHARS_EXTEND \
     XOS_PROTOCOL_XTTP_SERVER_MAIN_OPTIONS_CHARS_EXTEND \
+
+#define XOS_APP_CONSOLE_XTTP_SERVER_MAIN_OPTIONS_OPTIONS_EXTEND \
+    XOS_PROTOCOL_XTTP_SERVER_MAIN_OPTIONS_OPTIONS_EXTEND \
+
+#define XOS_APP_CONSOLE_XTTP_SERVER_MAIN_OPTIONS_CHARS \
+    XOS_APP_CONSOLE_XTTP_SERVER_MAIN_OPTIONS_CHARS_EXTEND \
+    XOS_PROTOCOL_XTTP_BASE_MAIN_OPTIONS_CHARS_EXTEND \
     XOS_NETWORK_SERVER_MAIN_OPTIONS_CHARS
 
 #define XOS_APP_CONSOLE_XTTP_SERVER_MAIN_OPTIONS_OPTIONS \
-    XOS_PROTOCOL_XTTP_SERVER_MAIN_OPTIONS_OPTIONS_EXTEND \
+    XOS_APP_CONSOLE_XTTP_SERVER_MAIN_OPTIONS_OPTIONS_EXTEND \
+    XOS_PROTOCOL_XTTP_BASE_MAIN_OPTIONS_OPTIONS_EXTEND \
     XOS_NETWORK_SERVER_MAIN_OPTIONS_OPTIONS
 
 #define XOS_APP_CONSOLE_XTTP_SERVER_MAIN_ARUMENTS_CHARS 0
@@ -48,8 +56,8 @@ namespace server {
 /// class main_optt
 template 
 <class TExtends = protocol::xttp::server::maint
- <protocol::xttp::server::main_optt<console::protocol::xttp::base::maint
- <console::protocol::xttp::base::main_optt<network::server::main> > > >, class TImplements = typename TExtends::implements>
+ <protocol::xttp::server::main_optt<protocol::xttp::base::maint
+ <protocol::xttp::base::main_optt<network::server::main> > > >, class TImplements = typename TExtends::implements>
 class exported main_optt: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;
@@ -77,9 +85,9 @@ private:
 protected:
     typedef typename extends::response_status_t response_status_t;
     typedef typename extends::response_t response_t;
-    typedef xos::protocol::xttp::request::extended::method request_method_t;
-    typedef xos::protocol::xttp::request::message request_t;
-    typedef xos::protocol::xttp::message::body::content content_t;
+    typedef xos::protocol::http::request::method::name request_method_t;
+    typedef xos::protocol::http::request::message request_t;
+    typedef xos::protocol::http::message::body::content content_t;
 
     /// ...options...
     virtual const char_t* options(const struct option*& longopts) {
@@ -98,12 +106,12 @@ protected:
     }
 
     /// request...
-    virtual request_t& request() const {
-        return (request_t&)request_;
+    virtual request_t& recved_request() const {
+        return (request_t&)recved_request_;
     }
 
 protected:
-    xos::protocol::http::request::message request_;
+    xos::protocol::http::request::message recved_request_;
 }; /// class main_optt
 typedef main_optt<> main_opt;
 

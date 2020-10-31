@@ -39,7 +39,9 @@ public:
     typedef TExtends extends;
     typedef namet derives;
 
+    typedef media::type::which type_which_t;
     typedef media::type::name type_name_t;
+    typedef media::subtype::which subtype_which_t;
     typedef media::subtype::name subtype_name_t;
     typedef extends part_t;
     typedef typename extends::string_t string_t;
@@ -183,6 +185,22 @@ public:
         return which_;
     }
 
+    /// ...type_name / ...type_which
+    virtual type_name_t& type_name() const {
+        return (type_name_t&)type_name_;
+    }
+    virtual type_which_t type_which() const {
+        type_name_t& type_name = this->type_name();
+        return type_name.which();
+    }
+    virtual subtype_name_t& subtype_name() const {
+        return (subtype_name_t&)subtype_name_;
+    }
+    virtual subtype_which_t subtype_which() const {
+        subtype_name_t& subtype_name = this->subtype_name();
+        return subtype_name.which();
+    }
+    
     /// ...of...
     virtual which_t of_name(const string_t& name) const {
         return of_name(name.chars());

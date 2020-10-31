@@ -16,29 +16,27 @@
 ///   File: main.cpp
 ///
 /// Author: $author$
-///   Date: 9/8/2020
+///   Date: 9/20/2020
 ///////////////////////////////////////////////////////////////////////
-#include "xos/app/console/http/client/main.hpp"
+#include "xos/app/console/xttp/main.hpp"
 
-//#define XOS_APP_CONSOLE_HTTP_CLIENT_MAIN_INSTANCE
-#if defined(XOS_APP_CONSOLE_HTTP_CLIENT_MAIN_INSTANCE)
+//#define XOS_APP_CONSOLE_XTTP_MAIN_INSTANCE
+#if defined(XOS_APP_CONSOLE_XTTP_MAIN_INSTANCE)
 //#include "xos/console/main_main.cpp"
-#endif /// defined(XOS_APP_CONSOLE_HTTP_CLIENT_MAIN_INSTANCE)
+#endif /// defined(XOS_APP_CONSOLE_XTTP_MAIN_INSTANCE)
 
 namespace xos {
 namespace app {
 namespace console {
-namespace http {
-namespace client {
+namespace xttp {
 
 ///  Class: maint
-#if defined(XOS_APP_CONSOLE_HTTP_CLIENT_MAIN_INSTANCE)
+#if defined(XOS_APP_CONSOLE_XTTP_MAIN_INSTANCE)
 static main the_main;
-#endif /// defined(XOS_APP_CONSOLE_HTTP_CLIENT_MAIN_INSTANCE)
+#endif /// defined(XOS_APP_CONSOLE_XTTP_MAIN_INSTANCE)
 
 
-} /// namespace client
-} /// namespace http
+} /// namespace xttp
 } /// namespace console
 } /// namespace app
 } /// namespace xos

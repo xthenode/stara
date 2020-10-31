@@ -13,31 +13,30 @@
 /// or otherwise) arising in any way out of the use of this software, 
 /// even if advised of the possibility of such damage.
 ///
-///   File: main.cpp
+///   File: main_opt.cpp
 ///
 /// Author: $author$
-///   Date: 9/8/2020
+///   Date: 10/29/2020
 ///////////////////////////////////////////////////////////////////////
-#include "xos/app/console/http/client/main.hpp"
+#include "xos/app/console/http/base/main_opt.hpp"
 
-//#define XOS_APP_CONSOLE_HTTP_CLIENT_MAIN_INSTANCE
-#if defined(XOS_APP_CONSOLE_HTTP_CLIENT_MAIN_INSTANCE)
-//#include "xos/console/main_main.cpp"
-#endif /// defined(XOS_APP_CONSOLE_HTTP_CLIENT_MAIN_INSTANCE)
+#if !defined(XOS_APP_CONSOLE_HTTP_BASE_MAIN_OPT_INSTANCE)
+//#define XOS_APP_CONSOLE_HTTP_BASE_MAIN_OPT_INSTANCE
+#endif /// !defined(XOS_APP_CONSOLE_HTTP_BASE_MAIN_OPT_INSTANCE)
 
 namespace xos {
 namespace app {
 namespace console {
 namespace http {
-namespace client {
+namespace base {
 
-///  Class: maint
-#if defined(XOS_APP_CONSOLE_HTTP_CLIENT_MAIN_INSTANCE)
-static main the_main;
-#endif /// defined(XOS_APP_CONSOLE_HTTP_CLIENT_MAIN_INSTANCE)
+///  Class: main_optt
+#if defined(XOS_APP_CONSOLE_HTTP_BASE_MAIN_OPT_INSTANCE)
+static main_opt the_main_opt;
+#endif /// defined(XOS_APP_CONSOLE_HTTP_BASE_MAIN_OPT_INSTANCE)
 
 
-} /// namespace client
+} /// namespace base
 } /// namespace http
 } /// namespace console
 } /// namespace app

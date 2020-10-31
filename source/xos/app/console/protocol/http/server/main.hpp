@@ -64,10 +64,17 @@ private:
     }
 
 protected:
-    typedef xos::protocol::xttp::response::extended::status response_status_t;
-    typedef xos::protocol::xttp::response::message response_t;
+    typedef typename extends::content_type_header_t content_type_header_t;
+    typedef typename extends::content_length_header_t content_length_header_t;
+    typedef typename extends::content_t content_t;
+    typedef xos::protocol::http::message::header::fields headers_t;
+    typedef xos::protocol::http::message::parts message_t;
+    typedef xos::protocol::http::response::status::code response_status_t;
+    typedef xos::protocol::http::response::status::reason response_reason_t;
+    typedef xos::protocol::http::response::line response_line_t;
+    typedef xos::protocol::http::response::message response_t;
 
-    /// ...run
+    /*/// ...run
     virtual int respond_run(int argc, char_t** argv, char_t** env) {
         out_writer_t& writer = this->out_writer();
         response_t& response = this->response();
@@ -116,25 +123,31 @@ protected:
             }
         }
         return err;
-    }
+    }*/
 
     /// response...
     virtual response_t& response() const {
         return (response_t&)response_;
     }
-    virtual response_status_t& set_response_status_ok() {
-        return set_response_status(response_status_ok());
+    virtual headers_t& response_headers() const {
+        return (headers_t&)response_headers_;
     }
+    virtual response_line_t& response_line() const {
+        return (response_line_t&)response_line_;
+    }
+    /*virtual response_status_t& set_response_status_ok() {
+        return set_response_status(response_status_ok());
+    }*/
     virtual response_status_t& response_status_ok() const {
         return (response_status_t&)ok_;
     }
-    virtual response_status_t& set_response_status_not_found() {
+    /*virtual response_status_t& set_response_status_not_found() {
         return set_response_status(response_status_not_found());
-    }
+    }*/
     virtual response_status_t& response_status_not_found() const {
         return (response_status_t&)not_found_;
     }
-    virtual response_status_t& set_response_status(const response_status_t& to) {
+    /*virtual response_status_t& set_response_status(const response_status_t& to) {
         return set_response_status(to.chars());
     }
     virtual response_status_t& set_response_status(const char_t* to) {
@@ -143,7 +156,7 @@ protected:
         response_.set_status(status_);
         response_.set_reason(reason_);
         return (response_status_t&)status_;
-    }
+    }*/
     virtual response_status_t& response_status() const {
         return (response_status_t&)status_;
     }

@@ -37,6 +37,9 @@ public:
     typedef TExtends extends;
     typedef maint derives;
 
+    typedef typename extends::in_reader_t in_reader_t;
+    typedef typename extends::err_writer_t err_writer_t;
+    typedef typename extends::out_writer_t out_writer_t;
     typedef typename extends::reader_t reader_t;
     typedef typename extends::writer_t writer_t;
     typedef typename extends::file_t file_t;
@@ -54,13 +57,13 @@ private:
 public:
 
 protected:
-    typedef typename extends::out_writer_t out_writer_t;
-    typedef typename extends::request_t request_t;
-    typedef typename extends::response_t response_t;
     typedef typename extends::content_t content_t;
     typedef typename extends::message_t message_t;
+    typedef typename extends::request_t request_t;
+    typedef typename extends::response_t response_t;
 
-    /*/// recv_request
+#if defined(XOS_APP_CONSOLE_HTTP_MAIN_OPT_EXTENDS_XOS_APP_CONSOLE_PROTOCOL_HTTP_MAIN)
+    /// recv_request
     virtual int recv_request(xos::network::sockets::interface& cn, int argc, char_t** argv, char_t**env) {
         request_t &rq = this->request();
         int err = 0;
@@ -91,7 +94,6 @@ protected:
      request_t &rq, xos::network::sockets::reader& reader, int argc, char_t** argv, char_t**env) {
         ssize_t amount = 0;
         int err = 0;
-        //rs.write(amount, writer);
         err = this->all_write_response_to(amount, writer, rs, rq, reader, argc, argv, env);
         return err;
     }
@@ -163,7 +165,7 @@ protected:
             writer.write(chars, length);
         }
         return err;
-    }*/
+    }
 
     /// send_request
     virtual int send_request(xos::network::sockets::interface& cn, int argc, char_t** argv, char_t**env) {
@@ -184,25 +186,14 @@ protected:
      xos::network::sockets::writer& writer, request_t &rq, int argc, char_t** argv, char_t**env) {
         ssize_t amount = 0;
         int err = 0;
-        //rq.write(amount, writer);
         err = this->all_write_request(amount, writer, rq, argc, argv, env);
         return err;
     }
 
     /// recv_response
     virtual int recv_response(xos::network::sockets::interface& cn, int argc, char_t** argv, char_t**env) {
-        /*message_t& message = this->message();
-        xos::network::sockets::reader reader(cn);*/
         response_t &rs = this->response();
         int err = 0;
-        /*if (!(err = this->recv(message, reader, argc, argv, env))) {
-            xos::network::sockets::sockchar_t c = 0;
-            ssize_t count = 0, amount = 0;
-            while (0 < (amount = reader.read(&c, 1))) {
-                this->out(&c, 1);
-                ++count;
-            }
-        }*/
         err = recv_response(rs, cn, argc, argv, env);
         return err;
     }
@@ -236,43 +227,8 @@ protected:
         }
         return err;
     }
-
-    /// recv 
-    virtual int recv(message_t& message, xos::network::sockets::reader& reader, int argc, char_t** argv, char_t**env) {
-        xos::network::sockets::sockchar_t c = 0;
-        unsigned cr = 0, lf = 0;
-        ssize_t count = 0, amount = 0;
-        int err = 0;
-
-        while (0 < (amount = reader.read(&c, 1))) {
-            if (0 < (amount)) {
-                count += amount;
-                if (c == '\r') {
-                    ++cr;
-                } else {
-                    if (c == '\n') {
-                        if (cr) {
-                            ++lf;
-                        }
-                    } else {
-                        cr = lf = 0;
-                    }
-                }
-                if ((err = this->recv(message, c, argc, argv, env))) {
-                    break;
-                }
-                if (1 < lf) {
-                    break;
-                }
-            }
-        }
-        return err;
-    }
-    virtual int recv(message_t& message, const xos::network::sockets::sockchar_t& c, int argc, char_t** argv, char_t**env) {
-        int err = 0;
-        this->out(&c, 1);
-        return err;
-    }
+#else /// defined(XOS_APP_CONSOLE_HTTP_MAIN_OPT_EXTENDS_XOS_APP_CONSOLE_PROTOCOL_HTTP_MAIN)
+#endif /// defined(XOS_APP_CONSOLE_HTTP_MAIN_OPT_EXTENDS_XOS_APP_CONSOLE_PROTOCOL_HTTP_MAIN)
 
 }; /// class maint
 typedef maint<> main;

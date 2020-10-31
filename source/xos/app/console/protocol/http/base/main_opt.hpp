@@ -16,82 +16,82 @@
 ///   File: main_opt.hpp
 ///
 /// Author: $author$
-///   Date: 9/10/2020
+///   Date: 9/20/2020
 ///////////////////////////////////////////////////////////////////////
-#ifndef XOS_APP_CONSOLE_PROTOCOL_XTTP_BASE_MAIN_OPT_HPP
-#define XOS_APP_CONSOLE_PROTOCOL_XTTP_BASE_MAIN_OPT_HPP
+#ifndef XOS_APP_CONSOLE_PROTOCOL_HTTP_BASE_MAIN_OPT_HPP
+#define XOS_APP_CONSOLE_PROTOCOL_HTTP_BASE_MAIN_OPT_HPP
 
-#include "xos/app/console/main.hpp"
+#include "xos/app/console/protocol/xttp/base/main.hpp"
 
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPT "content-of-message"
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_NONE
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTARG_RESULT 0
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTARG ""
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTUSE "Xttp content of message"
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTVAL_S "e"
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTVAL_C 'e'
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTION \
-   {XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPT, \
-    XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTARG_REQUIRED, \
-    XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTARG_RESULT, \
-    XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTVAL_C}, \
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPT "content-of-message"
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_NONE
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTARG_RESULT 0
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTARG ""
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTUSE "Http content of message"
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTVAL_S "e"
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTVAL_C 'e'
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTION \
+   {XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPT, \
+    XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTARG_REQUIRED, \
+    XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTARG_RESULT, \
+    XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTVAL_C}, \
 
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPT "content"
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_REQUIRED
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTARG_RESULT 0
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTARG ""
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTUSE "Xttp message content"
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTVAL_S "n:"
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTVAL_C 'n'
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTION \
-   {XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPT, \
-    XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTARG_REQUIRED, \
-    XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTARG_RESULT, \
-    XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTVAL_C}, \
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OPT "content"
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_REQUIRED
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OPTARG_RESULT 0
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OPTARG ""
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OPTUSE "Http message content"
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OPTVAL_S "n:"
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OPTVAL_C 'n'
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OPTION \
+   {XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OPT, \
+    XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OPTARG_REQUIRED, \
+    XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OPTARG_RESULT, \
+    XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OPTVAL_C}, \
 
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPT "content-type"
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_REQUIRED
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTARG_RESULT 0
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTARG ""
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTUSE "Xttp message content type"
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTVAL_S "y:"
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTVAL_C 'y'
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTION \
-   {XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPT, \
-    XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTARG_REQUIRED, \
-    XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTARG_RESULT, \
-    XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTVAL_C}, \
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_TYPE_OPT "content-type"
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_TYPE_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_REQUIRED
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_TYPE_OPTARG_RESULT 0
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_TYPE_OPTARG ""
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_TYPE_OPTUSE "Http message content type"
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_TYPE_OPTVAL_S "y:"
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_TYPE_OPTVAL_C 'y'
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_TYPE_OPTION \
+   {XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_TYPE_OPT, \
+    XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_TYPE_OPTARG_REQUIRED, \
+    XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_TYPE_OPTARG_RESULT, \
+    XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_TYPE_OPTVAL_C}, \
 
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_OPTIONS_CHARS_EXTEND \
-   XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTVAL_S \
-   XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTVAL_S \
-   XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTVAL_S \
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_OPTIONS_CHARS_EXTEND \
+   XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTVAL_S \
+   XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OPTVAL_S \
+   XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_TYPE_OPTVAL_S \
 
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_OPTIONS_OPTIONS_EXTEND \
-   XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTION \
-   XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTION \
-   XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTION \
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_OPTIONS_OPTIONS_EXTEND \
+   XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTION \
+   XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OPTION \
+   XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_TYPE_OPTION \
 
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_OPTIONS_CHARS \
-   XOS_PROTOCOL_XTTP_BASE_MAIN_OPTIONS_CHARS_EXTEND \
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_OPTIONS_CHARS \
+   XOS_PROTOCOL_HTTP_BASE_MAIN_OPTIONS_CHARS_EXTEND \
    XOS_CONSOLE_MAIN_OPTIONS_CHARS
 
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_OPTIONS_OPTIONS \
-   XOS_PROTOCOL_XTTP_BASE_MAIN_OPTIONS_OPTIONS_EXTEND \
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_OPTIONS_OPTIONS \
+   XOS_PROTOCOL_HTTP_BASE_MAIN_OPTIONS_OPTIONS_EXTEND \
    XOS_CONSOLE_MAIN_OPTIONS_OPTIONS
    
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_ARUMENTS_CHARS 0
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_ARUMENTS_ARGS 0
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_ARUMENTS_CHARS 0
+#define XOS_PROTOCOL_HTTP_BASE_MAIN_ARUMENTS_ARGS 0
 
 namespace xos {
 namespace app {
 namespace console {
 namespace protocol {
-namespace xttp {
+namespace http {
 namespace base {
 
 /// class main_optt
-template <class TExtends = main, class TImplements = typename TExtends::implements>
+template <class TExtends = protocol::xttp::base::main, class TImplements = typename TExtends::implements>
 class exported main_optt: virtual public TImplements, public TExtends {
 public:
     typedef TImplements implements;
@@ -117,6 +117,12 @@ private:
     }
 
 protected:
+    typedef typename extends::content_type_t content_type_t;
+    typedef typename extends::content_type_which_t content_type_which_t;
+    typedef typename extends::content_type_header_t content_type_header_t;
+    typedef typename extends::content_length_header_t content_length_header_t;
+    typedef typename extends::content_t content_t;
+
     /// ...run
     int (derives::*run_)(int argc, char_t** argv, char_t** env);
     virtual int run(int argc, char_t** argv, char_t** env) {
@@ -181,56 +187,6 @@ protected:
         return err;
     }
 
-    /// ...set_content
-    virtual int set_content(const char_t* content, int argc, char_t** argv, char** env) {
-        int err = 0;
-        return err;
-    }
-    virtual int before_set_content(const char_t* content, int argc, char_t** argv, char** env) {
-        int err = 0;
-        return err;
-    }
-    virtual int after_set_content(const char_t* content, int argc, char_t** argv, char** env) {
-        int err = 0;
-        return err;
-    }
-    virtual int all_set_content(const char_t* content, int argc, char_t** argv, char** env) {
-        int err = 0;
-        if (!(err = before_set_content(content, argc, argv, env))) {
-            int err2 = 0;
-            err = set_content(content, argc, argv, env);
-            if ((err2 = after_set_content(content, argc, argv, env))) {
-                if (!(err)) err = err2;
-            }
-        }
-        return err;
-    }
-
-    /// ...set_content_type
-    virtual int set_content_type(const char_t* content_type, int argc, char_t** argv, char** env) {
-        int err = 0;
-        return err;
-    }
-    virtual int before_set_content_type(const char_t* content_type, int argc, char_t** argv, char** env) {
-        int err = 0;
-        return err;
-    }
-    virtual int after_set_content_type(const char_t* content_type, int argc, char_t** argv, char** env) {
-        int err = 0;
-        return err;
-    }
-    virtual int all_set_content_type(const char_t* content_type, int argc, char_t** argv, char** env) {
-        int err = 0;
-        if (!(err = before_set_content_type(content_type, argc, argv, env))) {
-            int err2 = 0;
-            err = set_content_type(content_type, argc, argv, env);
-            if ((err2 = after_set_content_type(content_type, argc, argv, env))) {
-                if (!(err)) err = err2;
-            }
-        }
-        return err;
-    }
-
     /// ...option...
     virtual int on_content_of_message_option
     (int optval, const char_t* optarg, const char_t* optname, 
@@ -245,7 +201,7 @@ protected:
         int err = 0;
         const char_t* arg = 0;
         if ((arg = optarg) && (arg[0])) {
-            err = all_set_content(arg, argc, argv, env);
+            err = this->all_set_content(arg, argc, argv, env);
         }
         return err;
     }
@@ -255,7 +211,7 @@ protected:
         int err = 0;
         const char_t* arg = 0;
         if ((arg = optarg) && (arg[0])) {
-            err = all_set_content_type(arg, argc, argv, env);
+            err = this->all_set_content_type(arg, argc, argv, env);
         }
         return err;
     }
@@ -264,13 +220,13 @@ protected:
      int optind, int argc, char_t**argv, char_t**env) {
         int err = 0;
         switch(optval) {
-        case XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTVAL_C:
+        case XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTVAL_C:
             err = this->on_content_of_message_option(optval, optarg, optname, optind, argc, argv, env);
             break;
-        case XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTVAL_C:
+        case XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OPTVAL_C:
             err = this->on_content_option(optval, optarg, optname, optind, argc, argv, env);
             break;
-        case XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTVAL_C:
+        case XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_TYPE_OPTVAL_C:
             err = this->on_content_type_option(optval, optarg, optname, optind, argc, argv, env);
             break;
         default:
@@ -279,30 +235,30 @@ protected:
         return err;
     }
     virtual const char_t* content_of_message_option_usage(const char_t*& optarg, const struct option* longopt) {
-        optarg = XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTARG;
-        const char_t* chars = XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTUSE;
+        optarg = XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTARG;
+        const char_t* chars = XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTUSE;
         return chars;
     }
     virtual const char_t* content_option_usage(const char_t*& optarg, const struct option* longopt) {
-        optarg = XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTARG;
-        const char_t* chars = XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTUSE;
+        optarg = XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OPTARG;
+        const char_t* chars = XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OPTUSE;
         return chars;
     }
     virtual const char_t* content_type_option_usage(const char_t*& optarg, const struct option* longopt) {
-        optarg = XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTARG;
-        const char_t* chars = XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTUSE;
+        optarg = XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_TYPE_OPTARG;
+        const char_t* chars = XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_TYPE_OPTUSE;
         return chars;
     }
     virtual const char_t* option_usage(const char_t*& optarg, const struct option* longopt) {
         const char_t* chars = "";
         switch(longopt->val) {
-        case XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTVAL_C:
+        case XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTVAL_C:
             chars = content_of_message_option_usage(optarg, longopt);
             break;
-        case XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTVAL_C:
+        case XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_OPTVAL_C:
             chars = content_option_usage(optarg, longopt);
             break;
-        case XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTVAL_C:
+        case XOS_PROTOCOL_HTTP_BASE_MAIN_CONTENT_TYPE_OPTVAL_C:
             chars = content_type_option_usage(optarg, longopt);
             break;
         default:
@@ -312,9 +268,9 @@ protected:
         return chars;
     }
     virtual const char_t* options(const struct option*& longopts) {
-        static const char_t* chars = XOS_PROTOCOL_XTTP_BASE_MAIN_OPTIONS_CHARS;
+        static const char_t* chars = XOS_PROTOCOL_HTTP_BASE_MAIN_OPTIONS_CHARS;
         static struct option optstruct[]= {
-            XOS_PROTOCOL_XTTP_BASE_MAIN_OPTIONS_OPTIONS
+            XOS_PROTOCOL_HTTP_BASE_MAIN_OPTIONS_OPTIONS
             {0, 0, 0, 0}};
         longopts = optstruct;
         return chars;
@@ -322,17 +278,17 @@ protected:
 
     /// ...argument...
     virtual const char_t* arguments(const char_t**& args) {
-        args = XOS_PROTOCOL_XTTP_BASE_MAIN_ARUMENTS_ARGS;
-        return XOS_PROTOCOL_XTTP_BASE_MAIN_ARUMENTS_CHARS;
+        args = XOS_PROTOCOL_HTTP_BASE_MAIN_ARUMENTS_ARGS;
+        return XOS_PROTOCOL_HTTP_BASE_MAIN_ARUMENTS_CHARS;
     }
 }; /// class main_optt
 typedef main_optt<> main_opt;
 
 } /// namespace base
-} /// namespace xttp
+} /// namespace http
 } /// namespace protocol
 } /// namespace console
 } /// namespace app
 } /// namespace xos
 
-#endif /// XOS_APP_CONSOLE_PROTOCOL_XTTP_BASE_MAIN_OPT_HPP
+#endif /// XOS_APP_CONSOLE_PROTOCOL_HTTP_BASE_MAIN_OPT_HPP

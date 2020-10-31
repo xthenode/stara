@@ -16,18 +16,19 @@
 ///   File: main.hpp
 ///
 /// Author: $author$
-///   Date: 9/8/2020
+///   Date: 9/20/2020
 ///////////////////////////////////////////////////////////////////////
-#ifndef XOS_APP_CONSOLE_HTTP_SERVER_MAIN_HPP
-#define XOS_APP_CONSOLE_HTTP_SERVER_MAIN_HPP
+#ifndef XOS_APP_CONSOLE_PROTOCOL_HTTP_BASE_MAIN_HPP
+#define XOS_APP_CONSOLE_PROTOCOL_HTTP_BASE_MAIN_HPP
 
-#include "xos/app/console/http/server/main_opt.hpp"
+#include "xos/app/console/protocol/http/base/main_opt.hpp"
 
 namespace xos {
 namespace app {
 namespace console {
+namespace protocol {
 namespace http {
-namespace server {
+namespace base {
 
 /// class maint
 template <class TExtends = main_opt, class TImplements = typename TExtends::implements>
@@ -56,18 +57,55 @@ private:
     }
 
 protected:
+    typedef typename extends::content_type_t content_type_t;
+    typedef typename extends::content_type_which_t content_type_which_t;
+    typedef typename extends::content_type_header_t content_type_header_t;
+    typedef typename extends::content_length_header_t content_length_header_t;
     typedef typename extends::content_t content_t;
-    typedef typename extends::message_t message_t;
-    typedef typename extends::request_t request_t;
-    typedef typename extends::response_t response_t;
 
+    /// ...run
+    virtual int content_run(int argc, char_t** argv, char_t** env) {
+        out_writer_t& writer = this->out_writer();
+        content_t& content = this->content();
+        ssize_t amount = 0;
+        int err = 0;
+        err = all_write_content(amount, writer, content, argc, argv, env);
+        return err;
+    }
+
+    /// ...write_content
+    virtual int write_content(ssize_t& amount, writer_t& writer, content_t& content, int argc, char_t** argv, char** env) {
+        int err = 0;
+        content.write(amount, writer);
+        return err;
+    }
+    virtual int before_write_content(ssize_t& amount, writer_t& writer, content_t& content, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_write_content(ssize_t& amount, writer_t& writer, content_t& content, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_write_content(ssize_t& amount, writer_t& writer, content_t& content, int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_write_content(amount, writer, content, argc, argv, env))) {
+            int err2 = 0;
+            err = write_content(amount, writer, content, argc, argv, env);
+            if ((err2 = after_write_content(amount, writer, content, argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
 }; /// class maint
 typedef maint<> main;
 
-} /// namespace server
+} /// namespace base
 } /// namespace http
+} /// namespace protocol
 } /// namespace console
 } /// namespace app
 } /// namespace xos
 
-#endif /// XOS_APP_CONSOLE_HTTP_SERVER_MAIN_HPP
+#endif /// XOS_APP_CONSOLE_PROTOCOL_HTTP_BASE_MAIN_HPP

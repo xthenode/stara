@@ -62,7 +62,7 @@ protected:
 
     /// recv_request
     virtual int recv_request(xos::network::sockets::interface& cn, int argc, char_t** argv, char_t**env) {
-        request_t &rq = this->request();
+        request_t &rq = this->recved_request();
         int err = 0;
         err = recv_request(rq, cn, argc, argv, env);
         return err;
