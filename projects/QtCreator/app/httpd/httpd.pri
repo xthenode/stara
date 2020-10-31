@@ -37,6 +37,8 @@ $${stara_INCLUDEPATH} \
 #
 httpd_DEFINES += \
 $${stara_DEFINES} \
+LOGGING_LEVELS_DEFAULT=LOGGING_LEVELS_ERROR \
+XOS_APP_CONSOLE_HTTP_SERVER_MAIN_INSTANCE \
 
 ########################################################################
 # httpd OBJECTIVE_HEADERS
@@ -53,6 +55,23 @@ $${stara_DEFINES} \
 # httpd HEADERS
 #
 httpd_HEADERS += \
+$${STARA_SRC}/xos/app/console/protocol/xttp/base/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/base/main.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/server/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/server/main.hpp \
+\
+$${STARA_SRC}/xos/app/console/xttp/base/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/xttp/base/main.hpp \
+$${STARA_SRC}/xos/app/console/xttp/server/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/xttp/server/main.hpp \
+\
+$${STARA_SRC}/xos/app/console/protocol/http/base/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/http/base/main.hpp \
+$${STARA_SRC}/xos/app/console/protocol/http/server/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/http/server/main.hpp \
+\
+$${STARA_SRC}/xos/app/console/http/base/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/http/base/main.hpp \
 $${STARA_SRC}/xos/app/console/http/server/main_opt.hpp \
 $${STARA_SRC}/xos/app/console/http/server/main.hpp \
 \

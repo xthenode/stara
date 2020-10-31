@@ -37,7 +37,8 @@ $${stara_INCLUDEPATH} \
 #
 httpc_DEFINES += \
 $${stara_DEFINES} \
-XOS_APP_CONSOLE_XTTP_SERVER_MAIN_INSTANCE \
+LOGGING_LEVELS_DEFAULT=LOGGING_LEVELS_ERROR \
+XOS_APP_CONSOLE_HTTP_CLIENT_MAIN_INSTANCE \
 
 ########################################################################
 # httpc OBJECTIVE_HEADERS
@@ -54,30 +55,44 @@ XOS_APP_CONSOLE_XTTP_SERVER_MAIN_INSTANCE \
 # httpc HEADERS
 #
 httpc_HEADERS += \
-$${STARA_SRC}/xos/protocol/xttp/response/reason.hpp \
-$${STARA_SRC}/xos/protocol/http/response/status/which.hpp \
-$${STARA_SRC}/xos/protocol/http/response/status/code.hpp \
-$${STARA_SRC}/xos/protocol/http/response/status/reason.hpp \
-\
 $${STARA_SRC}/xos/app/console/protocol/xttp/base/main_opt.hpp \
 $${STARA_SRC}/xos/app/console/protocol/xttp/base/main.hpp \
 $${STARA_SRC}/xos/app/console/protocol/xttp/client/main_opt.hpp \
 $${STARA_SRC}/xos/app/console/protocol/xttp/client/main.hpp \
-$${STARA_SRC}/xos/app/console/protocol/xttp/server/main_opt.hpp \
-$${STARA_SRC}/xos/app/console/protocol/xttp/server/main.hpp \
 \
-$${STARA_SRC}/xos/app/console/xttp/server/main_opt.hpp \
-$${STARA_SRC}/xos/app/console/xttp/server/main.hpp \
+$${STARA_SRC}/xos/app/console/xttp/base/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/xttp/base/main.hpp \
+$${STARA_SRC}/xos/app/console/xttp/client/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/xttp/client/main.hpp \
+\
+$${STARA_SRC}/xos/protocol/http/content/media/type/which.hpp \
+$${STARA_SRC}/xos/protocol/http/content/media/type/name.hpp \
+$${STARA_SRC}/xos/protocol/http/content/media/subtype/which.hpp \
+$${STARA_SRC}/xos/protocol/http/content/media/subtype/name.hpp \
+$${STARA_SRC}/xos/protocol/http/content/type/which.hpp \
+$${STARA_SRC}/xos/protocol/http/content/type/name.hpp \
+\
+$${STARA_SRC}/xos/protocol/http/response/status/which.hpp \
+$${STARA_SRC}/xos/protocol/http/response/status/code.hpp \
+$${STARA_SRC}/xos/protocol/http/response/status/reason.hpp \
+\
+$${STARA_SRC}/xos/app/console/protocol/http/base/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/http/base/main.hpp \
+$${STARA_SRC}/xos/app/console/protocol/http/client/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/http/client/main.hpp \
+\
+$${STARA_SRC}/xos/app/console/http/base/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/http/base/main.hpp \
+$${STARA_SRC}/xos/app/console/http/client/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/http/client/main.hpp \
 \
 $${NADIR_SRC}/xos/console/main_main.hpp \
 
 # httpc SOURCES
 #
 httpc_SOURCES += \
-$${STARA_SRC}/xos/protocol/http/response/status/reason.cpp \
-\
-$${STARA_SRC}/xos/app/console/xttp/server/main_opt.cpp \
-$${STARA_SRC}/xos/app/console/xttp/server/main.cpp \
+$${STARA_SRC}/xos/app/console/http/client/main_opt.cpp \
+$${STARA_SRC}/xos/app/console/http/client/main.cpp \
 \
 $${NADIR_SRC}/xos/console/main_main.cpp \
 

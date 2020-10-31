@@ -37,7 +37,8 @@ $${stara_INCLUDEPATH} \
 #
 xttp_DEFINES += \
 $${stara_DEFINES} \
-XOS_APP_CONSOLE_PROTOCOL_XTTP_MAIN_INSTANCE \
+LOGGING_LEVELS_DEFAULT=LOGGING_LEVELS_ERROR \
+XOS_APP_CONSOLE_XTTP_MAIN_INSTANCE \
 
 ########################################################################
 # xttp OBJECTIVE_HEADERS
@@ -54,16 +55,29 @@ XOS_APP_CONSOLE_PROTOCOL_XTTP_MAIN_INSTANCE \
 # xttp HEADERS
 #
 xttp_HEADERS += \
+$${STARA_SRC}/xos/app/console/protocol/xttp/base/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/base/main.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/client/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/client/main.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/server/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/server/main.hpp \
 $${STARA_SRC}/xos/app/console/protocol/xttp/main_opt.hpp \
 $${STARA_SRC}/xos/app/console/protocol/xttp/main.hpp \
+\
+$${STARA_SRC}/xos/app/console/xttp/client/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/xttp/client/main.hpp \
+$${STARA_SRC}/xos/app/console/xttp/server/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/xttp/server/main.hpp \
+$${STARA_SRC}/xos/app/console/xttp/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/xttp/main.hpp \
 \
 $${NADIR_SRC}/xos/console/main_main.hpp \
 
 # xttp SOURCES
 #
 xttp_SOURCES += \
-$${STARA_SRC}/xos/app/console/protocol/xttp/main_opt.cpp \
-$${STARA_SRC}/xos/app/console/protocol/xttp/main.cpp \
+$${STARA_SRC}/xos/app/console/xttp/main_opt.cpp \
+$${STARA_SRC}/xos/app/console/xttp/main.cpp \
 \
 $${NADIR_SRC}/xos/console/main_main.cpp \
 

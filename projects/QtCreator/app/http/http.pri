@@ -37,6 +37,11 @@ $${stara_INCLUDEPATH} \
 #
 http_DEFINES += \
 $${stara_DEFINES} \
+LOGGING_LEVELS_DEFAULT=LOGGING_LEVELS_ERROR \
+XOS_APP_CONSOLE_HTTP_MAIN_INSTANCE \
+
+_http_DEFINES += \
+XOS_APP_CONSOLE_HTTP_MAIN_OPT_EXTENDS_XOS_APP_CONSOLE_PROTOCOL_HTTP_MAIN \
 
 ########################################################################
 # http OBJECTIVE_HEADERS
@@ -53,71 +58,50 @@ $${stara_DEFINES} \
 # http HEADERS
 #
 http_HEADERS += \
-$${RETE_SRC}/xos/network/sockets/posix/interface.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/base/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/base/main.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/client/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/client/main.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/server/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/server/main.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/xttp/main.hpp \
 \
-$${RETE_SRC}/xos/app/console/network/base/main_opt.hpp \
-$${RETE_SRC}/xos/app/console/network/base/main.hpp \
-$${RETE_SRC}/xos/app/console/network/client/main_opt.hpp \
-$${RETE_SRC}/xos/app/console/network/client/main.hpp \
-$${RETE_SRC}/xos/app/console/network/main_opt.hpp \
-$${RETE_SRC}/xos/app/console/network/main.hpp \
+$${STARA_SRC}/xos/app/console/xttp/base/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/xttp/base/main.hpp \
+$${STARA_SRC}/xos/app/console/xttp/client/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/xttp/client/main.hpp \
+$${STARA_SRC}/xos/app/console/xttp/server/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/xttp/server/main.hpp \
+$${STARA_SRC}/xos/app/console/xttp/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/xttp/main.hpp \
 \
-$${STARA_SRC}/xos/protocol/http/message/header/field.hpp \
-$${STARA_SRC}/xos/protocol/http/message/header/fields.hpp \
-$${STARA_SRC}/xos/protocol/http/message/header/content/type.hpp \
-$${STARA_SRC}/xos/protocol/http/message/header/content/length.hpp \
-$${STARA_SRC}/xos/protocol/http/message/body/content.hpp \
-$${STARA_SRC}/xos/protocol/http/message/parts.hpp \
-\
-$${STARA_SRC}/xos/protocol/http/protocol/name.hpp \
-$${STARA_SRC}/xos/protocol/http/protocol/version.hpp \
-$${STARA_SRC}/xos/protocol/http/protocol/identifier.hpp \
-\
-$${STARA_SRC}/xos/protocol/http/request/resource/which.hpp \
-$${STARA_SRC}/xos/protocol/http/request/resource/identifier.hpp \
-$${STARA_SRC}/xos/protocol/http/request/method/which.hpp \
-$${STARA_SRC}/xos/protocol/http/request/method/name.hpp \
-$${STARA_SRC}/xos/protocol/http/request/method/nameof.hpp \
-$${STARA_SRC}/xos/protocol/http/request/line.hpp \
-$${STARA_SRC}/xos/protocol/http/request/message.hpp \
-\
-$${STARA_SRC}/xos/protocol/http/response/status/which.hpp \
-$${STARA_SRC}/xos/protocol/http/response/status/code.hpp \
-$${STARA_SRC}/xos/protocol/http/response/status/codeof.hpp \
-$${STARA_SRC}/xos/protocol/http/response/status/reason.hpp \
-$${STARA_SRC}/xos/protocol/http/response/line.hpp \
-$${STARA_SRC}/xos/protocol/http/response/message.hpp \
-\
+$${STARA_SRC}/xos/app/console/protocol/http/base/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/http/base/main.hpp \
+$${STARA_SRC}/xos/app/console/protocol/http/client/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/http/client/main.hpp \
+$${STARA_SRC}/xos/app/console/protocol/http/server/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/protocol/http/server/main.hpp \
 $${STARA_SRC}/xos/app/console/protocol/http/main_opt.hpp \
 $${STARA_SRC}/xos/app/console/protocol/http/main.hpp \
+\
+$${STARA_SRC}/xos/app/console/http/base/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/http/base/main.hpp \
 $${STARA_SRC}/xos/app/console/http/client/main_opt.hpp \
 $${STARA_SRC}/xos/app/console/http/client/main.hpp \
+$${STARA_SRC}/xos/app/console/http/server/main_opt.hpp \
+$${STARA_SRC}/xos/app/console/http/server/main.hpp \
 $${STARA_SRC}/xos/app/console/http/main_opt.hpp \
 $${STARA_SRC}/xos/app/console/http/main.hpp \
+\
+$${NADIR_SRC}/xos/console/main_main.hpp \
 
 # http SOURCES
 #
 http_SOURCES += \
-$${STARA_SRC}/xos/protocol/http/message/header/field.cpp \
-$${STARA_SRC}/xos/protocol/http/message/header/fields.cpp \
-$${STARA_SRC}/xos/protocol/http/message/header/content/type.cpp \
-$${STARA_SRC}/xos/protocol/http/message/header/content/length.cpp \
-$${STARA_SRC}/xos/protocol/http/message/body/content.cpp \
-$${STARA_SRC}/xos/protocol/http/message/parts.cpp \
+$${STARA_SRC}/xos/app/console/http/main_opt.cpp \
+$${STARA_SRC}/xos/app/console/http/main.cpp \
 \
-$${STARA_SRC}/xos/protocol/http/protocol/name.cpp \
-$${STARA_SRC}/xos/protocol/http/protocol/version.cpp \
-$${STARA_SRC}/xos/protocol/http/protocol/identifier.cpp \
-\
-$${STARA_SRC}/xos/protocol/http/response/status/which.cpp \
-$${STARA_SRC}/xos/protocol/http/response/status/code.cpp \
-$${STARA_SRC}/xos/protocol/http/response/status/codeof.cpp \
-$${STARA_SRC}/xos/protocol/http/response/status/reason.cpp \
-$${STARA_SRC}/xos/protocol/http/response/line.cpp \
-$${STARA_SRC}/xos/protocol/http/response/message.cpp \
-\
-$${STARA_SRC}/xos/app/console/http/client/main_opt.cpp \
-$${STARA_SRC}/xos/app/console/http/client/main.cpp \
 $${NADIR_SRC}/xos/console/main_main.cpp \
 
 ########################################################################

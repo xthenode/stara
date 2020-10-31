@@ -37,6 +37,7 @@ $${stara_INCLUDEPATH} \
 #
 xttpc_DEFINES += \
 $${stara_DEFINES} \
+LOGGING_LEVELS_DEFAULT=LOGGING_LEVELS_ERROR \
 XOS_APP_CONSOLE_XTTP_CLIENT_MAIN_INSTANCE \
 
 ########################################################################
