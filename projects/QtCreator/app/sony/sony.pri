@@ -37,6 +37,8 @@ $${stara_INCLUDEPATH} \
 #
 sony_DEFINES += \
 $${stara_DEFINES} \
+LOGGING_LEVELS_DEFAULT=LOGGING_LEVELS_ERROR \
+XOS_APP_CONSOLE_SONY_MAIN_INSTANCE \
 
 ########################################################################
 # sony OBJECTIVE_HEADERS
@@ -55,6 +57,10 @@ $${stara_DEFINES} \
 sony_HEADERS += \
 $${NADIR_SRC}/xos/base/string.hpp \
 \
+$${RETE_SRC}/xos/app/console/network/base/main_opt.hpp \
+$${RETE_SRC}/xos/app/console/network/base/main.hpp \
+$${RETE_SRC}/xos/app/console/network/server/main_opt.hpp \
+$${RETE_SRC}/xos/app/console/network/server/main.hpp \
 $${RETE_SRC}/xos/app/console/network/main_opt.hpp \
 $${RETE_SRC}/xos/app/console/network/main.hpp \
 \
@@ -88,6 +94,7 @@ $${STARA_SRC}/xos/app/console/http/main.hpp \
 \
 $${STARA_SRC}/xos/app/console/sony/main_opt.hpp \
 $${STARA_SRC}/xos/app/console/sony/main.hpp \
+$${STARA_SRC}/xos/app/console/sony/main_main.hpp \
 
 # sony SOURCES
 #

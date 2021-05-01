@@ -37,6 +37,8 @@ $${stara_INCLUDEPATH} \
 #
 cgi_DEFINES += \
 $${stara_DEFINES} \
+LOGGING_LEVELS_DEFAULT=LOGGING_LEVELS_ERROR \
+XOS_APP_CONSOLE_NETWORK_PROTOCOL_HTTP_CGI_MAIN_INSTANCE \
 
 ########################################################################
 # cgi OBJECTIVE_HEADERS
@@ -68,6 +70,7 @@ $${STARA_SRC}/xos/protocol/http/cgi/environment/variable/values.hpp \
 \
 $${STARA_SRC}/xos/app/console/network/protocol/http/cgi/main_opt.hpp \
 $${STARA_SRC}/xos/app/console/network/protocol/http/cgi/main.hpp \
+\
 $${NADIR_SRC}/xos/console/main_main.hpp \
 
 # cgi SOURCES
@@ -75,6 +78,7 @@ $${NADIR_SRC}/xos/console/main_main.hpp \
 cgi_SOURCES += \
 $${STARA_SRC}/xos/app/console/network/protocol/http/cgi/main_opt.cpp \
 $${STARA_SRC}/xos/app/console/network/protocol/http/cgi/main.cpp \
+\
 $${NADIR_SRC}/xos/console/main_main.cpp \
 
 ########################################################################

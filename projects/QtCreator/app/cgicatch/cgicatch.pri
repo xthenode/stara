@@ -37,6 +37,8 @@ $${stara_INCLUDEPATH} \
 #
 cgicatch_DEFINES += \
 $${stara_DEFINES} \
+LOGGING_LEVELS_DEFAULT=LOGGING_LEVELS_ERROR \
+XOS_APP_CONSOLE_NETWORK_PROTOCOL_HTTP_CGICATCH_MAIN_INSTANCE \
 
 ########################################################################
 # cgicatch OBJECTIVE_HEADERS
@@ -87,6 +89,7 @@ $${STARA_SRC}/xos/app/console/network/protocol/http/cgi/main_opt.hpp \
 $${STARA_SRC}/xos/app/console/network/protocol/http/cgi/main.hpp \
 $${STARA_SRC}/xos/app/console/network/protocol/http/cgi/catcher/main_opt.hpp \
 $${STARA_SRC}/xos/app/console/network/protocol/http/cgi/catcher/main.hpp \
+\
 $${NADIR_SRC}/xos/console/main_main.hpp \
 
 # cgicatch SOURCES
@@ -110,6 +113,7 @@ $${STARA_SRC}/xos/protocol/http/cgi/configure/values.cpp \
 \
 $${STARA_SRC}/xos/app/console/network/protocol/http/cgi/catcher/main_opt.cpp \
 $${STARA_SRC}/xos/app/console/network/protocol/http/cgi/catcher/main.cpp \
+\
 $${NADIR_SRC}/xos/console/main_main.cpp \
 
 ########################################################################

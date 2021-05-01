@@ -37,6 +37,8 @@ $${stara_INCLUDEPATH} \
 #
 stara_exe_DEFINES += \
 $${stara_DEFINES} \
+LOGGING_LEVELS_DEFAULT=LOGGING_LEVELS_ERROR \
+XOS_APP_CONSOLE_STARA_MAIN_INSTANCE \
 
 ########################################################################
 # stara_exe OBJECTIVE_HEADERS

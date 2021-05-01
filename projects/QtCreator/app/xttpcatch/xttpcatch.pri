@@ -37,6 +37,8 @@ $${stara_INCLUDEPATH} \
 #
 xttpcatch_DEFINES += \
 $${stara_DEFINES} \
+LOGGING_LEVELS_DEFAULT=LOGGING_LEVELS_ERROR \
+XOS_APP_CONSOLE_XTTPCATCH_MAIN_INSTANCE \
 
 ########################################################################
 # xttpcatch OBJECTIVE_HEADERS
