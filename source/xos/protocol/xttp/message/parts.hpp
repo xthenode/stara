@@ -120,6 +120,14 @@ public:
             if ((success = this_content_.read(count, c, reader, content_length))) {
                 content_ = &this_content_;
             }
+        } else {
+            size_t length = 0;
+            const char_t* chars = 0;
+            if ((chars = headers_.content_type().has_chars(length))) {
+                if ((success = this_content_.read(count, c, reader))) {
+                    content_ = &this_content_;
+                }
+            }
         }
         return success;
     }
@@ -227,6 +235,8 @@ public:
     virtual derives& set_defaults() {
         line_.set_default();
         headers_.set_default();
+        this_content_.set_default();
+        content_ = 0;
         return *this;
     }
 

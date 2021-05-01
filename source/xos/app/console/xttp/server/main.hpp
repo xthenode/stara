@@ -103,14 +103,15 @@ protected:
         if ((chars = rq.has_chars(length)) && (!chars[length])) {
             this->errlln(__LOCATION__, "...request = \"", chars, "\"", null);
             if ((length = rq.content_length())) {
-                content_t& content = this->content();
+                content_t& content = this->request_content();
+                size_t content_length = length;
                 char_t c = 0;
                 for (content.clear(); 0 < length; --length) {
                     if (0 <= (reader.read(&c, 1))) {
                         content.append(&c, 1);
                     }
                 }
-                this->errlln(__LOCATION__, "...content[", unsigned_to_string(length).chars(), "] = \"", content.chars(), "\"", null);
+                this->errlln(__LOCATION__, "...content[", unsigned_to_string(content_length).chars(), "] = \"", content.chars(), "\"", null);
             }
         }
         return err;

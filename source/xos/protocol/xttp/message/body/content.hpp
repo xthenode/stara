@@ -71,6 +71,18 @@ public:
         }
         return success;
     }
+    virtual bool read(ssize_t& count, char_t& c, reader_t& reader) {
+        bool success = true;
+        set_default();
+        for (ssize_t amount = 1; 0 < amount; count += amount) {
+            if (0 < (amount = reader.read(&c, 1))) {
+                this->append(&c, 1);
+            } else {
+                break;
+            }
+        }
+        return success;
+    }
     virtual bool write(ssize_t& count, writer_t& writer) {
         return ((const derives*)this)->write(count, writer);
     }

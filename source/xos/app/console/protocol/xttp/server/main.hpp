@@ -64,10 +64,11 @@ private:
     }
 
 protected:
+    typedef typename extends::headers_t headers_t;
     typedef typename extends::content_type_header_t content_type_header_t;
     typedef typename extends::content_length_header_t content_length_header_t;
     typedef typename extends::content_t content_t;
-    typedef xos::protocol::http::message::header::fields headers_t;
+
     typedef xos::protocol::http::response::status::code response_status_t;
     typedef xos::protocol::http::response::status::reason response_reason_t;
     typedef xos::protocol::http::response::line response_line_t;
@@ -224,6 +225,11 @@ protected:
         return (response_status_t&)status_;
     }
 
+    /// ...content
+    virtual content_t& request_content() const {
+        return (content_t&)request_content_;
+    }
+
 protected:
     xos::protocol::http::response::status::codeof::OK ok_;
     xos::protocol::http::response::status::codeof::Not_Found not_found_;
@@ -232,6 +238,7 @@ protected:
     xos::protocol::http::response::line response_line_;
     xos::protocol::http::message::header::fields response_headers_;
     xos::protocol::http::response::message response_;
+    xos::protocol::http::message::body::content request_content_;
 }; /// class maint
 typedef maint<> main;
 

@@ -27,7 +27,7 @@
 #define XOS_PROTOCOL_XTTP_MAIN_RESPOND_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_NONE
 #define XOS_PROTOCOL_XTTP_MAIN_RESPOND_OPTARG_RESULT 0
 #define XOS_PROTOCOL_XTTP_MAIN_RESPOND_OPTARG ""
-#define XOS_PROTOCOL_XTTP_MAIN_RESPOND_OPTUSE "Send xttp response"
+#define XOS_PROTOCOL_XTTP_MAIN_RESPOND_OPTUSE "Send " XOS_APP_CONSOLE_PROTOCOL_xttp " response"
 #define XOS_PROTOCOL_XTTP_MAIN_RESPOND_OPTVAL_S "s"
 #define XOS_PROTOCOL_XTTP_MAIN_RESPOND_OPTVAL_C 's'
 #define XOS_PROTOCOL_XTTP_MAIN_RESPOND_OPTION \
@@ -40,7 +40,7 @@
 #define XOS_PROTOCOL_XTTP_MAIN_STATUS_OK_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_NONE
 #define XOS_PROTOCOL_XTTP_MAIN_STATUS_OK_OPTARG_RESULT 0
 #define XOS_PROTOCOL_XTTP_MAIN_STATUS_OK_OPTARG ""
-#define XOS_PROTOCOL_XTTP_MAIN_STATUS_OK_OPTUSE "OK xttp response status"
+#define XOS_PROTOCOL_XTTP_MAIN_STATUS_OK_OPTUSE "OK " XOS_APP_CONSOLE_PROTOCOL_xttp " response status"
 #define XOS_PROTOCOL_XTTP_MAIN_STATUS_OK_OPTVAL_S "k"
 #define XOS_PROTOCOL_XTTP_MAIN_STATUS_OK_OPTVAL_C 'k'
 #define XOS_PROTOCOL_XTTP_MAIN_STATUS_OK_OPTION \
@@ -53,7 +53,7 @@
 #define XOS_PROTOCOL_XTTP_MAIN_STATUS_NOT_FOUND_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_NONE
 #define XOS_PROTOCOL_XTTP_MAIN_STATUS_NOT_FOUND_OPTARG_RESULT 0
 #define XOS_PROTOCOL_XTTP_MAIN_STATUS_NOT_FOUND_OPTARG ""
-#define XOS_PROTOCOL_XTTP_MAIN_STATUS_NOT_FOUND_OPTUSE "Not Found xttp response status"
+#define XOS_PROTOCOL_XTTP_MAIN_STATUS_NOT_FOUND_OPTUSE "Not Found " XOS_APP_CONSOLE_PROTOCOL_xttp " response status"
 #define XOS_PROTOCOL_XTTP_MAIN_STATUS_NOT_FOUND_OPTVAL_S "f"
 #define XOS_PROTOCOL_XTTP_MAIN_STATUS_NOT_FOUND_OPTVAL_C 'f'
 #define XOS_PROTOCOL_XTTP_MAIN_STATUS_NOT_FOUND_OPTION \
@@ -121,6 +121,11 @@ private:
     }
 
 protected:
+    typedef typename extends::headers_t headers_t;
+    typedef typename extends::content_type_header_t content_type_header_t;
+    typedef typename extends::content_length_header_t content_length_header_t;
+    typedef typename extends::content_t content_t;
+
     /// ...run
     int (derives::*run_)(int argc, char_t** argv, char_t** env);
     virtual int run(int argc, char_t** argv, char_t** env) {

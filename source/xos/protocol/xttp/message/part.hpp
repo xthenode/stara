@@ -16,7 +16,7 @@
 ///   File: part.hpp
 ///
 /// Author: $author$
-///   Date: 3/10/2020
+///   Date: 3/10/2020, 2/20/2021
 ///////////////////////////////////////////////////////////////////////
 #ifndef XOS_PROTOCOL_XTTP_MESSAGE_PART_HPP
 #define XOS_PROTOCOL_XTTP_MESSAGE_PART_HPP
@@ -24,6 +24,8 @@
 #include "xos/base/string.hpp"
 #include "xos/base/logged.hpp"
 #include "xos/base/logger.hpp"
+#include "xos/io/sequence.hpp"
+#include "xos/io/seeker.hpp"
 #include "xos/io/reader.hpp"
 #include "xos/io/writer.hpp"
 

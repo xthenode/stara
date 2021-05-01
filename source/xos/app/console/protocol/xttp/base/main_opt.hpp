@@ -16,14 +16,22 @@
 ///   File: main_opt.hpp
 ///
 /// Author: $author$
-///   Date: 9/10/2020
+///   Date: 9/10/2020, 4/29/2021
 ///////////////////////////////////////////////////////////////////////
 #ifndef XOS_APP_CONSOLE_PROTOCOL_XTTP_BASE_MAIN_OPT_HPP
 #define XOS_APP_CONSOLE_PROTOCOL_XTTP_BASE_MAIN_OPT_HPP
 
 #include "xos/app/console/main.hpp"
 
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPT "content-of-message"
+#if defined(XOS_APP_CONSOLE_PROTOCOL_HTTP_MAIN_OPT_HPP)
+#define XOS_APP_CONSOLE_PROTOCOL_Xttp "Http"
+#define XOS_APP_CONSOLE_PROTOCOL_xttp "http"
+#else /// defined(XOS_APP_CONSOLE_PROTOCOL_HTTP_MAIN_OPT_HPP)
+#define XOS_APP_CONSOLE_PROTOCOL_Xttp "Xttp"
+#define XOS_APP_CONSOLE_PROTOCOL_xttp "xttp"
+#endif /// defined(XOS_APP_CONSOLE_PROTOCOL_HTTP_MAIN_OPT_HPP)
+
+/*#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPT "content-of-message"
 #define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_NONE
 #define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTARG_RESULT 0
 #define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTARG ""
@@ -34,14 +42,14 @@
    {XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPT, \
     XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTARG_REQUIRED, \
     XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTARG_RESULT, \
-    XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTVAL_C}, \
+    XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTVAL_C}, \*/
 
 #define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPT "content"
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_REQUIRED
+#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_OPTIONAL
 #define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTARG_RESULT 0
 #define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTARG ""
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTUSE "Xttp message content"
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTVAL_S "n:"
+#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTUSE XOS_APP_CONSOLE_PROTOCOL_Xttp " message content"
+#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTVAL_S "n::"
 #define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTVAL_C 'n'
 #define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTION \
    {XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPT, \
@@ -50,11 +58,11 @@
     XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTVAL_C}, \
 
 #define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPT "content-type"
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_REQUIRED
+#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_OPTIONAL
 #define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTARG_RESULT 0
 #define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTARG ""
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTUSE "Xttp message content type"
-#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTVAL_S "y:"
+#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTUSE XOS_APP_CONSOLE_PROTOCOL_Xttp " message content type"
+#define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTVAL_S "y::"
 #define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTVAL_C 'y'
 #define XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTION \
    {XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPT, \
@@ -63,13 +71,13 @@
     XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTVAL_C}, \
 
 #define XOS_PROTOCOL_XTTP_BASE_MAIN_OPTIONS_CHARS_EXTEND \
-   XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTVAL_S \
-   XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTVAL_S \
+   /*XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTVAL_S \
+   */XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTVAL_S \
    XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTVAL_S \
 
 #define XOS_PROTOCOL_XTTP_BASE_MAIN_OPTIONS_OPTIONS_EXTEND \
-   XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTION \
-   XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTION \
+   /*XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTION \
+   */XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTION \
    XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_TYPE_OPTION \
 
 #define XOS_PROTOCOL_XTTP_BASE_MAIN_OPTIONS_CHARS \
@@ -125,6 +133,58 @@ protected:
             err = (this->*run_)(argc, argv, env);
         } else {
             err = extends::run(argc, argv, env);
+        }
+        return err;
+    }
+
+    /// ...content_type_run
+    virtual int content_type_run(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        err = this->usage(argc, argv, env);
+        return err;
+    }
+    virtual int before_content_type_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_content_type_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_content_type_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_content_type_run(argc, argv, env))) {
+            int err2 = 0;
+            err = content_type_run(argc, argv, env);
+            if ((err2 = after_content_type_run(argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...set_content_type_run
+    virtual int set_content_type_run(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        run_ = &derives::all_content_type_run;
+        return err;
+    }
+    virtual int before_set_content_type_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_set_content_type_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_set_content_type_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_set_content_type_run(argc, argv, env))) {
+            int err2 = 0;
+            err = set_content_type_run(argc, argv, env);
+            if ((err2 = after_set_content_type_run(argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
         }
         return err;
     }
@@ -246,6 +306,8 @@ protected:
         const char_t* arg = 0;
         if ((arg = optarg) && (arg[0])) {
             err = all_set_content(arg, argc, argv, env);
+        } else {
+            err = this->all_set_content_run(argc, argv, env);
         }
         return err;
     }
@@ -256,6 +318,8 @@ protected:
         const char_t* arg = 0;
         if ((arg = optarg) && (arg[0])) {
             err = all_set_content_type(arg, argc, argv, env);
+        } else {
+            err = this->all_set_content_type_run(argc, argv, env);
         }
         return err;
     }
@@ -264,9 +328,9 @@ protected:
      int optind, int argc, char_t**argv, char_t**env) {
         int err = 0;
         switch(optval) {
-        case XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTVAL_C:
+        /*case XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTVAL_C:
             err = this->on_content_of_message_option(optval, optarg, optname, optind, argc, argv, env);
-            break;
+            break;*/
         case XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTVAL_C:
             err = this->on_content_option(optval, optarg, optname, optind, argc, argv, env);
             break;
@@ -278,11 +342,11 @@ protected:
         }
         return err;
     }
-    virtual const char_t* content_of_message_option_usage(const char_t*& optarg, const struct option* longopt) {
+    /*virtual const char_t* content_of_message_option_usage(const char_t*& optarg, const struct option* longopt) {
         optarg = XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTARG;
         const char_t* chars = XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTUSE;
         return chars;
-    }
+    }*/
     virtual const char_t* content_option_usage(const char_t*& optarg, const struct option* longopt) {
         optarg = XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTARG;
         const char_t* chars = XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTUSE;
@@ -296,9 +360,9 @@ protected:
     virtual const char_t* option_usage(const char_t*& optarg, const struct option* longopt) {
         const char_t* chars = "";
         switch(longopt->val) {
-        case XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTVAL_C:
+/*        case XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OF_MESSAGE_OPTVAL_C:
             chars = content_of_message_option_usage(optarg, longopt);
-            break;
+            break;*/
         case XOS_PROTOCOL_XTTP_BASE_MAIN_CONTENT_OPTVAL_C:
             chars = content_option_usage(optarg, longopt);
             break;

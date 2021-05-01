@@ -78,6 +78,34 @@ protected:
     typedef xos::protocol::xttp::content::json::array json_array_t;
     typedef xos::protocol::xttp::content::json::object json_object_t;
 
+    /// ...content_type_run
+    typedef xos::protocol::http::content::type::name content_type_t;
+    virtual int content_type_run(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        size_t length = 0;
+        const char_t* chars = 0;
+        content_type_t& content_type = this->content_type();
+        
+        if ((chars = content_type.has_chars(length))) {
+            this->outln(chars, length);
+        }
+        return err;
+    }
+
+    /// ...content_run
+    typedef xos::protocol::http::message::body::content content_t;
+    virtual int content_run(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        size_t length = 0;
+        const char_t* chars = 0;
+        content_t& content = this->content();
+        
+        if ((chars = content.has_chars(length))) {
+            this->outln(chars, length);
+        }
+        return err;
+    }
+
     /// ...set_content_type
     virtual int before_set_content_type(const char_t* content_type, int argc, char_t** argv, char** env) {
         int err = 0;
@@ -93,15 +121,18 @@ protected:
     }
 
     /// content_type...
+    typedef xos::protocol::http::message::header::fields headers_t;
     typedef xos::protocol::http::message::header::content::type content_type_header_t;
     virtual content_type_header_t& content_type_header() const {
         return (content_type_header_t&)content_type_header_;
     }
+    enum { content_type_subtype_json = xos::protocol::http::content::media::subtype::json };
+    typedef xos::protocol::http::content::media::subtype::which_t content_type_subtype_which_t;
+    typedef xos::protocol::http::content::media::subtype::name content_type_subtype_t;
     enum { content_type_type_text = xos::protocol::http::content::media::type::text };
     typedef xos::protocol::http::content::media::type::which_t content_type_type_which_t;
     typedef xos::protocol::http::content::media::type::name content_type_type_t;
     typedef xos::protocol::http::content::type::which_t content_type_which_t;
-    typedef xos::protocol::http::content::type::name content_type_t;
     virtual content_type_t& content_type_text() const {
         return (content_type_t&)text_;
     }
@@ -141,7 +172,6 @@ protected:
     }
     
     /// content
-    typedef xos::protocol::http::message::body::content content_t;
     virtual content_t& set_content(const char_t* to) {
         content_length_header_t& content_length_header = this->content_length_header();
         content_t& content = this->content();

@@ -62,6 +62,8 @@ protected:
     typedef typename extends::content_type_t content_type_t;
     typedef typename extends::content_type_type_which_t content_type_type_which_t;
     enum { content_type_type_text = extends::content_type_type_text };
+    typedef typename extends::content_type_subtype_which_t content_type_subtype_which_t;
+    enum { content_type_subtype_json = extends::content_type_subtype_json };
 
     /// send_request
     virtual int send_request(xos::network::sockets::interface& cn, int argc, char_t** argv, char_t**env) {
@@ -116,11 +118,16 @@ protected:
     virtual int process_response(response_t &rs, xos::network::sockets::reader& reader, int argc, char_t** argv, char_t**env) {
         const char_t* chars = 0; size_t length = 0;
         int err = 0;
+
         if ((chars = rs.has_chars(length))) {
             this->out(chars, length);
+
             if ((chars = rs.headers().content_type().has_chars(length))) {
                 content_type_t content_type(chars);
-                if (content_type_type_text == (content_type.type_name().which())) {
+
+                if ((content_type_type_text == (content_type.type_name().which()))
+                    || ((content_type_subtype_json == (content_type.subtype_name().which())))) {
+
                     if (0 < (length = rs.headers().content_length())) {
                         err = recv_response_content(reader, length, argc, argv, env);
                     } else {                    

@@ -16,7 +16,7 @@
 ///   File: main_opt.hpp
 ///
 /// Author: $author$
-///   Date: 8/14/2020
+///   Date: 8/14/2020, 4/29/2021
 ///////////////////////////////////////////////////////////////////////
 #ifndef XOS_APP_CONSOLE_PROTOCOL_XTTP_CLIENT_MAIN_OPT_HPP
 #define XOS_APP_CONSOLE_PROTOCOL_XTTP_CLIENT_MAIN_OPT_HPP
@@ -28,7 +28,7 @@
 #define XOS_PROTOCOL_XTTP_MAIN_REQUEST_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_NONE
 #define XOS_PROTOCOL_XTTP_MAIN_REQUEST_OPTARG_RESULT 0
 #define XOS_PROTOCOL_XTTP_MAIN_REQUEST_OPTARG ""
-#define XOS_PROTOCOL_XTTP_MAIN_REQUEST_OPTUSE "Send xttp request"
+#define XOS_PROTOCOL_XTTP_MAIN_REQUEST_OPTUSE "Send " XOS_APP_CONSOLE_PROTOCOL_xttp " request"
 #define XOS_PROTOCOL_XTTP_MAIN_REQUEST_OPTVAL_S "r"
 #define XOS_PROTOCOL_XTTP_MAIN_REQUEST_OPTVAL_C 'r'
 #define XOS_PROTOCOL_XTTP_MAIN_REQUEST_OPTION \
@@ -41,7 +41,7 @@
 #define XOS_PROTOCOL_XTTP_MAIN_METHOD_GET_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_NONE
 #define XOS_PROTOCOL_XTTP_MAIN_METHOD_GET_OPTARG_RESULT 0
 #define XOS_PROTOCOL_XTTP_MAIN_METHOD_GET_OPTARG ""
-#define XOS_PROTOCOL_XTTP_MAIN_METHOD_GET_OPTUSE "GET xttp request method"
+#define XOS_PROTOCOL_XTTP_MAIN_METHOD_GET_OPTUSE "GET " XOS_APP_CONSOLE_PROTOCOL_xttp " request method"
 #define XOS_PROTOCOL_XTTP_MAIN_METHOD_GET_OPTVAL_S "g"
 #define XOS_PROTOCOL_XTTP_MAIN_METHOD_GET_OPTVAL_C 'g'
 #define XOS_PROTOCOL_XTTP_MAIN_METHOD_GET_OPTION \
@@ -54,7 +54,7 @@
 #define XOS_PROTOCOL_XTTP_MAIN_METHOD_POST_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_NONE
 #define XOS_PROTOCOL_XTTP_MAIN_METHOD_POST_OPTARG_RESULT 0
 #define XOS_PROTOCOL_XTTP_MAIN_METHOD_POST_OPTARG ""
-#define XOS_PROTOCOL_XTTP_MAIN_METHOD_POST_OPTUSE "POST xttp request method"
+#define XOS_PROTOCOL_XTTP_MAIN_METHOD_POST_OPTUSE "POST " XOS_APP_CONSOLE_PROTOCOL_xttp " request method"
 #define XOS_PROTOCOL_XTTP_MAIN_METHOD_POST_OPTVAL_S "t"
 #define XOS_PROTOCOL_XTTP_MAIN_METHOD_POST_OPTVAL_C 't'
 #define XOS_PROTOCOL_XTTP_MAIN_METHOD_POST_OPTION \
@@ -64,11 +64,11 @@
     XOS_PROTOCOL_XTTP_MAIN_METHOD_POST_OPTVAL_C}, \
 
 #define XOS_PROTOCOL_XTTP_MAIN_METHOD_OPT "method"
-#define XOS_PROTOCOL_XTTP_MAIN_METHOD_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_REQUIRED
+#define XOS_PROTOCOL_XTTP_MAIN_METHOD_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_OPTIONAL
 #define XOS_PROTOCOL_XTTP_MAIN_METHOD_OPTARG_RESULT 0
 #define XOS_PROTOCOL_XTTP_MAIN_METHOD_OPTARG "{ GET | POST | ...}"
-#define XOS_PROTOCOL_XTTP_MAIN_METHOD_OPTUSE "Xttp request method"
-#define XOS_PROTOCOL_XTTP_MAIN_METHOD_OPTVAL_S "m:"
+#define XOS_PROTOCOL_XTTP_MAIN_METHOD_OPTUSE XOS_APP_CONSOLE_PROTOCOL_Xttp " request method"
+#define XOS_PROTOCOL_XTTP_MAIN_METHOD_OPTVAL_S "m::"
 #define XOS_PROTOCOL_XTTP_MAIN_METHOD_OPTVAL_C 'm'
 #define XOS_PROTOCOL_XTTP_MAIN_METHOD_OPTION \
    {XOS_PROTOCOL_XTTP_MAIN_METHOD_OPT, \
@@ -77,12 +77,12 @@
     XOS_PROTOCOL_XTTP_MAIN_METHOD_OPTVAL_C}, \
 
 #define XOS_PROTOCOL_XTTP_MAIN_PARAMETER_OPT "parameter"
-#define XOS_PROTOCOL_XTTP_MAIN_PARAMETER_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_REQUIRED
+#define XOS_PROTOCOL_XTTP_MAIN_PARAMETER_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_OPTIONAL
 #define XOS_PROTOCOL_XTTP_MAIN_PARAMETER_OPTARG_RESULT 0
 #define XOS_PROTOCOL_XTTP_MAIN_PARAMETER_OPTARG "{ / | ...}"
-#define XOS_PROTOCOL_XTTP_MAIN_PARAMETER_OPTUSE "Xttp request parameter"
-#define XOS_PROTOCOL_XTTP_MAIN_PARAMETER_OPTVAL_S "a:"
-#define XOS_PROTOCOL_XTTP_MAIN_PARAMETER_OPTVAL_C 'a'
+#define XOS_PROTOCOL_XTTP_MAIN_PARAMETER_OPTUSE XOS_APP_CONSOLE_PROTOCOL_Xttp " request parameter"
+#define XOS_PROTOCOL_XTTP_MAIN_PARAMETER_OPTVAL_S "e::"
+#define XOS_PROTOCOL_XTTP_MAIN_PARAMETER_OPTVAL_C 'e'
 #define XOS_PROTOCOL_XTTP_MAIN_PARAMETER_OPTION \
    {XOS_PROTOCOL_XTTP_MAIN_PARAMETER_OPT, \
     XOS_PROTOCOL_XTTP_MAIN_PARAMETER_OPTARG_REQUIRED, \
@@ -152,6 +152,11 @@ private:
     }
 
 protected:
+    typedef typename extends::headers_t headers_t;
+    typedef typename extends::content_type_header_t content_type_header_t;
+    typedef typename extends::content_length_header_t content_length_header_t;
+    typedef typename extends::content_t content_t;
+
     /// ...run
     int (derives::*run_)(int argc, char_t** argv, char_t** env);
     virtual int run(int argc, char_t** argv, char_t** env) {
@@ -189,7 +194,6 @@ protected:
         }
         return err;
     }
-
     /// ...set_request_run
     virtual int set_request_run(int argc, char_t** argv, char_t** env) {
         int err = 0;
@@ -210,6 +214,109 @@ protected:
             int err2 = 0;
             err = set_request_run(argc, argv, env);
             if ((err2 = after_set_request_run(argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...method_run
+    virtual int method_run(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        err = this->usage(argc, argv, env);
+        return err;
+    }
+    virtual int before_method_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_method_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_method_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_method_run(argc, argv, env))) {
+            int err2 = 0;
+            err = method_run(argc, argv, env);
+            if ((err2 = after_method_run(argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+    /// ...set_method_run
+    virtual int set_method_run(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        run_ = &derives::all_method_run;
+        return err;
+    }
+    virtual int before_set_method_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_set_method_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_set_method_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_set_method_run(argc, argv, env))) {
+            int err2 = 0;
+            err = set_method_run(argc, argv, env);
+            if ((err2 = after_set_method_run(argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...parameter_run
+    virtual int parameter_run(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        err = this->usage(argc, argv, env);
+        return err;
+    }
+    virtual int before_parameter_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_parameter_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_parameter_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_parameter_run(argc, argv, env))) {
+            int err2 = 0;
+            err = parameter_run(argc, argv, env);
+            if ((err2 = after_parameter_run(argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+
+    /// ...set_parameter_run
+    virtual int set_parameter_run(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        run_ = &derives::all_parameter_run;
+        return err;
+    }
+    virtual int before_set_parameter_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_set_parameter_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_set_parameter_run(int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_set_parameter_run(argc, argv, env))) {
+            int err2 = 0;
+            err = set_parameter_run(argc, argv, env);
+            if ((err2 = after_set_parameter_run(argc, argv, env))) {
                 if (!(err)) err = err2;
             }
         }
@@ -341,6 +448,8 @@ protected:
         const char_t* arg = 0;
         if ((arg = optarg) && (arg[0])) {
             err = all_set_method(arg, argc, argv, env);
+        } else {
+            err = all_set_method_run(argc, argv, env);
         }
         return err;
     }
@@ -351,6 +460,8 @@ protected:
         const char_t* arg = 0;
         if ((arg = optarg) && (arg[0])) {
             err = all_set_parameter(arg, argc, argv, env);
+        } else {
+            err = all_set_parameter_run(argc, argv, env);
         }
         return err;
     }

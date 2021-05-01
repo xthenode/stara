@@ -66,6 +66,11 @@ public:
       stop_end_("\"}], \"version\": \"1.1\"}"),
       stop_params_(""),
 
+      pause_path_("/sony/avContent"),
+      pause_begin_("{\"method\": \"pausePlayingContent\", \"id\": 73, \"params\": [{\"output\": \""),
+      pause_end_("\"}], \"version\": \"1.1\"}"),
+      pause_params_(""),
+
       resume_path_("/sony/avContent"),
       resume_begin_("{\"method\": \"setPlayContent\", \"id\": 73, \"params\": [{\"output\": \"\", \"resume\": "),
       resume_end_("}], \"version\": \"1.2\"}"),
@@ -74,12 +79,15 @@ public:
       volume_level_(10), volume_value_(volume_level_), volume_param_("volume", volume_value_), 
       volume_object_(&volume_param_, null), volume_params_(&volume_object_, null),
       volume_path_("/sony/audio"),
+      get_volume_begin_("{\"method\": \"getVolumeInformation\", \"id\": 73, \"params\": [{\"output\": \"\"}]"),
       volume_begin_("{\"method\": \"setAudioVolume\", \"id\": 73, \"params\": "),
       volume_end_(", \"version\": \"1.1\"}"),
       
-      power_status_("on"), power_value_(power_status_), power_param_("status", power_value_), 
+      power_status_on_("active"), power_status_off_("off"), 
+      power_status_(power_status_on_), power_value_(power_status_), power_param_("status", power_value_), 
       power_object_(&power_param_, null), power_params_(&power_object_, null),
       power_path_("/sony/system"),
+      get_power_begin_("{\"method\": \"getPowerStatus\", \"id\": 73, \"params\": []"),
       power_begin_("{\"method\": \"setPowerStatus\", \"id\": 73, \"params\": "),
       power_end_(", \"version\": \"1.1\"}")
     {
@@ -136,6 +144,16 @@ protected:
         request.set_content(next_);
         return err;
     }
+    virtual int before_write_pause_request(ssize_t& amount, writer_t& writer, request_t& request, int argc, char_t** argv, char** env) {
+        int err = 0;
+        set_pause();
+        request.set_method(this->request_method_post());
+        request.set_path(pause_path_);
+        request.set_content_type(this->content_type_json());
+        request.set_content_length(pause_.length());
+        request.set_content(pause_);
+        return err;
+    }
     virtual int before_write_stop_request(ssize_t& amount, writer_t& writer, request_t& request, int argc, char_t** argv, char** env) {
         int err = 0;
         set_stop();
@@ -159,6 +177,17 @@ protected:
     virtual int before_write_volume_request(ssize_t& amount, writer_t& writer, request_t& request, int argc, char_t** argv, char** env) {
         int err = 0;
         set_volume();
+        err = write_volume_request(amount, writer, request, argc, argv, env);
+        return err;
+    }
+    virtual int before_write_get_volume_request(ssize_t& amount, writer_t& writer, request_t& request, int argc, char_t** argv, char** env) {
+        int err = 0;
+        get_volume();
+        err = write_volume_request(amount, writer, request, argc, argv, env);
+        return err;
+    }
+    virtual int write_volume_request(ssize_t& amount, writer_t& writer, request_t& request, int argc, char_t** argv, char** env) {
+        int err = 0;
         request.set_method(this->request_method_post());
         request.set_path(volume_path_);
         request.set_content_type(this->content_type_json());
@@ -169,6 +198,17 @@ protected:
     virtual int before_write_power_request(ssize_t& amount, writer_t& writer, request_t& request, int argc, char_t** argv, char** env) {
         int err = 0;
         set_power();
+        err = write_power_request(amount, writer, request, argc, argv, env);
+        return err;
+    }
+    virtual int before_write_get_power_request(ssize_t& amount, writer_t& writer, request_t& request, int argc, char_t** argv, char** env) {
+        int err = 0;
+        get_power();
+        err = write_power_request(amount, writer, request, argc, argv, env);
+        return err;
+    }
+    virtual int write_power_request(ssize_t& amount, writer_t& writer, request_t& request, int argc, char_t** argv, char** env) {
+        int err = 0;
         request.set_method(this->request_method_post());
         request.set_path(power_path_);
         request.set_content_type(this->content_type_json());
@@ -229,6 +269,15 @@ protected:
         }
         return err;
     }
+    virtual int on_pause_option
+    (int optval, const char_t* optarg, const char_t* optname, 
+     int optind, int argc, char_t**argv, char_t**env) {
+        int err = 0;
+        if (!(err = this->set_connect_run(argc, argv, env))) {
+            before_write_request_ = &derives::before_write_pause_request;
+        }
+        return err;
+    }
     virtual int on_resume_option
     (int optval, const char_t* optarg, const char_t* optname, 
      int optind, int argc, char_t**argv, char_t**env) {
@@ -242,12 +291,34 @@ protected:
     (int optval, const char_t* optarg, const char_t* optname, 
      int optind, int argc, char_t**argv, char_t**env) {
         int err = 0;
-        const char_t* arg = 0;
-        if ((arg = optarg) && (arg[0])) {
-            set_volume_level(string_t(arg).to_unsigned());
-        }
         if (!(err = this->set_connect_run(argc, argv, env))) {
-            before_write_request_ = &derives::before_write_volume_request;
+            const char_t* arg = 0;
+            if ((arg = optarg) && (arg[0])) {
+                set_volume_level(string_t(arg).to_unsigned());
+                before_write_request_ = &derives::before_write_volume_request;
+            } else {
+                before_write_request_ = &derives::before_write_get_volume_request;
+            }
+        }
+        return err;
+    }
+    virtual int on_power_on_option
+    (int optval, const char_t* optarg, const char_t* optname, 
+     int optind, int argc, char_t**argv, char_t**env) {
+        int err = 0;
+        if (!(err = this->set_connect_run(argc, argv, env))) {
+            set_power_status_on();
+            before_write_request_ = &derives::before_write_power_request;
+        }
+        return err;
+    }
+    virtual int on_power_off_option
+    (int optval, const char_t* optarg, const char_t* optname, 
+     int optind, int argc, char_t**argv, char_t**env) {
+        int err = 0;
+        if (!(err = this->set_connect_run(argc, argv, env))) {
+            set_power_status_off();
+            before_write_request_ = &derives::before_write_power_request;
         }
         return err;
     }
@@ -255,12 +326,14 @@ protected:
     (int optval, const char_t* optarg, const char_t* optname, 
      int optind, int argc, char_t**argv, char_t**env) {
         int err = 0;
-        const char_t* arg = 0;
-        if ((arg = optarg) && (arg[0])) {
-            set_power_status(arg);
-        }
         if (!(err = this->set_connect_run(argc, argv, env))) {
-            before_write_request_ = &derives::before_write_power_request;
+            const char_t* arg = 0;
+            if ((arg = optarg) && (arg[0])) {
+                set_power_status(arg);
+                before_write_request_ = &derives::before_write_power_request;
+            } else {
+                before_write_request_ = &derives::before_write_get_power_request;
+            }
         }
         return err;
     }
@@ -284,6 +357,12 @@ protected:
         stop_.append(stop_end_);
         return stop_;
     }
+    virtual string_t& set_pause() {
+        pause_.assign(pause_begin_);
+        pause_.append(pause_params_);
+        pause_.append(pause_end_);
+        return pause_;
+    }
     virtual string_t& set_resume() {
         resume_.assign(resume_begin_);
         resume_.append(resume_params_);
@@ -306,8 +385,19 @@ protected:
         volume_.append(volume_end_);
         return volume_;
     }
+    virtual string_t& get_volume() {
+        volume_.assign(get_volume_begin_);
+        volume_.append(volume_end_);
+        return volume_;
+    }
 
     /// ...power...
+    virtual string_t& set_power_status_on() {
+        return set_power_status(power_status_on_.chars());
+    }
+    virtual string_t& set_power_status_off() {
+        return set_power_status(power_status_off_.chars());
+    }
     virtual string_t& set_power_status(const char_t* to) {
         power_status_.assign(to);
         power_value_.set(power_status_);
@@ -322,6 +412,11 @@ protected:
         power_.append(power_end_);
         return power_;
     }
+    virtual string_t& get_power() {
+        power_.assign(get_power_begin_);
+        power_.append(power_end_);
+        return power_;
+    }
 
 protected:
     short port_;
@@ -329,15 +424,16 @@ protected:
     string_t previous_path_, previous_begin_, previous_end_, previous_params_, previous_;
     string_t next_path_, next_begin_, next_end_, next_params_, next_;
     string_t stop_path_, stop_begin_, stop_end_, stop_params_, stop_;
+    string_t pause_path_, pause_begin_, pause_end_, pause_params_, pause_;
     string_t resume_path_, resume_begin_, resume_end_, resume_params_, resume_;
 
     unsigned volume_level_; json_node_t volume_value_, volume_param_;
     json_object_t volume_object_; json_array_t volume_params_;
-    string_t volume_path_, volume_begin_, volume_end_, volume_;
+    string_t volume_path_, get_volume_begin_, volume_begin_, volume_end_, volume_;
     
-    string_t power_status_; json_node_t power_value_, power_param_;
+    string_t power_status_on_, power_status_off_, power_status_; json_node_t power_value_, power_param_;
     json_object_t power_object_; json_array_t power_params_;
-    string_t power_path_, power_begin_, power_end_, power_;
+    string_t power_path_, get_power_begin_, power_begin_, power_end_, power_;
 }; /// class maint
 typedef maint<> main;
 

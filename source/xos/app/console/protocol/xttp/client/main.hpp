@@ -64,10 +64,11 @@ private:
     }
     
 protected:
+    typedef typename extends::headers_t headers_t;
     typedef typename extends::content_type_header_t content_type_header_t;
     typedef typename extends::content_length_header_t content_length_header_t;
     typedef typename extends::content_t content_t;
-    typedef xos::protocol::http::message::header::fields headers_t;
+
     typedef xos::protocol::http::request::method::name request_method_t;
     typedef xos::protocol::http::request::resource::identifier request_resource_t;
     typedef xos::protocol::http::request::line request_line_t;
@@ -80,6 +81,26 @@ protected:
         ssize_t amount = 0;
         int err = 0;
         err = all_write_request(amount, writer, request, argc, argv, env);
+        return err;
+    }
+    virtual int method_run(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        size_t length = 0;
+        const char_t* chars = 0;
+        request_method_t& method = this->request_method();
+        if ((chars = method.has_chars(length))) {
+            this->outln(chars, length);
+        }
+        return err;
+    }
+    virtual int parameter_run(int argc, char_t** argv, char_t** env) {
+        int err = 0;
+        size_t length = 0;
+        const char_t* chars = 0;
+        request_resource_t& resource = this->request_resource();
+        if ((chars = resource.has_chars(length))) {
+            this->outln(chars, length);
+        }
         return err;
     }
     
