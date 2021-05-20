@@ -16,7 +16,7 @@
 #   File: http.pri
 #
 # Author: $author$
-#   Date: 6/12/2020
+#   Date: 6/12/2020, 5/20/2021
 #
 # QtCreator .pri file for stara executable http
 ########################################################################
@@ -37,11 +37,8 @@ $${stara_INCLUDEPATH} \
 #
 http_DEFINES += \
 $${stara_DEFINES} \
-LOGGING_LEVELS_DEFAULT=LOGGING_LEVELS_ERROR \
+DEFAULT_LOGGING_LEVELS_ERROR \
 XOS_APP_CONSOLE_HTTP_MAIN_INSTANCE \
-
-_http_DEFINES += \
-XOS_APP_CONSOLE_HTTP_MAIN_OPT_EXTENDS_XOS_APP_CONSOLE_PROTOCOL_HTTP_MAIN \
 
 ########################################################################
 # http OBJECTIVE_HEADERS
