@@ -16,7 +16,7 @@
 ///   File: main.hpp
 ///
 /// Author: $author$
-///   Date: 8/18/2020
+///   Date: 8/18/2020, 5/4/2021
 ///////////////////////////////////////////////////////////////////////
 #ifndef XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_HPP
 #define XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_HPP
@@ -26,6 +26,7 @@
 #include "xos/protocol/http/request/resource/identifier.hpp"
 #include "xos/protocol/http/request/line.hpp"
 #include "xos/protocol/http/request/message.hpp"
+#include "xos/protocol/http/response/message.hpp"
 
 namespace xos {
 namespace app {
@@ -55,7 +56,8 @@ public:
     maint()
     : method_(get_), resource_(path_), request_line_(method_, resource_, this->protocol_),
       request_headers_(&this->content_type_header_, &this->content_length_header_, null),
-      request_(request_line_, request_headers_, this->content_) {
+      request_(request_line_, request_headers_, this->content_),
+      response_content_size_(0) {
     }
     virtual ~maint() {
     }
@@ -73,6 +75,7 @@ protected:
     typedef xos::protocol::http::request::resource::identifier request_resource_t;
     typedef xos::protocol::http::request::line request_line_t;
     typedef xos::protocol::http::request::message request_t;
+    typedef xos::protocol::http::response::message response_t;
 
     /// request...
     virtual request_t& request() const {
@@ -97,6 +100,17 @@ protected:
         return (request_resource_t&)resource_;
     }
 
+    /// response...
+    virtual response_t& response() const {
+        return (response_t&)response_;
+    }
+    virtual content_t& response_content() const {
+        return (content_t&)response_content_;
+    }
+    virtual size_t& response_content_size() const {
+        return (size_t&)response_content_size_;
+    }
+
 protected:
     xos::protocol::http::request::method::nameof::GET get_;
     xos::protocol::http::request::method::nameof::POST post_;
@@ -108,6 +122,9 @@ protected:
     xos::protocol::http::request::line request_line_;
     xos::protocol::http::message::header::fields request_headers_;
     xos::protocol::http::request::message request_;
+
+    size_t response_content_size_; content_t response_content_;
+    xos::protocol::http::response::message response_;
 }; /// class maint
 typedef maint<> main;
 

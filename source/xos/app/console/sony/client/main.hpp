@@ -70,6 +70,11 @@ public:
       resume_end_("}], \"version\": \"1.2\"}"),
       resume_params_("true"),
       
+      replay_path_("/sony/avContent"),
+      replay_begin_("{\"method\": \"setPlayContent\", \"id\": 73, \"params\": [{\"repeatType\": \""),
+      replay_end_("\"}], \"version\": \"1.2\"}"),
+      replay_params_("on"),
+      
       volume_level_(10), volume_value_(volume_level_), volume_param_("volume", volume_value_), 
       volume_object_(&volume_param_, null), volume_params_(&volume_object_, null),
       volume_path_("/sony/audio"),
@@ -300,6 +305,7 @@ protected:
     string_t next_path_, next_begin_, next_end_, next_params_, next_;
     string_t stop_path_, stop_begin_, stop_end_, stop_params_, stop_;
     string_t resume_path_, resume_begin_, resume_end_, resume_params_, resume_;
+    string_t replay_path_, replay_begin_, replay_end_, replay_params_, replay_;
 
     unsigned volume_level_; json_node_t volume_value_, volume_param_;
     json_object_t volume_object_; json_array_t volume_params_;

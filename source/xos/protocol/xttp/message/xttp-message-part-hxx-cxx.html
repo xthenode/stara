@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+=====================================================================
+=== Copyright (c) 1988-2021 $organization$
+===
+=== This software is provided by the author and contributors ``as is'' 
+=== and any express or implied warranties, including, but not limited to, 
+=== the implied warranties of merchantability and fitness for a particular 
+=== purpose are disclaimed. In no event shall the author or contributors 
+=== be liable for any direct, indirect, incidental, special, exemplary, 
+=== or consequential damages (including, but not limited to, procurement 
+=== of substitute goods or services; loss of use, data, or profits; or 
+=== business interruption) however caused and on any theory of liability, 
+=== whether in contract, strict liability, or tort (including negligence 
+=== or otherwise) arising in any way out of the use of this software, 
+=== even if advised of the possibility of such damage.
+===
+===   File: xttp-message-part-hxx-cxx.html
+===
+=== Author: $author$
+===   Date: 5/11/2021
+=====================================================================
+-->
+<!--
+=====================================================================
+=== html
+=====================================================================
+-->
+<html>
+    <!--
+    =====================================================================
+    === head
+    =====================================================================
+    -->
+    <head>
+        <!--
+        =====================================================================
+        === title
+        =====================================================================
+        -->
+        <title>Xttp - message - part</title>
+
+        <!--
+        =====================================================================
+        === style
+        =====================================================================
+        -->
+        <link rel="stylesheet" type="text/css" href="/xthenode/css/Xthenode.css"></link>
+        <style type="text/css">
+        </style>
+
+        <!--
+        =====================================================================
+        === script
+        =====================================================================
+        -->
+        <script type="text/javascript" src="/xthenode/js/Xthenode.js"></script>
+        <script type="text/javascript">
+        </script>
+    </head>
+
+    <!--
+    =====================================================================
+    === body
+    =====================================================================
+    -->
+    <body>
+        <a href="xttp-message-part-hxx-cxx.html"><h3>Create xttp message part</h3></a>
+
+        <!--
+        =====================================================================
+        === Form
+        =====================================================================
+        -->
+        <form
+         Name="Form" Action="xos-app-console-what-main-hxx.t" Method="POST" 
+         onSubmit="return setFormSubmit(getFormValue2('FormTemplate','FormAction','Form'),getFormValue('FormMethod','Form'),'Form')">
+             <div class="form"><hr/>
+
+             Template: <select name="FormTemplate">
+             <option value="xttp-message-part-hxx.t">xttp-message-part-hxx.t</option>
+             <option value="xttp-message-part-cxx.t">xttp-message-part-cxx.t</option>
+             <option value=""></option>
+             <option value="/xthenode-cgi/cgi">cgi parameters</option>
+             <option value=""></option>
+             </select><br/>
+    
+            <b>namespace </b><input name="Framework" value=""></input><b>%Framework%[xos] {</b>
+            <b></b><input type="checkbox" name="is_Framework" value="no" unchecked="checked">no</input><b></b><br/>
+
+            <b>namespace </b><input name="Section" value=""></input><b>%Section%[internet] {</b>
+            <b></b><input type="checkbox" name="is_Section" value="no" unchecked="checked">no</input><b></b><br/>
+
+            <b>namespace </b><input name="Namespace" value=""></input><b>%Namespace%[protocol] {</b>
+            <b></b><input type="checkbox" name="is_Namespace" value="no" unchecked="checked">no</input><b></b><br/>
+
+            <b>namespace </b><input name="Protocol" value=""></input><b>%Protocol%[xttp] {</b>
+            <b></b><input type="checkbox" name="is_Protocol" value="no" unchecked="checked">no</input><b></b><br/>
+
+            <b>namespace </b><input name="Message" value=""></input><b>%Message%[message] {</b>
+            <b></b><input type="checkbox" name="is_Message" value="no" unchecked="checked">no</input><b></b><br/>
+
+            <b>class </b><input name="What" value=""></input><b>%What%[what]</b>
+            <b>: public </b><input name="Extends_message" value="message"></input><b>[%Message%]::</b>
+            <b></b><input name="Extends" value=""></input><b>%Extends%[part]</b>
+            <b></b><input type="checkbox" name="is_What" value="no" unchecked="checked">no</input><b></b>
+            <br/>
+
+            <b>}; /// class %What%</b><br/>
+            <b>} /// namespace %Message%</b><br/>
+            <b>} /// namespace %Protocol%</b><br/>
+            <b>} /// namespace %Namespace%</b><br/>
+            <b>} /// namespace %Section%</b><br/>
+            <b>} /// namespace %Framework%</b><br/>
+
+             <br/>
+             Content-Type: <select name="content_type">
+             <option value="text/plain">text</option>
+             <option value="text/html">html</option>
+             <option value="text/xml">xml</option>
+             <option value="application/json">json</option>
+             <option value="application/javascript">javascript</option>
+             <option value=""></option>
+             </select><br/>
+             Action: <select name="FormAction">
+             <option value="xttp-message-part-hxx.t">xttp-message-part-hxx.t</option>
+             <option value=""></option>
+             <option value="/sthenode-cgi/cgi">cgi parameters</option>
+             <option value=""></option>
+             </select><br/>
+             Method: <select name="FormMethod">
+             <option value="POST">POST</option>
+             <option value="GET">GET</option>
+             <option value=""></option>
+             </select><br/>
+             <br/>
+    
+             <input type="submit" name="submit" value="submit"/><br/>
+             <hr/></div>
+
+            <table><tr>
+                <td><a href="."><b>..</b></a></td>
+                <td><a href="/xthenode/"><b>/xthenode/</b></a></td>
+                <td><a href="/xthenode/html/Xthenode.html"><b>Xthenode</b></a></td>
+            </tr></table>
+    </body>
+</html>

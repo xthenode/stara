@@ -16,7 +16,7 @@
 ///   File: main_opt.hpp
 ///
 /// Author: $author$
-///   Date: 6/12/2020
+///   Date: 6/12/2020, 5/4/2021
 ///////////////////////////////////////////////////////////////////////
 #ifndef XOS_APP_CONSOLE_PROTOCOL_HTTP_MAIN_OPT_HPP
 #define XOS_APP_CONSOLE_PROTOCOL_HTTP_MAIN_OPT_HPP
@@ -24,11 +24,11 @@
 #include "xos/app/console/main.hpp"
 
 #define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPT "method"
-#define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_REQUIRED
+#define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_OPTIONAL
 #define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTARG_RESULT 0
-#define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTARG "{ GET | POST | ...}"
+#define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTARG "[{ GET | POST | ...}]"
 #define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTUSE "Http request method"
-#define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTVAL_S "m:"
+#define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTVAL_S "m::"
 #define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTVAL_C 'm'
 #define XOS_PROTOCOL_HTTP_MAIN_METHOD_OPTION \
    {XOS_PROTOCOL_HTTP_MAIN_METHOD_OPT, \
@@ -265,9 +265,9 @@ protected:
         int err = 0;
         const char_t* arg = 0;
         if ((arg = optarg) && (arg[0])) {
-            err = all_set_request_method_run(arg,argc, argv, env);
-        } else  {
             err = all_set_request_run(argc, argv, env);
+        } else  {
+            err = all_set_request_method_run(arg,argc, argv, env);
         }
         return err;
     }

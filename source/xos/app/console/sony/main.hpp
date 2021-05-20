@@ -51,34 +51,60 @@ public:
     maint()
     : before_write_request_(0), port_(10000),
 
-      previous_path_("/sony/avContent"),
+      system_path_("/sony/system"), 
+      audio_path_("/sony/audio"), 
+      avContent_path_("/sony/avContent"),
+      
+      previous_path_(avContent_path_),
       previous_begin_("{\"method\": \"setPlayPreviousContent\", \"id\": 73, \"params\": [{\"output\": \""),
       previous_end_("\"}], \"version\": \"1.0\"}"),
       previous_params_(""),
 
-      next_path_("/sony/avContent"),
+      next_path_(avContent_path_),
       next_begin_("{\"method\": \"setPlayNextContent\", \"id\": 73, \"params\": [{\"output\": \""),
       next_end_("\"}], \"version\": \"1.0\"}"),
       next_params_(""),
 
-      stop_path_("/sony/avContent"),
+      stop_path_(avContent_path_),
       stop_begin_("{\"method\": \"stopPlayingContent\", \"id\": 73, \"params\": [{\"output\": \""),
       stop_end_("\"}], \"version\": \"1.1\"}"),
       stop_params_(""),
 
-      pause_path_("/sony/avContent"),
+      pause_path_(avContent_path_),
       pause_begin_("{\"method\": \"pausePlayingContent\", \"id\": 73, \"params\": [{\"output\": \""),
       pause_end_("\"}], \"version\": \"1.1\"}"),
       pause_params_(""),
 
-      resume_path_("/sony/avContent"),
+      resume_path_(avContent_path_),
       resume_begin_("{\"method\": \"setPlayContent\", \"id\": 73, \"params\": [{\"output\": \"\", \"resume\": "),
       resume_end_("}], \"version\": \"1.2\"}"),
       resume_params_("true"),
 
+      replay_path_(avContent_path_),
+      get_replay_begin_("{\"method\": \"getPlayingContentInfo\", \"id\": 73, \"params\": [{\"output\": \""),
+      get_replay_end_("\"}], \"version\": \"1.2\"}"),
+      /*
+      get_replay_begin_("{\"method\": \"getPlaybackModeSettings\", \"id\": 73, \"params\": [{\"target\": \"repeatType\", \"uri\": \""),
+      get_replay_end_("extInput:bd-dvd\"}], \"version\": \"1.0\"}"),
+      */
+      /*
+      replay_begin_("{\"method\": \"setPlayContent\", \"id\": 73, \"params\": [{\"repeatType\": \""),
+      replay_end_("\"}], \"version\": \"1.2\"}"),
+      */
+      replay_begin_("{\"method\": \"setPlaybackModeSettings\", \"id\": 73, \"params\": [{\"settings\": [{\"target\": \"repeatType\", \"value\": \""),
+      replay_end_("\"}]}], \"version\": \"1.0\"}"),
+      replay_all_("all"), replay_off_("off"), replay_params_(replay_all_),
+
+      shuffle_path_(avContent_path_),
+      get_shuffle_begin_("{\"method\": \"getPlaybackModeSettings\", \"id\": 73, \"params\": [{\"target\": \"shuffleType\", \"uri\": \""),
+      get_shuffle_end_("extInput:bd-dvd\"}], \"version\": \"1.0\"}"),
+      shuffle_begin_("{\"method\": \"setPlaybackModeSettings\", \"id\": 73, \"params\": [{\"settings\": [{\"target\": \"shuffleType\", \"value\": \""),
+      shuffle_end_("\"}]}], \"version\": \"1.0\"}"),
+      shuffle_all_("all"), shuffle_off_("off"), shuffle_params_(shuffle_all_),
+
       volume_level_(10), volume_value_(volume_level_), volume_param_("volume", volume_value_), 
       volume_object_(&volume_param_, null), volume_params_(&volume_object_, null),
-      volume_path_("/sony/audio"),
+      volume_path_(audio_path_),
       get_volume_begin_("{\"method\": \"getVolumeInformation\", \"id\": 73, \"params\": [{\"output\": \"\"}]"),
       volume_begin_("{\"method\": \"setAudioVolume\", \"id\": 73, \"params\": "),
       volume_end_(", \"version\": \"1.1\"}"),
@@ -86,7 +112,7 @@ public:
       power_status_on_("active"), power_status_off_("off"), 
       power_status_(power_status_on_), power_value_(power_status_), power_param_("status", power_value_), 
       power_object_(&power_param_, null), power_params_(&power_object_, null),
-      power_path_("/sony/system"),
+      power_path_(system_path_),
       get_power_begin_("{\"method\": \"getPowerStatus\", \"id\": 73, \"params\": []"),
       power_begin_("{\"method\": \"setPowerStatus\", \"id\": 73, \"params\": "),
       power_end_(", \"version\": \"1.1\"}")
@@ -172,6 +198,46 @@ protected:
         request.set_content_type(this->content_type_json());
         request.set_content_length(resume_.length());
         request.set_content(resume_);
+        return err;
+    }
+    virtual int before_write_replay_request(ssize_t& amount, writer_t& writer, request_t& request, int argc, char_t** argv, char** env) {
+        int err = 0;
+        set_replay();
+        request.set_method(this->request_method_post());
+        request.set_path(replay_path_);
+        request.set_content_type(this->content_type_json());
+        request.set_content_length(replay_.length());
+        request.set_content(replay_);
+        return err;
+    }
+    virtual int before_write_get_replay_request(ssize_t& amount, writer_t& writer, request_t& request, int argc, char_t** argv, char** env) {
+        int err = 0;
+        get_replay();
+        request.set_method(this->request_method_post());
+        request.set_path(replay_path_);
+        request.set_content_type(this->content_type_json());
+        request.set_content_length(replay_.length());
+        request.set_content(replay_);
+        return err;
+    }
+    virtual int before_write_shuffle_request(ssize_t& amount, writer_t& writer, request_t& request, int argc, char_t** argv, char** env) {
+        int err = 0;
+        set_shuffle();
+        request.set_method(this->request_method_post());
+        request.set_path(shuffle_path_);
+        request.set_content_type(this->content_type_json());
+        request.set_content_length(shuffle_.length());
+        request.set_content(shuffle_);
+        return err;
+    }
+    virtual int before_write_get_shuffle_request(ssize_t& amount, writer_t& writer, request_t& request, int argc, char_t** argv, char** env) {
+        int err = 0;
+        get_shuffle();
+        request.set_method(this->request_method_post());
+        request.set_path(shuffle_path_);
+        request.set_content_type(this->content_type_json());
+        request.set_content_length(shuffle_.length());
+        request.set_content(shuffle_);
         return err;
     }
     virtual int before_write_volume_request(ssize_t& amount, writer_t& writer, request_t& request, int argc, char_t** argv, char** env) {
@@ -287,6 +353,62 @@ protected:
         }
         return err;
     }
+    virtual int on_replay_all_option
+    (int optval, const char_t* optarg, const char_t* optname,
+     int optind, int argc, char_t**argv, char_t**env) {
+        int err = 0;
+        if (!(err = this->set_connect_run(argc, argv, env))) {
+            if ((optarg) && (optarg[0])) {
+                set_replay(optarg);
+            } else {
+                set_replay_all();
+            }
+            before_write_request_ = &derives::before_write_replay_request;
+        }
+        return err;
+    }
+    virtual int on_replay_off_option
+    (int optval, const char_t* optarg, const char_t* optname,
+     int optind, int argc, char_t**argv, char_t**env) {
+        int err = 0;
+        if (!(err = this->set_connect_run(argc, argv, env))) {
+            if ((optarg) && (optarg[0])) {
+                set_replay(optarg);
+            } else {
+                set_replay_off();
+            }
+            before_write_request_ = &derives::before_write_replay_request;
+        }
+        return err;
+    }
+    virtual int on_replay_option
+    (int optval, const char_t* optarg, const char_t* optname,
+     int optind, int argc, char_t**argv, char_t**env) {
+        int err = 0;
+        if (!(err = this->set_connect_run(argc, argv, env))) {
+            if ((optarg) && (optarg[0])) {
+                set_replay(optarg);
+                before_write_request_ = &derives::before_write_replay_request;
+            } else {
+                before_write_request_ = &derives::before_write_get_replay_request;
+            }
+        }
+        return err;
+    }
+    virtual int on_shuffle_option
+    (int optval, const char_t* optarg, const char_t* optname,
+     int optind, int argc, char_t**argv, char_t**env) {
+        int err = 0;
+        if (!(err = this->set_connect_run(argc, argv, env))) {
+            if ((optarg) && (optarg[0])) {
+                set_shuffle(optarg);
+                before_write_request_ = &derives::before_write_shuffle_request;
+            } else {
+                before_write_request_ = &derives::before_write_get_shuffle_request;
+            }
+        }
+        return err;
+    }
     virtual int on_volume_option
     (int optval, const char_t* optarg, const char_t* optname, 
      int optind, int argc, char_t**argv, char_t**env) {
@@ -369,6 +491,68 @@ protected:
         resume_.append(resume_end_);
         return resume_;
     }
+    
+    /// ...replay...
+    virtual string_t& set_replay(const string_t& to) {
+        set_replay(to.chars());
+        return replay_;
+    }
+    virtual string_t& set_replay(const char_t* to) {
+        if ((to) && (to[0])) {
+            replay_params_.assign(to);
+        }
+        return replay_;
+    }
+    virtual string_t& set_replay_all() {
+        set_replay(replay_all_);
+        return replay_;
+    }
+    virtual string_t& set_replay_off() {
+        set_replay(replay_off_);
+        return replay_;
+    }
+    virtual string_t& set_replay() {
+        replay_.assign(replay_begin_);
+        replay_.append(replay_params_);
+        replay_.append(replay_end_);
+        return replay_;
+    }
+    virtual string_t& get_replay() {
+        replay_.assign(get_replay_begin_);
+        replay_.append(get_replay_end_);
+        return replay_;
+    }
+
+    /// ...shuffle...
+    virtual string_t& set_shuffle(const string_t& to) {
+        set_shuffle(to.chars());
+        return shuffle_;
+    }
+    virtual string_t& set_shuffle(const char_t* to) {
+        if ((to) && (to[0])) {
+            shuffle_params_.assign(to);
+        }
+        return shuffle_;
+    }
+    virtual string_t& set_shuffle_all() {
+        set_shuffle(shuffle_all_);
+        return shuffle_;
+    }
+    virtual string_t& set_shuffle_off() {
+        set_shuffle(shuffle_off_);
+        return shuffle_;
+    }
+    virtual string_t& set_shuffle() {
+        shuffle_.assign(shuffle_begin_);
+        shuffle_.append(shuffle_params_);
+        shuffle_.append(shuffle_end_);
+        return shuffle_;
+    }
+    virtual string_t& get_shuffle() {
+        shuffle_.assign(get_shuffle_begin_);
+        shuffle_.append(get_shuffle_end_);
+        return shuffle_;
+    }
 
     /// ...volume...
     virtual string_t& set_volume_level(unsigned to) {
@@ -421,11 +605,15 @@ protected:
 protected:
     short port_;
 
+    string_t system_path_, audio_path_, avContent_path_;
+
     string_t previous_path_, previous_begin_, previous_end_, previous_params_, previous_;
     string_t next_path_, next_begin_, next_end_, next_params_, next_;
     string_t stop_path_, stop_begin_, stop_end_, stop_params_, stop_;
     string_t pause_path_, pause_begin_, pause_end_, pause_params_, pause_;
     string_t resume_path_, resume_begin_, resume_end_, resume_params_, resume_;
+    string_t replay_path_, get_replay_begin_, get_replay_end_, replay_begin_, replay_end_, replay_all_, replay_off_, replay_params_, replay_;
+    string_t shuffle_path_, get_shuffle_begin_, get_shuffle_end_, shuffle_begin_, shuffle_end_, shuffle_all_, shuffle_off_, shuffle_params_, shuffle_;
 
     unsigned volume_level_; json_node_t volume_value_, volume_param_;
     json_object_t volume_object_; json_array_t volume_params_;

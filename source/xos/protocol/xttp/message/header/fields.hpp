@@ -16,7 +16,7 @@
 ///   File: fields.hpp
 ///
 /// Author: $author$
-///   Date: 3/11/2020
+///   Date: 3/11/2020, 5/8/2021
 ///////////////////////////////////////////////////////////////////////
 #ifndef XOS_PROTOCOL_XTTP_MESSAGE_HEADER_FIELDS_HPP
 #define XOS_PROTOCOL_XTTP_MESSAGE_HEADER_FIELDS_HPP
@@ -553,12 +553,22 @@ public:
         combine();
         return content_type_;
     }
+    virtual part& set_content_type(const char_t* chars, size_t length) {
+        string_t to(chars, length);
+        return set_content_type(to);
+    }
     virtual part& set_content_type(const char_t* chars) {
         string_t to(chars);
         return set_content_type(to);
     }
     virtual const part& content_type() const {
         return content_type_;
+    }
+    virtual const char_t* content_type_chars() const {
+        return content_type_.has_chars();
+    }
+    virtual const char_t* content_type_chars(size_t& length) const {
+        return content_type_.has_chars(length);
     }
 
     /// ...content_encoding...

@@ -16,7 +16,7 @@
 ///   File: main.hpp
 ///
 /// Author: $author$
-///   Date: 9/20/2020
+///   Date: 9/20/2020, 5/2/2021
 ///////////////////////////////////////////////////////////////////////
 #ifndef XOS_APP_CONSOLE_PROTOCOL_HTTP_BASE_MAIN_HPP
 #define XOS_APP_CONSOLE_PROTOCOL_HTTP_BASE_MAIN_HPP
@@ -72,6 +72,14 @@ protected:
         err = all_write_content(amount, writer, content, argc, argv, env);
         return err;
     }
+    virtual int content_type_run(int argc, char_t** argv, char_t** env) {
+        out_writer_t& writer = this->out_writer();
+        content_type_t& content_type = this->content_type();
+        ssize_t amount = 0;
+        int err = 0;
+        err = all_write_content_type(amount, writer, content_type, argc, argv, env);
+        return err;
+    }
 
     /// ...write_content
     virtual int write_content(ssize_t& amount, writer_t& writer, content_t& content, int argc, char_t** argv, char** env) {
@@ -93,6 +101,32 @@ protected:
             int err2 = 0;
             err = write_content(amount, writer, content, argc, argv, env);
             if ((err2 = after_write_content(amount, writer, content, argc, argv, env))) {
+                if (!(err)) err = err2;
+            }
+        }
+        return err;
+    }
+    
+    /// ...write_content_type
+    virtual int write_content_type(ssize_t& amount, writer_t& writer, content_type_t& content_type, int argc, char_t** argv, char** env) {
+        int err = 0;
+        content_type.write(amount, writer);
+        return err;
+    }
+    virtual int before_write_content_type(ssize_t& amount, writer_t& writer, content_type_t& content_type, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int after_write_content_type(ssize_t& amount, writer_t& writer, content_type_t& content_type, int argc, char_t** argv, char** env) {
+        int err = 0;
+        return err;
+    }
+    virtual int all_write_content_type(ssize_t& amount, writer_t& writer, content_type_t& content_type, int argc, char_t** argv, char** env) {
+        int err = 0;
+        if (!(err = before_write_content_type(amount, writer, content_type, argc, argv, env))) {
+            int err2 = 0;
+            err = write_content_type(amount, writer, content_type, argc, argv, env);
+            if ((err2 = after_write_content_type(amount, writer, content_type, argc, argv, env))) {
                 if (!(err)) err = err2;
             }
         }

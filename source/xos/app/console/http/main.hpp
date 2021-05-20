@@ -16,7 +16,7 @@
 ///   File: main.hpp
 ///
 /// Author: $author$
-///   Date: 6/12/2020
+///   Date: 6/12/2020, 5/20/2021
 ///////////////////////////////////////////////////////////////////////
 #ifndef XOS_APP_CONSOLE_HTTP_MAIN_HPP
 #define XOS_APP_CONSOLE_HTTP_MAIN_HPP
@@ -134,24 +134,6 @@ protected:
                 if (!(err)) err = err2;
             }
         }
-        return err;
-    }
-    virtual int before_process_response_to_restart(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
-        int err = 0;
-        return err;
-    }
-    virtual int after_process_response_to_restart(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
-        int err = 0;
-        this->set_accept_restart();
-        return err;
-    }
-    virtual int before_process_response_to_stop(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
-        int err = 0;
-        return err;
-    }
-    virtual int after_process_response_to_stop(ssize_t& amount, writer_t& writer, response_t& response, request_t& request, reader_t& reader, int argc, char_t** argv, char** env) {
-        int err = 0;
-        this->set_accept_done();
         return err;
     }
 

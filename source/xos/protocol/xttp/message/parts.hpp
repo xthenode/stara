@@ -16,7 +16,7 @@
 ///   File: parts.hpp
 ///
 /// Author: $author$
-///   Date: 3/13/2020
+///   Date: 3/13/2020, 5/8/2021
 ///////////////////////////////////////////////////////////////////////
 #ifndef XOS_PROTOCOL_XTTP_MESSAGE_PARTS_HPP
 #define XOS_PROTOCOL_XTTP_MESSAGE_PARTS_HPP
@@ -82,6 +82,23 @@ public:
         set_line(line);
         set_headers(headers);
         set_content(content);
+        return *this;
+    }
+    virtual derives& set(const line_t& line, const headers_t& headers, const content_t* content) {
+        set_line(line);
+        set_headers(headers);
+        if ((content)) {
+            set_content(*content);
+        } else {
+            clear_content();
+        }
+        return *this;
+    }
+    virtual derives& set(const derives& to) {
+        const line_t& line = to.line();
+        const headers_t& headers = to.headers();
+        const content_t* content = to.content();
+        set(to.line(), to.headers(), to.content());
         return *this;
     }
 
@@ -260,16 +277,41 @@ public:
     virtual const content_t* content() const {
         return content_;
     }
+    virtual const content_t* set_content(const char_t* to, size_t length) {
+        content_ = &this_content_;
+        this_content_.assign(to, length);
+        this->combine();
+        return content_;
+    }
     virtual const content_t* set_content(const string_t& to) {
         content_ = &this_content_;
         this_content_.assign(to);
         this->combine();
         return content_;
     }
+    virtual const content_t* clear_content() {
+        content_ = &this_content_;
+        this_content_.clear();
+        this->combine();
+        return content_;
+    }
+    virtual part_t set_content_type(const char_t* to, size_t length) {
+        part_t content_type(headers_.set_content_type(to, length));
+        this->combine();
+        return content_type;
+    }
     virtual part_t set_content_type(const string_t& to) {
         part_t content_type(headers_.set_content_type(to));
         this->combine();
         return content_type;
+    }
+    virtual const char_t* content_type_chars() const {
+        const char_t* chars = headers_.content_type_chars();
+        return chars;
+    }
+    virtual const char_t* content_type_chars(size_t& length) const {
+        const char_t* chars = headers_.content_type_chars(length);
+        return chars;
     }
     virtual size_t set_content_length(size_t to) {
         size_t content_length = headers_.set_content_length(to);

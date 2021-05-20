@@ -16,16 +16,18 @@
 ///   File: main_opt.hpp
 ///
 /// Author: $author$
-///   Date: 6/12/2020
+///   Date: 6/12/2020, 5/20/2021
 ///////////////////////////////////////////////////////////////////////
 #ifndef XOS_APP_CONSOLE_HTTP_MAIN_OPT_HPP
 #define XOS_APP_CONSOLE_HTTP_MAIN_OPT_HPP
 
 #include "xos/app/console/network/main.hpp"
+
 #include "xos/app/console/xttp/base/main.hpp"
 #include "xos/app/console/xttp/client/main.hpp"
 #include "xos/app/console/xttp/server/main.hpp"
 #include "xos/app/console/xttp/main.hpp"
+
 #include "xos/app/console/protocol/http/base/main.hpp"
 #include "xos/app/console/protocol/http/client/main.hpp"
 #include "xos/app/console/protocol/http/server/main.hpp"
@@ -72,8 +74,8 @@
     XOS_APP_CONSOLE_HTTP_MAIN_OPTIONS_OPTIONS_EXTEND \
     XOS_APP_CONSOLE_NETWORK_MAIN_OPTIONS_OPTIONS 
 
-#define XOS_APP_CONSOLE_HTTP_MAIN_ARUMENTS_CHARS 0
-#define XOS_APP_CONSOLE_HTTP_MAIN_ARUMENTS_ARGS 0
+#define XOS_APP_CONSOLE_HTTP_MAIN_ARGS 0
+#define XOS_APP_CONSOLE_HTTP_MAIN_ARGV 0,
 
 namespace xos {
 namespace app {
@@ -82,18 +84,7 @@ namespace http {
 
 /// class main_optt
 template 
-<class TExtends = /*console::protocol::http::maint
- <console::protocol::http::main_optt<network::main> >*/
- /*console::xttp::server::maint<console::xttp::server::main_optt
-   <protocol::http::server::maint<protocol::http::server::main_optt
-    <protocol::xttp::server::maint<protocol::xttp::server::main_optt
-    <console::xttp::client::maint<console::xttp::client::main_optt
-     <protocol::http::client::maint<protocol::http::client::main_optt
-       <protocol::xttp::client::maint<protocol::xttp::client::main_optt
-        <protocol::http::base::maint<protocol::http::base::main_optt
-          <protocol::xttp::base::maint<protocol::xttp::base::main_optt
-            <network::main> > > > > > > > > > > > > > > >*/
- XOS_APP_CONSOLE_HTTP_MAIN_OPT_EXTEND, 
+<class TExtends = XOS_APP_CONSOLE_HTTP_MAIN_OPT_EXTEND, 
  class TImplements = typename TExtends::implements>
 class exported main_optt: virtual public TImplements, public TExtends {
 public:
@@ -127,7 +118,17 @@ protected:
     typedef typename extends::response_t resppnse_t;
 
 protected:
-    /// ...options...
+    /// ...option...
+    virtual int on_option
+    (int optval, const char_t* optarg, const char_t* optname,
+     int optind, int argc, char_t**argv, char_t**env) {
+        int err = 0;
+        switch(optval) {
+        default:
+            err = extends::on_option(optval, optarg, optname, optind, argc, argv, env);
+        }
+        return err;
+    }
     virtual const char_t* options(const struct option*& longopts) {
         static const char_t* chars = XOS_APP_CONSOLE_HTTP_MAIN_OPTIONS_CHARS;
         static struct option optstruct[]= {
@@ -137,10 +138,14 @@ protected:
         return chars;
     }
 
-    /// ...arguments...
-    virtual const char_t* arguments(const char_t**& args) {
-        args = XOS_APP_CONSOLE_HTTP_MAIN_ARUMENTS_ARGS;
-        return XOS_APP_CONSOLE_HTTP_MAIN_ARUMENTS_CHARS;
+    /// ...argument...
+    virtual const char_t* arguments(const char_t**& argv) {
+        static const char_t* _args = XOS_APP_CONSOLE_HTTP_MAIN_ARGS;
+        static const char_t* _argv[] = {
+            XOS_APP_CONSOLE_HTTP_MAIN_ARGV
+            0};
+        argv = _argv;
+        return _args;
     }
 }; /// class main_optt
 typedef main_optt<> main_opt;
