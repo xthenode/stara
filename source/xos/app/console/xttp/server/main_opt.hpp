@@ -16,13 +16,17 @@
 ///   File: main_opt.hpp
 ///
 /// Author: $author$
-///   Date: 9/14/2020
+///   Date: 9/14/2020, 5/21/2021
 ///////////////////////////////////////////////////////////////////////
 #ifndef XOS_APP_CONSOLE_XTTP_SERVER_MAIN_OPT_HPP
 #define XOS_APP_CONSOLE_XTTP_SERVER_MAIN_OPT_HPP
 
-#include "xos/app/console/protocol/xttp/server/main.hpp"
+#include "xos/app/console/network/base/main.hpp"
 #include "xos/app/console/network/server/main.hpp"
+
+#include "xos/app/console/protocol/xttp/base/main.hpp"
+#include "xos/app/console/protocol/xttp/server/main.hpp"
+
 #include "xos/protocol/http/request/method/nameof.hpp"
 #include "xos/protocol/http/request/resource/identifier.hpp"
 #include "xos/protocol/http/request/line.hpp"
@@ -44,8 +48,8 @@
     XOS_PROTOCOL_XTTP_BASE_MAIN_OPTIONS_OPTIONS_EXTEND \
     XOS_NETWORK_SERVER_MAIN_OPTIONS_OPTIONS
 
-#define XOS_APP_CONSOLE_XTTP_SERVER_MAIN_ARUMENTS_CHARS 0
-#define XOS_APP_CONSOLE_XTTP_SERVER_MAIN_ARUMENTS_ARGS 0
+#define XOS_APP_CONSOLE_XTTP_SERVER_MAIN_ARGS 0
+#define XOS_APP_CONSOLE_XTTP_SERVER_MAIN_ARGV 0,
 
 namespace xos {
 namespace app {
@@ -89,7 +93,17 @@ protected:
     typedef xos::protocol::http::request::message request_t;
     typedef xos::protocol::http::message::body::content content_t;
 
-    /// ...options...
+    /// ...option...
+    virtual int on_option
+    (int optval, const char_t* optarg, const char_t* optname,
+     int optind, int argc, char_t**argv, char_t**env) {
+        int err = 0;
+        switch(optval) {
+        default:
+            err = extends::on_option(optval, optarg, optname, optind, argc, argv, env);
+        }
+        return err;
+    }
     virtual const char_t* options(const struct option*& longopts) {
         static const char_t* chars = XOS_APP_CONSOLE_XTTP_SERVER_MAIN_OPTIONS_CHARS;
         static struct option optstruct[]= {
@@ -99,10 +113,14 @@ protected:
         return chars;
     }
 
-    /// ...arguments...
-    virtual const char_t* arguments(const char_t**& args) {
-        args = XOS_APP_CONSOLE_XTTP_SERVER_MAIN_ARUMENTS_ARGS;
-        return XOS_APP_CONSOLE_XTTP_SERVER_MAIN_ARUMENTS_CHARS;
+    /// ...argument...
+    virtual const char_t* arguments(const char_t**& argv) {
+        static const char_t* _args = XOS_APP_CONSOLE_XTTP_SERVER_MAIN_ARGS;
+        static const char_t* _argv[] = {
+            XOS_APP_CONSOLE_XTTP_SERVER_MAIN_ARGV
+            0};
+        argv = _argv;
+        return _args;
     }
 
     /// request...

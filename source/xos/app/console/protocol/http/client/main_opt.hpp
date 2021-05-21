@@ -16,7 +16,7 @@
 ///   File: main_opt.hpp
 ///
 /// Author: $author$
-///   Date: 8/18/2020, 5/4/2021
+///   Date: 8/18/2020, 5/21/2021
 ///////////////////////////////////////////////////////////////////////
 #ifndef XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_OPT_HPP
 #define XOS_APP_CONSOLE_PROTOCOL_HTTP_CLIENT_MAIN_OPT_HPP
@@ -154,8 +154,8 @@ protected:
 
     /// ...options...
     virtual const char_t* request_option_usage(const char_t*& optarg, const struct option* longopt) {
-        const char_t* chars = XOS_PROTOCOL_HTTP_MAIN_REQUEST_OPTARG;
-        chars = XOS_PROTOCOL_HTTP_MAIN_REQUEST_OPTUSE;
+        optarg = XOS_PROTOCOL_HTTP_MAIN_REQUEST_OPTARG;
+        const char_t* chars = XOS_PROTOCOL_HTTP_MAIN_REQUEST_OPTUSE;
         return chars;
     }
     virtual const char_t* method_get_option_usage(const char_t*& optarg, const struct option* longopt) {
